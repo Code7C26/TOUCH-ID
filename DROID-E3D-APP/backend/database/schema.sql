@@ -55,6 +55,25 @@ CREATE TABLE IF NOT EXISTS auditoria (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS robot (
+    id INT PRIMARY KEY,                             -- siempre hay una sola fila (id = 1)
+    estado VARCHAR(20) DEFAULT 'detenido',          -- detenido / recorriendo / pausado / emergencia
+    bateria INT DEFAULT 100,
+    zona_actual_id INT NULL,
+    comando_pendiente VARCHAR(20) NULL,             -- iniciar / pausar / detener / emergencia
+    url_video VARCHAR(255) DEFAULT '',
+    ultima_conexion DATETIME NULL,
+    FOREIGN KEY (zona_actual_id) REFERENCES zonas(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS puntos_ruta (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    orden INT NOT NULL,
+    zona_id INT NOT NULL,
+    tiempo_espera_seg INT DEFAULT 30,
+    FOREIGN KEY (zona_id) REFERENCES zonas(id) ON DELETE CASCADE
+);
+
 -- ===== DATOS DE EJEMPLO (cargar una sola vez, en base vacía) =====
 -- Salen de docs/FABRICA-CLIENTE.md (datos ficticios hasta tener los reales).
 
@@ -116,3 +135,7 @@ INSERT INTO incidencias (tipo, timestamp, zona_id, empleado_id, confianza, estad
 ('sin_chaleco', DATE_SUB(NOW(), INTERVAL 39814 MINUTE), 4, 7, 0.9, 'resuelta', 2, DATE_SUB(NOW(), INTERVAL 39240 MINUTE)),
 ('sin_chaleco', DATE_SUB(NOW(), INTERVAL 42559 MINUTE), 2, 4, 0.88, 'resuelta', 2, DATE_SUB(NOW(), INTERVAL 42374 MINUTE)),
 ('sin_lentes', DATE_SUB(NOW(), INTERVAL 42768 MINUTE), 2, 5, 0.91, 'resuelta', 2, DATE_SUB(NOW(), INTERVAL 42202 MINUTE));
+
+-- Robot y su ruta: pasa por las 4 zonas y espera 30 s en cada una
+INSERT INTO robot (id, estado, bateria) VALUES (1, 'detenido', 100);
+INSERT INTO puntos_ruta (orden, zona_id, tiempo_espera_seg) VALUES (1, 1, 30), (2, 2, 30), (3, 3, 30), (4, 4, 30);

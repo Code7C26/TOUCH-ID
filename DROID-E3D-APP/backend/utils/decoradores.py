@@ -39,6 +39,24 @@ def rol_requerido(*roles):
     return decorador
 
 
+def sesion_o_api_key(*nombres_clave):
+    """Para datos de solo lectura que pueden ver tanto las personas (con token) como las
+    máquinas (con X-API-KEY de cualquiera de las claves indicadas)."""
+    def decorador(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            enviada = request.headers.get("X-API-KEY")
+            if enviada:
+                for nombre in nombres_clave:
+                    esperada = getattr(Config, nombre, "")
+                    if esperada and hmac.compare_digest(enviada, esperada):
+                        return f(*args, **kwargs)
+                return {"error": "Clave de API inválida"}, 401
+            return token_required(f)(*args, **kwargs)
+        return decorated
+    return decorador
+
+
 def api_key_requerida(nombre_clave):
     """Para las máquinas (YOLO, ESP32): exige el header  X-API-KEY.
     `nombre_clave` es el nombre en Config, ej. "YOLO_API_KEY" o "ROBOT_API_KEY"."""

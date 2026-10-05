@@ -2,7 +2,7 @@ from flask import Blueprint, request
 
 from models import db, Zona, Usuario, Incidencia
 from utils.auditoria import registrar
-from utils.decoradores import token_required, rol_requerido
+from utils.decoradores import token_required, rol_requerido, sesion_o_api_key
 
 zones_bp = Blueprint("zones", __name__)
 
@@ -42,8 +42,9 @@ def aplicar_datos(zona, data, es_nueva):
 
 
 @zones_bp.route("/zones", methods=["GET"])
-@token_required
+@sesion_o_api_key("YOLO_API_KEY", "ROBOT_API_KEY")
 def listar_zonas():
+    """Lo pueden leer las personas (con sesión) y las máquinas (con X-API-KEY)."""
     zonas = Zona.query.order_by(Zona.nombre).all()
     return {"zonas": [z.to_dict() for z in zonas]}
 

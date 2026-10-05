@@ -114,3 +114,62 @@ class Auditoria(db.Model):
             "accion": self.accion, "detalle": self.detalle,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+
+class Robot(db.Model):
+    """Estado del robot. Hay una sola fila (id = 1)."""
+    __tablename__ = "robot"
+
+    ESTADOS = ("detenido", "recorriendo", "pausado", "emergencia")
+    COMANDOS = ("iniciar", "pausar", "detener", "emergencia")
+
+    id = db.Column(db.Integer, primary_key=True)
+    estado = db.Column(db.String(20), default="detenido")
+    bateria = db.Column(db.Integer, default=100)                 # porcentaje 0 a 100
+    zona_actual_id = db.Column(db.Integer, db.ForeignKey("zonas.id"))
+    comando_pendiente = db.Column(db.String(20))                 # lo que el robot todavía no ejecutó
+    url_video = db.Column(db.String(255), default="")            # stream MJPEG del servidor de IA
+    ultima_conexion = db.Column(db.DateTime)                     # último reporte del ESP32
+
+    zona_actual = db.relationship("Zona")
+
+    def conectado(self):
+        """El robot se considera conectado si reportó en los últimos 10 segundos."""
+        return bool(self.ultima_conexion) and (datetime.now() - self.ultima_conexion).total_seconds() <= 10
+
+    def to_dict(self):
+        return {
+            "estado": self.estado, "bateria": self.bateria,
+            "zona_actual_id": self.zona_actual_id,
+            "zona_actual": self.zona_actual.nombre if self.zona_actual else None,
+            "comando_pendiente": self.comando_pendiente, "url_video": self.url_video,
+            "ultima_conexion": self.ultima_conexion.isoformat() if self.ultima_conexion else None,
+            "conectado": self.conectado(),
+        }
+
+
+class PuntoRuta(db.Model):
+    """Un paso de la ruta del robot: ir a una zona y esperar unos segundos."""
+    __tablename__ = "puntos_ruta"
+
+    id = db.Column(db.Integer, primary_key=True)
+    orden = db.Column(db.Integer, nullable=False)
+    zona_id = db.Column(db.Integer, db.ForeignKey("zonas.id"), nullable=False)
+    tiempo_espera_seg = db.Column(db.Integer, default=30)
+
+    zona = db.relationship("Zona")
+
+    def to_dict(self):
+        return {"id": self.id, "orden": self.orden, "zona_id": self.zona_id,
+                "zona": self.zona.nombre if self.zona else None,
+                "tiempo_espera_seg": self.tiempo_espera_seg}
+
+
+def obtener_robot():
+    """Devuelve la fila del robot; la crea si todavía no existe."""
+    robot = Robot.query.get(1)
+    if not robot:
+        robot = Robot(id=1)
+        db.session.add(robot)
+        db.session.commit()
+    return robot

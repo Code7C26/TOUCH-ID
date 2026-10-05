@@ -3,11 +3,13 @@ from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
 from config import Config
-from models import db
+from models import db, obtener_robot
 from routes.auth import auth_bp
 from routes.incidents import incidents_bp
 from routes.zones import zones_bp
 from routes.users import users_bp
+from routes.robot import robot_bp
+from routes.rostros import rostros_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -19,6 +21,8 @@ app.register_blueprint(auth_bp, url_prefix="/api")
 app.register_blueprint(incidents_bp, url_prefix="/api")
 app.register_blueprint(zones_bp, url_prefix="/api")
 app.register_blueprint(users_bp, url_prefix="/api")
+app.register_blueprint(robot_bp, url_prefix="/api")
+app.register_blueprint(rostros_bp, url_prefix="/api")
 
 
 @app.errorhandler(HTTPException)
@@ -35,6 +39,7 @@ def health():
 def crear_datos_iniciales():
     """Crea las tablas que falten. Los datos de ejemplo vienen de database/schema.sql."""
     db.create_all()
+    obtener_robot()  # asegura que exista la fila del robot
 
 
 if __name__ == "__main__":

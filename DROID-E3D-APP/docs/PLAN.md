@@ -118,8 +118,8 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 1.4 `/api/zones` y `/api/users` CRUD (escritura solo encargado)
 - [x] 1.5 `schema.sql`: 4 zonas, 6 empleados, 1 encargado, ~40 incidencias de 30 días
 - [x] 1.6 Auditoría: tabla + helper `registrar(accion, detalle)`
-- [ ] 1.7 `docs/API.md` con el contrato de hardware/IA · PAUSA: la revisa Morena
-- [ ] 1.8 Stubs de endpoints de hardware (`X-API-KEY`, Robot/PuntoRuta mínimos, `maquina_activa`) + `docs/integracion/`
+- [x] 1.7 `docs/API.md` con el contrato de hardware/IA · PAUSA: la revisa Morena
+- [x] 1.8 Stubs de endpoints de hardware (`X-API-KEY`, Robot/PuntoRuta mínimos, `maquina_activa`) + `docs/integracion/`
 
 ### Fase 2 · Base del frontend
 - [ ] 2.1 Tailwind con colores de seguridad provisionales (hasta el manual de marca E.4) + modo oscuro
