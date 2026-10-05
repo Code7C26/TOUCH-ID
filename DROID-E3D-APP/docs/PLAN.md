@@ -107,7 +107,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 0.0 Instalar Node LTS y GitHub CLI con winget · PAUSA: el usuario corre `gh auth login`
 - [x] 0.1 Crear `.env` desde `.example`, venv + `pip install`, `npm install`; MySQL (XAMPP) iniciado; `/api/health` y `npm run build` OK
 - [x] 0.2 `.gitignore` de la app (venv, node_modules, .env, uploads, __pycache__, dist)
-- [ ] 0.3 Labels `smat:*`, plantillas `.github/` con prefijo smat, `CONTRIBUIR.md`
+- [x] 0.3 Labels `smat:*`, plantillas `.github/` con prefijo smat, `CONTRIBUIR.md`
 - [ ] 0.4 `docs/FABRICA-CLIENTE.md` (borrador), `docs/BITACORA.md` (semana 1), `docs/decisiones/001…005`
 - [ ] 0.5 Comandos `/tarea-profe`, `/bitacora`, `/pr` · PR `SMAT-web → main`
 
