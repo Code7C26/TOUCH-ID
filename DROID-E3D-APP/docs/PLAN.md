@@ -190,3 +190,4 @@ Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y d
 ### Tareas del profe (sección viva, se llena con `/tarea-profe`)
 Formato: `- [ ] P.N descripción (#issue)`
 - [x] P.1 Reporte de avance de 1 página en PDF subido a `docs/SMAT/` (#25)
+- [x] P.2 Jornada remota: refactor + feat + docs, con capturas y tarjeta en Done (#26)
