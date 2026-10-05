@@ -10,5 +10,5 @@ El profe pidió: $ARGUMENTS
    `- [ ] P.N descripción (#issue)` y decime en qué fase encaja.
 3. Si afecta a la fábrica cliente: actualizá docs/FABRICA-CLIENTE.md.
 4. Si es de la empresa SMAT: agregala a la Fase E y decime qué socio la hace.
-5. Si es de hardware/IA: dejala sin asignar y avisame (el responsable está por definir).
+5. Si es de hardware/IA: asignala a Morena (responsable de hardware/IA) y avisame.
 6. No empieces a hacerla hasta que yo lo diga. Resumen de máximo 4 líneas.

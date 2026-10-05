@@ -5,8 +5,8 @@
 
 **Jerarquía:** TOUCH (empresa madre) → SMAT (división: Toro y Morena) → DROID-E3D (producto = robot + web).
 **Repo:** `Code7C26/TOUCH-ID` · rama de trabajo `SMAT-web` · PR a `main` al final de cada fase.
-**Hardware/IA:** responsable **por definir** (ESP32, relé, cámara, YOLO, reconocimiento facial).
-Hasta que haya alguien, el backend se prueba con los simuladores y el contrato de `docs/API.md`.
+**Hardware/IA:** **Morena** (ESP32, relé, cámara, YOLO, reconocimiento facial), rama `SMAT-hardware`.
+Mientras no esté el hardware, el backend se prueba con los simuladores y el contrato de `docs/API.md`.
 
 ---
 
@@ -90,9 +90,9 @@ frontend/src/
 `/siguiente` sigue este orden: **0 → E.0-E.1 → 1 → 2 → 3 → 4 → L → 5 → 6 → 7 → 8 → 9**.
 La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes del profe van primero.
 
-| Semana | Web (Toro + Claude) | Empresa (Toro + Morena) | Hardware/IA |
+| Semana | Web (Toro + Claude) | Empresa (Toro + Morena) | Hardware/IA (Morena) |
 |---|---|---|---|
-| 1 · 05/10 | Fase 0, Fase 1 (API.md + stubs) | E.0, E.1, E.2 | Definir responsable |
+| 1 · 05/10 | Fase 0, Fase 1 (API.md + stubs) | E.0, E.1, E.2 | Revisa API.md, arma ESP32 con ejemplos |
 | 2 · 12/10 | Fases 2, 3, 4 | E.3, E.4 marca | Robot + relé contra stubs |
 | 3 · 19/10 | Fase L, 5, 6 | E.5, E.6 | YOLO + facial, prueba conjunta |
 | 4 · 26/10 | Fases 7, 8, 9 (despliegue) | E.7-E.10 | Ajustes, demo |
@@ -118,7 +118,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [ ] 1.4 `/api/zones` y `/api/users` CRUD (escritura solo encargado)
 - [ ] 1.5 `schema.sql`: 4 zonas, 6 empleados, 1 encargado, ~40 incidencias de 30 días
 - [ ] 1.6 Auditoría: tabla + helper `registrar(accion, detalle)`
-- [ ] 1.7 `docs/API.md` con el contrato de hardware/IA · PAUSA: revisión del responsable de hardware/IA (o del profe si aún no hay)
+- [ ] 1.7 `docs/API.md` con el contrato de hardware/IA · PAUSA: la revisa Morena
 - [ ] 1.8 Stubs de endpoints de hardware (`X-API-KEY`, Robot/PuntoRuta mínimos, `maquina_activa`) + `docs/integracion/`
 
 ### Fase 2 · Base del frontend

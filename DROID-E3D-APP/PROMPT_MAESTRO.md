@@ -9,7 +9,7 @@ CONTEXTO
 - Jerarquía: TOUCH (empresa madre) → SMAT (Toro y Morena) → DROID-E3D (robot + web).
 - Repo compartido: Code7C26/TOUCH-ID. Mi rama es SMAT-web. El profe supervisa y me da tareas
   por Classroom; yo te las paso con /tarea-profe.
-- Hardware/IA: el responsable está por definir. Trabajá contra docs/API.md y los simuladores.
+- Hardware/IA: lo hace Morena (también socia de SMAT). Trabajá contra docs/API.md y los simuladores hasta que ella tenga el hardware.
 - La empresa SMAT se crea desde cero en ../EMPRESA-SMAT/ (Fase E del plan).
 
 OBJETIVO

@@ -6,7 +6,7 @@
 Robot oruga con ESP32 recorre la fábrica, una cámara + IA YOLO detecta si los empleados usan su EPP
 (casco, guantes, lentes, chaleco) e identifica al empleado por reconocimiento facial. Si no lo usan:
 alarma y/o parada de la máquina. Esta carpeta es la app web; la empresa vive en `../EMPRESA-SMAT/`.
-El responsable de hardware/IA está **por definir**: mientras tanto se usan simuladores y `docs/API.md`.
+**Morena** es socia de SMAT y además responsable de hardware/IA (ESP32, relé, cámara, YOLO, facial). Hasta que tenga el hardware se usan simuladores y `docs/API.md`.
 
 Flujo: cámara → servidor YOLO → POST /api/incidents (este backend) → MySQL → web (+ push al celular).
 El ESP32 consulta por HTTP al backend qué comando ejecutar y si su máquina debe estar parada.
