@@ -93,19 +93,33 @@ Todos los campos son opcionales; mandá los que cambiaron:
 
 Respuesta: `{ "comando": ..., "estado": ... }`. **Cada reporte cuenta como "latido":** si pasan más de 10 s sin reportar, la web muestra el robot como *desconectado*.
 
-### 🔜 Ruta del robot (Fase 5.2)
-`GET /robot/ruta` devolverá la lista ordenada de zonas a visitar y cuántos segundos esperar en cada una:
+### ✅ `GET /robot/ruta` · zonas a recorrer
+Lista ordenada de zonas a visitar y cuántos segundos esperar en cada una (la define el encargado desde la web):
 ```json
-{ "ruta": [ { "orden": 1, "zona_id": 1, "tiempo_espera_seg": 30 }, { "orden": 2, "zona_id": 2, "tiempo_espera_seg": 30 } ] }
+{ "ruta": [ { "orden": 1, "zona_id": 1, "zona": "Zona A", "tiempo_espera_seg": 30 },
+            { "orden": 2, "zona_id": 2, "zona": "Zona B", "tiempo_espera_seg": 30 } ] }
 ```
+Consultala al arrancar y cada vez que recibas `iniciar`, por si el encargado la cambió.
 
 ### Cómo llega un comando al robot
-1. El encargado toca **Iniciar / Pausar / EMERGENCIA** en la web (Fase 5).
+1. El encargado toca **Iniciar / Pausar / EMERGENCIA** en la web (`POST /robot/comando`, ver sección 2b).
 2. El backend guarda `comando_pendiente`.
 3. El ESP32 lo ve en su próxima consulta, lo ejecuta y manda `comando_ejecutado`.
 4. El backend borra el comando.
 
 > La parada de emergencia de la web tiene hasta ~2 s de demora. **El robot debe tener además un botón físico de parada.**
+
+**Después de una `emergencia`** el backend rechaza `iniciar` y `pausar` (409) hasta que el encargado envíe `detener`. Así el robot no puede volver a arrancar solo.
+
+### 2b. Lo que hace la web (para que sepas qué te va a llegar)
+Estos endpoints los usa el encargado con sesión (`Authorization: Bearer ...`); el ESP32 no los llama.
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /robot/estado` | Estado, batería, zona, comando pendiente y `conectado` (reportó hace menos de 10 s) |
+| ✅ `POST /robot/comando` | `{"comando": "iniciar" \| "pausar" \| "detener" \| "emergencia"}` |
+| ✅ `PUT /robot/ruta` | `{"ruta": [{"zona_id": 1, "tiempo_espera_seg": 30}, ...]}` (el orden de la lista es el recorrido; espera de 5 a 3600 s) |
+| ✅ `PUT /robot/video` | `{"url_video": "http://<IP-PC-YOLO>:8080/video"}` · texto vacío = sin video |
 
 ---
 
