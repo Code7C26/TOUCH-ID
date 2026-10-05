@@ -15,3 +15,7 @@ class Config:
 
     JWT_SECRET = os.getenv("JWT_SECRET", "clave_secreta")
     PORT = int(os.getenv("FLASK_PORT", 5000))
+
+    # Claves para las máquinas (no para personas). Van en el header X-API-KEY.
+    YOLO_API_KEY = os.getenv("YOLO_API_KEY", "")      # servidor de IA
+    ROBOT_API_KEY = os.getenv("ROBOT_API_KEY", "")    # ESP32 del robot y de las máquinas

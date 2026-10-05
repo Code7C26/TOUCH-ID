@@ -112,12 +112,12 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 0.5 Comandos `/tarea-profe`, `/bitacora`, `/pr` · PR `SMAT-web → main`
 
 ### Fase 1 · Backend sólido
-- [ ] 1.1 Modelo `Zona` (con grilla), `zona_id` en usuarios e incidencias, `legajo` · PAUSA: recrear base
-- [ ] 1.2 `utils/decoradores.py` (`token_required`, `rol_requerido`), contraseñas con werkzeug, `GET /api/me`
-- [ ] 1.3 `/incidents`: empleado solo las suyas; filtros (zona_id, empleado_id, estado, desde, hasta, paginado); resolver solo encargado
-- [ ] 1.4 `/api/zones` y `/api/users` CRUD (escritura solo encargado)
-- [ ] 1.5 `schema.sql`: 4 zonas, 6 empleados, 1 encargado, ~40 incidencias de 30 días
-- [ ] 1.6 Auditoría: tabla + helper `registrar(accion, detalle)`
+- [x] 1.1 Modelo `Zona` (con grilla), `zona_id` en usuarios e incidencias, `legajo` · PAUSA: recrear base
+- [x] 1.2 `utils/decoradores.py` (`token_required`, `rol_requerido`), contraseñas con werkzeug, `GET /api/me`
+- [x] 1.3 `/incidents`: empleado solo las suyas; filtros (zona_id, empleado_id, estado, desde, hasta, paginado); resolver solo encargado
+- [x] 1.4 `/api/zones` y `/api/users` CRUD (escritura solo encargado)
+- [x] 1.5 `schema.sql`: 4 zonas, 6 empleados, 1 encargado, ~40 incidencias de 30 días
+- [x] 1.6 Auditoría: tabla + helper `registrar(accion, detalle)`
 - [ ] 1.7 `docs/API.md` con el contrato de hardware/IA · PAUSA: la revisa Morena
 - [ ] 1.8 Stubs de endpoints de hardware (`X-API-KEY`, Robot/PuntoRuta mínimos, `maquina_activa`) + `docs/integracion/`
 
@@ -149,7 +149,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [ ] 5.6 `tools/simular_esp32.py`
 
 ### Fase 6 · YOLO y reconocimiento facial
-- [ ] 6.1 `YOLO_API_KEY` en `POST /api/incidents` (multipart con imagen → `uploads/`)
+- [ ] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8
 - [ ] 6.2 Fotos de rostro con consentimiento (Ley 25.326) + `GET /api/rostros`
 - [ ] 6.3 Evidencia en detalle y en AlertCard
 - [ ] 6.4 `tools/simular_yolo.py`

@@ -1,12 +1,34 @@
 from datetime import datetime
-import hashlib
+
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
 
-def hashear(texto):
-    return hashlib.sha256(texto.encode()).hexdigest()
+class Zona(db.Model):
+    """Una zona de la fábrica: tiene una máquina y un EPP obligatorio."""
+    __tablename__ = "zonas"
+
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), unique=True, nullable=False)
+    maquina = db.Column(db.String(100))                        # ej. "Sierra circular"
+    epp_requerido = db.Column(db.String(200), default="")      # texto: "casco,guantes,lentes"
+    maquina_activa = db.Column(db.Boolean, default=True)       # False = la máquina debe estar parada
+    # Posición en el mapa de la fábrica (grilla): x, y, ancho y alto en celdas
+    grilla_x = db.Column(db.Integer, default=0)
+    grilla_y = db.Column(db.Integer, default=0)
+    ancho = db.Column(db.Integer, default=2)
+    alto = db.Column(db.Integer, default=2)
+
+    def to_dict(self):
+        epp = [e for e in (self.epp_requerido or "").split(",") if e]
+        return {
+            "id": self.id, "nombre": self.nombre, "maquina": self.maquina,
+            "epp_requerido": epp, "maquina_activa": self.maquina_activa,
+            "grilla_x": self.grilla_x, "grilla_y": self.grilla_y,
+            "ancho": self.ancho, "alto": self.alto,
+        }
 
 
 class Usuario(db.Model):
@@ -14,44 +36,81 @@ class Usuario(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     usuario = db.Column(db.String(50), unique=True, nullable=False)
-    contrasena = db.Column(db.String(255), nullable=False)
+    contrasena = db.Column(db.String(255), nullable=False)     # hash, nunca la clave en texto
     nombre = db.Column(db.String(100), nullable=False)
+    legajo = db.Column(db.String(20), unique=True)             # número de legajo del empleado
     rol = db.Column(db.Enum("empleado", "encargado"), nullable=False)
-    zona = db.Column(db.String(100))
+    zona_id = db.Column(db.Integer, db.ForeignKey("zonas.id"))
+    activo = db.Column(db.Boolean, default=True)               # False = dado de baja
     created_at = db.Column(db.DateTime, default=datetime.now)
 
+    zona = db.relationship("Zona", backref="usuarios")
+
     def set_password(self, password):
-        self.contrasena = hashear(password)
+        self.contrasena = generate_password_hash(password, method="pbkdf2:sha256")
 
     def check_password(self, password):
-        return self.contrasena == hashear(password)
+        return check_password_hash(self.contrasena, password)
 
     def to_dict(self):
-        return {"id": self.id, "usuario": self.usuario, "nombre": self.nombre,
-                "rol": self.rol, "zona": self.zona}
+        return {
+            "id": self.id, "usuario": self.usuario, "nombre": self.nombre,
+            "legajo": self.legajo, "rol": self.rol, "activo": self.activo,
+            "zona_id": self.zona_id,
+            "zona": self.zona.nombre if self.zona else None,   # nombre, para la web
+        }
 
 
 class Incidencia(db.Model):
     __tablename__ = "incidencias"
 
     id = db.Column(db.Integer, primary_key=True)
-    tipo = db.Column(db.String(50), nullable=False)          # sin_casco, sin_guantes...
+    tipo = db.Column(db.String(50), nullable=False)            # sin_casco, sin_guantes...
     timestamp = db.Column(db.DateTime, default=datetime.now)
-    zona = db.Column(db.String(100), nullable=False)
+    zona_id = db.Column(db.Integer, db.ForeignKey("zonas.id"), nullable=False)
     empleado_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
-    confianza = db.Column(db.Float, default=0.0)              # 0 a 1 (viene de YOLO)
-    estado = db.Column(db.String(20), default="activa")       # activa / resuelta
+    confianza = db.Column(db.Float, default=0.0)               # 0 a 1 (viene de YOLO)
+    estado = db.Column(db.String(20), default="activa")        # activa / resuelta
+    imagen_url = db.Column(db.String(255))                     # foto de evidencia
+    resuelta_por = db.Column(db.Integer, db.ForeignKey("usuarios.id"))
+    resuelta_at = db.Column(db.DateTime)
 
-    empleado = db.relationship("Usuario", backref="incidencias")
+    zona = db.relationship("Zona", backref="incidencias")
+    empleado = db.relationship("Usuario", foreign_keys=[empleado_id], backref="incidencias")
 
     def to_dict(self):
         return {
             "id": self.id,
             "tipo": self.tipo,
             "timestamp": self.timestamp.isoformat() if self.timestamp else None,
-            "zona": self.zona,
+            "zona_id": self.zona_id,
+            "zona": self.zona.nombre if self.zona else None,
             "empleado_id": self.empleado_id,
             "empleado_nombre": self.empleado.nombre if self.empleado else "Desconocido",
             "confianza": self.confianza,
             "estado": self.estado,
+            "imagen_url": self.imagen_url,
+            "resuelta_por": self.resuelta_por,
+            "resuelta_at": self.resuelta_at.isoformat() if self.resuelta_at else None,
+        }
+
+
+class Auditoria(db.Model):
+    """Registro de quién hizo qué y cuándo (acciones del encargado, parada de máquina...)."""
+    __tablename__ = "auditoria"
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"))   # None = una máquina (YOLO/ESP32)
+    accion = db.Column(db.String(50), nullable=False)                  # ej. "resolver_incidencia"
+    detalle = db.Column(db.String(255), default="")
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    usuario = db.relationship("Usuario")
+
+    def to_dict(self):
+        return {
+            "id": self.id, "usuario_id": self.usuario_id,
+            "usuario_nombre": self.usuario.nombre if self.usuario else "Sistema",
+            "accion": self.accion, "detalle": self.detalle,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
         }
