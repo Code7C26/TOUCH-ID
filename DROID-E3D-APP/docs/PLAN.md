@@ -109,7 +109,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 0.2 `.gitignore` de la app (venv, node_modules, .env, uploads, __pycache__, dist)
 - [x] 0.3 Labels `smat:*`, plantillas `.github/` con prefijo smat, `CONTRIBUIR.md`
 - [x] 0.4 `docs/FABRICA-CLIENTE.md` (borrador), `docs/BITACORA.md` (semana 1), `docs/decisiones/001…005`
-- [ ] 0.5 Comandos `/tarea-profe`, `/bitacora`, `/pr` · PR `SMAT-web → main`
+- [x] 0.5 Comandos `/tarea-profe`, `/bitacora`, `/pr` · PR `SMAT-web → main`
 
 ### Fase 1 · Backend sólido
 - [ ] 1.1 Modelo `Zona` (con grilla), `zona_id` en usuarios e incidencias, `legajo` · PAUSA: recrear base
