@@ -12,3 +12,6 @@ dist/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Archivos subidos en ejecucion (evidencias y rostros)
+backend/uploads/
