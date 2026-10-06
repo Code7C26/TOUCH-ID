@@ -38,6 +38,13 @@ async function request(path, options = {}) {
 
   // Si la respuesta no es JSON (por ejemplo una página de error), seguimos con un objeto vacío
   const data = await res.json().catch(() => ({}))
+
+  // 401 con sesión = el token venció o es inválido: se cierra la sesión y AuthContext lo detecta
+  if (res.status === 401 && token) {
+    localStorage.removeItem('user')
+    window.dispatchEvent(new Event('sesion-vencida'))
+  }
+
   if (!res.ok) throw new Error(data.error || `Error ${res.status} en el servidor`)
   return data
 }
