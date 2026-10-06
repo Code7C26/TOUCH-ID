@@ -126,7 +126,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 2.2 `AuthContext` + `TemaContext`, reemplazar el estado de `App.jsx`
 - [x] 2.3 `Logo` SVG, `Layout`, `NavBar`, `BottomNav`, `RutaProtegida`
 - [ ] 2.4 Mover a `pages/` y crear todas las rutas bajo `/app/*` (páginas vacías)
-- [ ] 2.5 `usePolling`, `utils/formato.js`, StatCard, Tabla, Modal, Filtros
+- [x] 2.5 `usePolling`, `utils/formato.js`, StatCard, Tabla, Modal, Filtros
 
 ### Fase 3 · Páginas del empleado
 - [ ] 3.1 Inicio · [ ] 3.2 Mis alertas · [ ] 3.3 Perfil
