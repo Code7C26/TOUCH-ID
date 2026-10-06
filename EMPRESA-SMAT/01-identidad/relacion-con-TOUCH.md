@@ -1,33 +1,41 @@
 # Relación con TOUCH
 
-> **Estado:** plantilla · **Responsable:** TODO (socio) · **Última actualización:** —
+> **Estado:** completo (v1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** Define qué es SMAT dentro de TOUCH. Evita malentendidos con clientes y con el jurado.
+**Para qué sirve:** define qué es SMAT dentro de TOUCH, para evitar malentendidos con clientes y con el jurado.
 
-## Datos ya definidos
+## Qué es cada una
 
-- _SMAT es una división de TOUCH. DROID-E3D es el producto de SMAT (robot + web)._
-- _El repositorio compartido es `Code7C26/TOUCH-ID`._
-
-TODO (socio): escribir acá.
+| | **TOUCH** | **SMAT** |
+|---|---|---|
+| Qué es | Empresa madre (equipo del proyecto final) | División de TOUCH |
+| Integrantes | Alexandra, Sol y Lola | Toro y Morena (socios) |
+| Producto | **Touch ID**: asistencia por huella dactilar | **DROID-E3D**: robot que controla el uso de EPP |
+| Carpetas en el repo | `assets/`, `design/`, `docs/`, `src/` (`TOUCH-ID`) | `DROID-E3D-APP/`, `EMPRESA-SMAT/`, `docs/SMAT/` |
 
 ## Qué comparten
 
-- _¿Marca, clientes, finanzas, personas, herramientas?_
+- **El repositorio** `Code7C26/TOUCH-ID`, el tablero «Kanban TOUCH-ID» y el profe supervisor.
+- **El tipo de cliente:** fábricas y PyMEs industriales. Un mismo cliente puede usar Touch ID para la asistencia y DROID-E3D para la seguridad.
+- **La marca madre:** SMAT se presenta como «una división de TOUCH».
 
-TODO (socio): escribir acá.
+## Qué es independiente
 
-## Qué es independiente de TOUCH
+- **Producto, plan y presupuesto:** SMAT decide sobre DROID-E3D sin consultar a TOUCH.
+- **Ramas y revisiones:** SMAT trabaja en `SMAT-web`, `SMAT-hardware` y `SMAT-empresa` y sus Pull Requests los revisan los socios de SMAT.
+- **Etiquetas y plantillas:** todo lo de SMAT lleva el prefijo `smat` para no mezclarse con TOUCH.
 
-- _¿Qué decide SMAT sola? ¿Qué le tiene que consultar a TOUCH?_
+## Qué se consulta con TOUCH
 
-TODO (socio): escribir acá.
+- Cambios que afecten a todo el repositorio (por ejemplo, el `README.md` de la raíz o la configuración de GitHub).
+- Usar el nombre o el logo de TOUCH en materiales nuevos.
+- Ofrecer a un mismo cliente los dos productos juntos (precio combinado).
 
 ## Cómo se presenta SMAT
 
-- _Ejemplo: «SMAT, una división de TOUCH». ¿Siempre así o depende del contexto?_
+- En documentos y la web: **«DROID-E3D by SMAT · una división de TOUCH»**.
+- Hablando: «Somos SMAT, la división de TOUCH que hace DROID-E3D».
 
-TODO (socio): escribir acá.
+## Oportunidad conjunta
 
----
-_Cuando esté listo: cambiar el estado a «en revisión», abrir un Pull Request y pedirle la revisión al otro socio._
+Touch ID sabe **quién está** en la planta; DROID-E3D sabe **si está protegido**. Integrados, el encargado podría ver en una sola pantalla la asistencia y el cumplimiento de EPP de cada trabajador. Se deja como línea futura, a conversar entre las dos empresas.

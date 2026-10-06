@@ -1,31 +1,33 @@
 # Misión, visión y valores
 
-> **Estado:** plantilla · **Responsable:** TODO (socio) · **Última actualización:** —
+> **Estado:** completo (v1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** Dice qué es SMAT y hacia dónde va. Lo usa la web pública (página «Nosotros») y el pitch.
-
-> ⚠ Decisión de los dos socios: abrir un Issue `smat:decision` antes de dar por aprobado.
+**Para qué sirve:** dice qué es SMAT y hacia dónde va. Lo usan la web pública (página «Nosotros») y el pitch.
 
 ## Misión
 
-- _¿Qué hace SMAT, para quién y cómo? (1 o 2 frases)_
-- _¿Qué problema de las fábricas resuelve?_
+**Ayudar a las fábricas a que cada trabajador vuelva a su casa sano, controlando de forma automática y respetuosa que use su equipo de protección personal.**
 
-TODO (socio): escribir acá.
+SMAT diseña, fabrica e instala **DROID-E3D**: un robot que recorre la planta, detecta con inteligencia artificial si los empleados usan casco, guantes, lentes y chaleco, avisa al instante y, si hace falta, detiene la máquina de esa zona.
 
 ## Visión
 
-- _¿Dónde quiere estar SMAT dentro de 3 años?_
-- _¿Cuántas fábricas, qué productos, qué equipo?_
+En 3 años (2029), ser la opción de referencia para **PyMEs industriales de Argentina** que quieren cumplir con la normativa de seguridad e higiene sin sumar supervisores:
 
-TODO (socio): escribir acá.
+- 25 fábricas usando DROID-E3D.
+- Una segunda versión del robot que también detecte riesgos del entorno (derrames, pasillos obstruidos).
+- Soporte técnico propio en el AMBA y en una provincia industrial más.
 
 ## Valores
 
-- _3 a 5 valores. Para cada uno, una frase de cómo se nota en el trabajo diario._
-- _Ejemplo del formato: «Seguridad primero: no entregamos nada que no hayamos probado.»_
+| Valor | Cómo se nota en el trabajo diario |
+|---|---|
+| **Seguridad primero** | No entregamos nada que no hayamos probado. Ante la duda, el robot frena. |
+| **Respeto por las personas** | DROID-E3D cuida al trabajador, no lo persigue: las fotos se usan solo para seguridad, con consentimiento y por tiempo limitado. |
+| **Transparencia** | Decimos qué hace y qué no hace el sistema. Cada alerta muestra la confianza de la IA y se puede revisar. |
+| **Aprender haciendo** | Documentamos cada decisión y cada error para mejorar el producto y el equipo. |
+| **Trabajo en equipo** | Las decisiones importantes se toman entre los socios y quedan registradas en GitHub. |
 
-TODO (socio): escribir acá.
+## Frase corta (para la web y redes)
 
----
-_Cuando esté listo: cambiar el estado a «en revisión», abrir un Pull Request y pedirle la revisión al otro socio._
+> **DROID-E3D by SMAT · Seguridad que recorre la planta.**
