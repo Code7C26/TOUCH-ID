@@ -145,7 +145,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 5.2 Endpoints ESP32 completos (`comando-pendiente`, `reporte`; robot "desconectado" si no reporta en 10 s)
 - [x] 5.3 Incidencia → `maquina_activa=false`; `PUT /api/zones/<id>/reactivar` (encargado, auditado)
 - [ ] 5.4 Página Robot + robot visible en el mapa
-- [ ] 5.5 `VideoEnVivo` (MJPEG desde `url_video`)
+- [x] 5.5 `VideoEnVivo` (MJPEG desde `url_video`)
 - [ ] 5.6 `tools/simular_esp32.py`
 
 ### Fase 6 · YOLO y reconocimiento facial
