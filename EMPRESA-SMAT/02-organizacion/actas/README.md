@@ -1,14 +1,30 @@
 # Actas de reunión
 
-> **Estado:** plantilla · **Responsable:** TODO (socio) · **Última actualización:** —
+> **Estado:** completo (v1) · **Responsable:** quien escribe el acta de cada reunión · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** Un archivo por reunión. Nombre: `AAAA-MM-DD-tema.md`.
+**Para qué sirve:** dejar por escrito qué se decidió y quién hace qué. Un archivo por reunión, con el nombre `AAAA-MM-DD-tema.md`.
 
 ## Formato de cada acta
 
-- _Fecha, asistentes, temas tratados, decisiones tomadas, tareas (quién y para cuándo)._
+```markdown
+# Acta AAAA-MM-DD · tema
 
-TODO (socio): escribir acá.
+**Asistentes:** ...
+**Duración:** ... minutos
 
----
-_Cuando esté listo: cambiar el estado a «en revisión», abrir un Pull Request y pedirle la revisión al otro socio._
+## Temas
+1. ...
+
+## Decisiones
+- ...  (si es compartida, enlazar el Issue `smat:decision`)
+
+## Tareas
+| Qué | Quién | Para cuándo |
+|---|---|---|
+```
+
+## Actas
+
+| Fecha | Tema |
+|---|---|
+| [06/10/2026](2026-10-06-arranque-de-smat.md) | Arranque de SMAT: repositorio, plan y documentos de la empresa |

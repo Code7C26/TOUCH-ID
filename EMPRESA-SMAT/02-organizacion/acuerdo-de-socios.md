@@ -1,40 +1,66 @@
 # Acuerdo de socios
 
-> **Estado:** plantilla · **Responsable:** TODO (socio) · **Última actualización:** —
+> **Estado:** completo (v1) · **listo para firmar** · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** Reglas claras entre los socios desde el principio, para evitar conflictos después.
+**Para qué sirve:** reglas claras entre los socios desde el principio, para evitar conflictos después.
 
-> ⚠ Es un documento sensible: conviene que lo revise un adulto de confianza o un abogado antes de firmarlo.
+> ⚠ Este acuerdo vale cuando **lo aprueban los dos socios** (Pull Request aprobado o firma al pie). Como los socios son menores de edad, para que tenga valor legal fuera del proyecto escolar debe firmarse también por sus representantes legales o rehacerse al cumplir 18 años.
 
-## Aportes
+## 1. Partes
 
-- _¿Qué pone cada uno? (tiempo semanal, dinero, equipos, conocimiento)_
+- **Toro**, socio, responsable de software y web.
+- **Morena**, socia, responsable de hardware e inteligencia artificial.
 
-TODO (socio): escribir acá.
+Ambos forman **SMAT**, división de TOUCH, cuyo producto es **DROID-E3D**.
 
-## Participación y ganancias
+## 2. Aportes
 
-- _¿Qué porcentaje tiene cada uno? ¿Cómo se reparten las ganancias?_
+| | Toro | Morena |
+|---|---|---|
+| Tiempo | Mínimo 8 horas por semana | Mínimo 8 horas por semana |
+| Conocimiento | Desarrollo de software y web | Electrónica, robótica e IA |
+| Equipos | Notebook propia para desarrollo y servidor local | Herramientas de electrónica y componentes del prototipo |
+| Dinero | Partes iguales de la inversión inicial (ver `../05-finanzas/inversion-inicial.md`) | Partes iguales de la inversión inicial |
 
-TODO (socio): escribir acá.
+Si uno aporta dinero de más, se registra como **préstamo a SMAT** y se le devuelve antes de repartir ganancias.
 
-## Propiedad
+## 3. Participación y ganancias
 
-- _¿De quién es el software, el hardware, la marca y los datos?_
+- Cada socio tiene el **50 %** de SMAT.
+- Las ganancias se reparten **50 / 50**, después de: (1) devolver préstamos de socios y (2) guardar un **20 % como fondo de reserva** para repuestos y garantías.
+- Durante el primer año no se reparten ganancias: todo se reinvierte en el producto.
 
-TODO (socio): escribir acá.
+## 4. Decisiones
 
-## Si alguien se va
+- **Por unanimidad:** precios, firma de contratos con clientes, gastos de más de USD 200, cambios a este acuerdo, ingreso de un socio nuevo.
+- **Cada socio en su área:** lo indicado en `roles-y-responsabilidades.md`.
+- **Si no hay acuerdo:** se deja la decisión por escrito en un Issue `smat:decision`, se espera 48 horas y se vuelve a votar. Si sigue el empate, se pide la opinión del profe supervisor y se respeta.
 
-- _¿Qué pasa con su parte y con lo que desarrolló?_
+## 5. Propiedad de lo que se crea
 
-TODO (socio): escribir acá.
+- El **software** de DROID-E3D (backend, web, scripts) es de **SMAT**.
+- El **diseño del robot** y el **código del ESP32 y de la IA** son de **SMAT**.
+- Las **marcas** «SMAT» y «DROID-E3D» y sus logos son de **SMAT**.
+- Cada socio puede **mostrar el proyecto en su portfolio**, CV y redes, aunque deje la empresa.
+- Los **datos de los clientes** (empleados, fotos, alertas) son del cliente; SMAT solo los trata para prestar el servicio.
 
-## Confidencialidad
+## 6. Si un socio se va
 
-- _¿Qué información no se comparte afuera?_
+- Avisa con **30 días** de anticipación y deja documentado y subido lo que estaba haciendo.
+- El otro socio tiene **prioridad para quedarse con su parte**, al valor que acuerden o, si no se ponen de acuerdo, a lo que aportó en dinero más un 10 %.
+- Quien se va **no puede usar la marca** ni ofrecer el mismo producto a los clientes de SMAT durante 12 meses.
 
-TODO (socio): escribir acá.
+## 7. Confidencialidad
 
----
-_Cuando esté listo: cambiar el estado a «en revisión», abrir un Pull Request y pedirle la revisión al otro socio._
+No se comparten fuera de SMAT: claves (`.env`), datos de clientes y empleados, precios acordados con cada cliente y el código del modelo de IA entrenado. Esto sigue vigente aunque un socio se vaya.
+
+## 8. Revisión
+
+Este acuerdo se revisa **cada 6 meses** o cuando entre un socio nuevo o el primer cliente pagante.
+
+## Conformidad
+
+| Socio | Conformidad (Pull Request aprobado o firma) | Fecha |
+|---|---|---|
+| Toro | | |
+| Morena | | |
