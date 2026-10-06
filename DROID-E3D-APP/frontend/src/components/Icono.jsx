@@ -16,6 +16,9 @@ const TRAZOS = {
   salir: <><path d="M15 4h4v16h-4" /><path d="M10 8l-4 4 4 4M6 12h10" /></>,
   ok: <><circle cx="12" cy="12" r="9" /><path d="M8 12.5l2.5 2.5L16 9.5" /></>,
   cerrar: <path d="M6 6l12 12M18 6L6 18" />,
+  play: <path d="M7 4l13 8-13 8z" fill="currentColor" />,
+  pausa: <><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" /><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" /></>,
+  stop: <rect x="6" y="6" width="12" height="12" rx="1.5" fill="currentColor" />,
 }
 
 export default function Icono({ nombre, className = 'size-5' }) {
