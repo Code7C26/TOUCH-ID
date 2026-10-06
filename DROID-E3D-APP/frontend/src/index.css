@@ -1,0 +1,23 @@
+/* Único archivo de CSS del proyecto: el resto de los estilos son clases de Tailwind en cada componente. */
+@import "tailwindcss";
+
+/* Modo oscuro manual: se activa cuando <html> tiene la clase "dark" (lo maneja TemaContext). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Colores de seguridad industrial (provisionales hasta el manual de marca de SMAT, tarea E.4).
+   Se usan como clases: bg-marca, text-alerta, border-ok, etc. */
+@theme {
+  --color-marca: #f5b800;        /* amarillo de seguridad: botones y acentos */
+  --color-marca-oscuro: #c99400; /* hover del amarillo */
+  --color-naranja: #f97316;      /* advertencias */
+  --color-alerta: #dc2626;       /* rojo: alertas activas, emergencia */
+  --color-ok: #16a34a;           /* verde: todo en orden */
+  --color-tinta: #1f2328;        /* texto oscuro sobre amarillo */
+}
+
+/* Colores de fondo y texto de toda la página, en claro y en oscuro */
+@layer base {
+  body {
+    @apply bg-zinc-100 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  }
+}

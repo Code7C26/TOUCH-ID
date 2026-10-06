@@ -16,3 +16,7 @@ Tailwind. Los colores de seguridad industrial se definen una sola vez en la conf
 
 ## Consecuencias
 El manual de marca (EMPRESA-SMAT/03-marca) define los colores finales; hasta entonces son provisionales.
+
+## Nota de implementación (2026-10-06)
+Se usa **Tailwind 4** con su plugin oficial de Vite (`@tailwindcss/vite`), que reemplaza a postcss + autoprefixer.
+La configuración está en `frontend/src/index.css` (`@theme`), no en un `tailwind.config.js`.

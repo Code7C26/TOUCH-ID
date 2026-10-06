@@ -122,7 +122,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 1.8 Stubs de endpoints de hardware (`X-API-KEY`, Robot/PuntoRuta mínimos, `maquina_activa`) + `docs/integracion/`
 
 ### Fase 2 · Base del frontend
-- [ ] 2.1 Tailwind con colores de seguridad provisionales (hasta el manual de marca E.4) + modo oscuro
+- [x] 2.1 Tailwind con colores de seguridad provisionales (hasta el manual de marca E.4) + modo oscuro
 - [ ] 2.2 `AuthContext` + `TemaContext`, reemplazar el estado de `App.jsx`
 - [ ] 2.3 `Logo` SVG, `Layout`, `NavBar`, `BottomNav`, `RutaProtegida`
 - [ ] 2.4 Mover a `pages/` y crear todas las rutas bajo `/app/*` (páginas vacías)
