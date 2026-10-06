@@ -69,3 +69,24 @@ export const resolveIncident = (id) => request(`/incidents/${id}/resolver`, { me
 // ---------- Estadísticas (solo encargado) ----------
 
 export const getStats = () => request('/stats')
+
+// ---------- Zonas (leer: todos · crear, editar y borrar: encargado) ----------
+
+export const getZones = () => request('/zones')
+export const createZone = (datos) => request('/zones', { method: 'POST', body: JSON.stringify(datos) })
+export const updateZone = (id, datos) => request(`/zones/${id}`, { method: 'PUT', body: JSON.stringify(datos) })
+export const deleteZone = (id) => request(`/zones/${id}`, { method: 'DELETE' })
+
+// ---------- Empleados (solo encargado) ----------
+
+// filtros opcionales: { rol, zona_id, activo: 'true' | 'false' }
+export const getUsers = (filtros) => request(`/users${armarConsulta(filtros)}`)
+export const createUser = (datos) => request('/users', { method: 'POST', body: JSON.stringify(datos) })
+export const updateUser = (id, datos) => request(`/users/${id}`, { method: 'PUT', body: JSON.stringify(datos) })
+// "Dar de baja" no borra al empleado (se perdería su historial): lo marca como inactivo
+export const deactivateUser = (id) => request(`/users/${id}`, { method: 'DELETE' })
+
+// ---------- Robot (solo encargado) ----------
+
+// Estado, batería, zona actual y si está conectado
+export const getRobot = () => request('/robot/estado')

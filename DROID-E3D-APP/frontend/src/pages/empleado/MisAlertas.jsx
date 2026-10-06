@@ -5,6 +5,7 @@ import AlertCard from '../../components/AlertCard.jsx'
 import DetalleAlerta from '../../components/DetalleAlerta.jsx'
 import Filtros from '../../components/Filtros.jsx'
 import Modal from '../../components/Modal.jsx'
+import Paginador from '../../components/Paginador.jsx'
 import Titulo from '../../components/Titulo.jsx'
 import usePolling from '../../hooks/usePolling.js'
 import { nombreTipo } from '../../utils/formato.js'
@@ -32,14 +33,12 @@ export default function MisAlertas() {
   )
   const lista = datos?.incidencias || []
   const total = datos?.total ?? 0
-  const paginas = Math.max(1, Math.ceil(total / POR_PAGINA))
 
   const cambiarFiltros = (nuevos) => {
     setPagina(1) // un filtro nuevo siempre empieza en la primera página
     setFiltros(nuevos)
   }
   const hayFiltros = Object.values(filtros).some(Boolean)
-  const botonPagina = 'rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium disabled:opacity-40 dark:border-zinc-700'
 
   return (
     <>
@@ -62,13 +61,7 @@ export default function MisAlertas() {
         ))}
       </div>
 
-      {total > POR_PAGINA && (
-        <div className="mt-4 flex items-center justify-between">
-          <button type="button" className={botonPagina} disabled={pagina <= 1} onClick={() => setPagina(pagina - 1)}>Anterior</button>
-          <span className="text-sm text-zinc-500">Página {pagina} de {paginas}</span>
-          <button type="button" className={botonPagina} disabled={pagina >= paginas} onClick={() => setPagina(pagina + 1)}>Siguiente</button>
-        </div>
-      )}
+      <Paginador pagina={pagina} total={total} porPagina={POR_PAGINA} onCambiar={setPagina} />
 
       <Modal abierto={Boolean(elegida)} titulo="Detalle de la alerta" onCerrar={() => setElegida(null)}>
         {elegida && <DetalleAlerta incidencia={elegida} />}

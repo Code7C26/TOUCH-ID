@@ -1,8 +1,10 @@
-// Tarjeta de una alerta (incidencia). Si se pasa onResolver, muestra el botón "Resolver".
+// Tarjeta de una alerta (incidencia).
+//  - onResolver: muestra el botón "Resolver" (solo si la alerta está activa)
+//  - onVer: muestra el botón "Detalle"
 import { COLOR_ESTADO, formatearFecha, haceCuanto, nombreTipo, porcentaje } from '../utils/formato.js'
 import Icono from './Icono.jsx'
 
-export default function AlertCard({ incidencia, onResolver }) {
+export default function AlertCard({ incidencia, onResolver, onVer }) {
   const activa = incidencia.estado === 'activa'
 
   return (
@@ -28,11 +30,21 @@ export default function AlertCard({ incidencia, onResolver }) {
         </p>
       </div>
 
-      {onResolver && activa && (
-        <button type="button" onClick={() => onResolver(incidencia.id)}
-                className="shrink-0 rounded-lg bg-marca px-3 py-2 text-sm font-semibold text-tinta hover:bg-marca-oscuro">
-          Resolver
-        </button>
+      {(onVer || (onResolver && activa)) && (
+        <div className="flex shrink-0 flex-col gap-1.5">
+          {onResolver && activa && (
+            <button type="button" onClick={() => onResolver(incidencia.id)}
+                    className="rounded-lg bg-marca px-3 py-1.5 text-sm font-semibold text-tinta hover:bg-marca-oscuro">
+              Resolver
+            </button>
+          )}
+          {onVer && (
+            <button type="button" onClick={() => onVer(incidencia)}
+                    className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">
+              Detalle
+            </button>
+          )}
+        </div>
       )}
     </article>
   )

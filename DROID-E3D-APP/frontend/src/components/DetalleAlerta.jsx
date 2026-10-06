@@ -34,6 +34,7 @@ export default function DetalleAlerta({ incidencia }) {
         <Dato etiqueta="Cuándo">{formatearFecha(incidencia.timestamp)}</Dato>
         <Dato etiqueta="Confianza de la IA">{porcentaje(incidencia.confianza)}</Dato>
         {incidencia.resuelta_at && <Dato etiqueta="Resuelta el">{formatearFecha(incidencia.resuelta_at)}</Dato>}
+        {incidencia.resuelta_por_nombre && <Dato etiqueta="Resuelta por">{incidencia.resuelta_por_nombre}</Dato>}
       </dl>
     </div>
   )
