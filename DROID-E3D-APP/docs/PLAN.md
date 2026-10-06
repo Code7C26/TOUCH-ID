@@ -176,16 +176,16 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 ### Fase E · Empresa SMAT desde cero (carpeta `../EMPRESA-SMAT/`, rama `SMAT-empresa`)
 Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y deja `TODO (socio)` donde falte una decisión.
 - [x] E.0 Estructura con plantillas y `EMPRESA-SMAT/README.md` índice
-- [x] E.1 Issues `smat:empresa` (#29 a #37, uno por carpeta) · PAUSA pendiente: reparto entre Toro y Morena
-- [ ] E.2 Identidad (misión, visión, valores, relación con TOUCH)
-- [ ] E.3 Organización (organigrama TOUCH → SMAT, roles, acuerdo de socios, decisiones, actas)
-- [ ] E.4 Marca (nombre, logo, manual de marca, redes y dominio)
-- [ ] E.5 Negocio (canvas, cliente ideal, competencia, propuesta de valor)
-- [ ] E.6 Finanzas (inversión, costos de DROID-E3D, precios, proyección 3 años, financiamiento)
-- [ ] E.7 Comercial (marketing, propuesta modelo, contrato de servicio modelo)
-- [ ] E.8 Legal (forma jurídica, propiedad intelectual, normativa EPP, datos personales)
-- [ ] E.9 FODA
-- [ ] E.10 Pitch y guion para el jurado/cliente
+- [x] E.1 Issues `smat:empresa` (#29 a #37, uno por carpeta), asignados a Toro con revisión de Morena
+- [x] E.2 Identidad (misión, visión, valores, relación con TOUCH)
+- [x] E.3 Organización (organigrama TOUCH → SMAT, roles, acuerdo de socios, decisiones, actas)
+- [x] E.4 Marca (nombre, logo, manual de marca, redes y dominio)
+- [x] E.5 Negocio (canvas, cliente ideal, competencia, propuesta de valor)
+- [x] E.6 Finanzas (inversión, costos de DROID-E3D, precios, proyección 3 años, financiamiento)
+- [x] E.7 Comercial (marketing, propuesta modelo, contrato de servicio modelo)
+- [x] E.8 Legal (forma jurídica, propiedad intelectual, normativa EPP, datos personales)
+- [x] E.9 FODA
+- [x] E.10 Pitch y guion para el jurado/cliente
 
 ### Tareas del profe (sección viva, se llena con `/tarea-profe`)
 Formato: `- [ ] P.N descripción (#issue)`
