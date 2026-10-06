@@ -2,6 +2,11 @@
 -- Es seguro correrlo en una base nueva. NO borra datos existentes (usa IF NOT EXISTS),
 -- pero los datos de ejemplo del final solo se deben cargar UNA vez, en una base vacía.
 -- Para empezar de cero:  DROP DATABASE robot_db;  y volver a correr este script.
+
+-- Este archivo está en UTF-8. Sin esta línea, la consola de Windows lo lee como cp850
+-- y los acentos se guardan mal (ej. "María" queda como "Mar├¡a").
+SET NAMES utf8mb4;
+
 CREATE DATABASE IF NOT EXISTS robot_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE robot_db;
 

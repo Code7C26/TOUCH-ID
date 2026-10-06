@@ -122,14 +122,14 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 1.8 Stubs de endpoints de hardware (`X-API-KEY`, Robot/PuntoRuta mínimos, `maquina_activa`) + `docs/integracion/`
 
 ### Fase 2 · Base del frontend
-- [ ] 2.1 Tailwind con colores de seguridad provisionales (hasta el manual de marca E.4) + modo oscuro
-- [ ] 2.2 `AuthContext` + `TemaContext`, reemplazar el estado de `App.jsx`
-- [ ] 2.3 `Logo` SVG, `Layout`, `NavBar`, `BottomNav`, `RutaProtegida`
-- [ ] 2.4 Mover a `pages/` y crear todas las rutas bajo `/app/*` (páginas vacías)
-- [ ] 2.5 `usePolling`, `utils/formato.js`, StatCard, Tabla, Modal, Filtros
+- [x] 2.1 Tailwind con colores de seguridad provisionales (hasta el manual de marca E.4) + modo oscuro
+- [x] 2.2 `AuthContext` + `TemaContext`, reemplazar el estado de `App.jsx`
+- [x] 2.3 `Logo` SVG, `Layout`, `NavBar`, `BottomNav`, `RutaProtegida`
+- [x] 2.4 Mover a `pages/` y crear todas las rutas bajo `/app/*` (páginas vacías)
+- [x] 2.5 `usePolling`, `utils/formato.js`, StatCard, Tabla, Modal, Filtros
 
 ### Fase 3 · Páginas del empleado
-- [ ] 3.1 Inicio · [ ] 3.2 Mis alertas · [ ] 3.3 Perfil
+- [x] 3.1 Inicio · [x] 3.2 Mis alertas · [x] 3.3 Perfil
 
 ### Fase 4 · Páginas del encargado
 - [ ] 4.1 `MapaFabrica` (SVG en grilla)
@@ -175,17 +175,17 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase E · Empresa SMAT desde cero (carpeta `../EMPRESA-SMAT/`, rama `SMAT-empresa`)
 Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y deja `TODO (socio)` donde falte una decisión.
-- [ ] E.0 Estructura con plantillas y `EMPRESA-SMAT/README.md` índice
-- [ ] E.1 Un Issue `smat:empresa` por documento · PAUSA: reparto entre Toro y Morena
-- [ ] E.2 Identidad (misión, visión, valores, relación con TOUCH)
-- [ ] E.3 Organización (organigrama TOUCH → SMAT, roles, acuerdo de socios, decisiones, actas)
-- [ ] E.4 Marca (nombre, logo, manual de marca, redes y dominio)
-- [ ] E.5 Negocio (canvas, cliente ideal, competencia, propuesta de valor)
-- [ ] E.6 Finanzas (inversión, costos de DROID-E3D, precios, proyección 3 años, financiamiento)
-- [ ] E.7 Comercial (marketing, propuesta modelo, contrato de servicio modelo)
-- [ ] E.8 Legal (forma jurídica, propiedad intelectual, normativa EPP, datos personales)
-- [ ] E.9 FODA
-- [ ] E.10 Pitch y guion para el jurado/cliente
+- [x] E.0 Estructura con plantillas y `EMPRESA-SMAT/README.md` índice
+- [x] E.1 Issues `smat:empresa` (#29 a #37, uno por carpeta), asignados a Toro con revisión de Morena
+- [x] E.2 Identidad (misión, visión, valores, relación con TOUCH)
+- [x] E.3 Organización (organigrama TOUCH → SMAT, roles, acuerdo de socios, decisiones, actas)
+- [x] E.4 Marca (nombre, logo, manual de marca, redes y dominio)
+- [x] E.5 Negocio (canvas, cliente ideal, competencia, propuesta de valor)
+- [x] E.6 Finanzas (inversión, costos de DROID-E3D, precios, proyección 3 años, financiamiento)
+- [x] E.7 Comercial (marketing, propuesta modelo, contrato de servicio modelo)
+- [x] E.8 Legal (forma jurídica, propiedad intelectual, normativa EPP, datos personales)
+- [x] E.9 FODA
+- [x] E.10 Pitch y guion para el jurado/cliente
 
 ### Tareas del profe (sección viva, se llena con `/tarea-profe`)
 Formato: `- [ ] P.N descripción (#issue)`

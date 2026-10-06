@@ -3,7 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DROID-E3D</title>
+    <meta name="theme-color" content="#f5b800" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>DROID-E3D · SMAT</title>
+    <script>
+      // Aplica el tema guardado ANTES de dibujar la página, para que no "parpadee" en blanco.
+      try {
+        const guardado = localStorage.getItem('tema')
+        const oscuro = guardado ? guardado === 'oscuro' : matchMedia('(prefers-color-scheme: dark)').matches
+        if (oscuro) document.documentElement.classList.add('dark')
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
