@@ -132,7 +132,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 3.1 Inicio · [x] 3.2 Mis alertas · [x] 3.3 Perfil
 
 ### Fase 4 · Páginas del encargado
-- [ ] 4.1 `MapaFabrica` (SVG en grilla)
+- [x] 4.1 `MapaFabrica` (SVG en grilla)
 - [ ] 4.2 Panel · [ ] 4.3 Incidencias · [ ] 4.4 Empleados · [ ] 4.5 Zonas
 
 ### Fase L · Landing pública
