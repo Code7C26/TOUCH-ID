@@ -19,16 +19,17 @@ Cámara → servidor YOLO ──POST /api/incidents──▶ Backend Flask ─�
 - **Encargado:** ve todas las alertas y las resuelve, gestiona zonas y empleados, controla el robot (iniciar, pausar, parada de emergencia, ruta) y ve el estado de las máquinas.
 - **Máquinas (YOLO y ESP32):** no tienen usuario; se identifican con una clave en el header `X-API-KEY`.
 
-## Estado técnico (05/10/2026)
+## Estado técnico (06/10/2026)
 
 | Área | Estado |
 |---|---|
 | Backend: login con roles, zonas, empleados, incidencias, auditoría | ✅ Funciona; verificado con 76 chequeos automáticos de permisos y validaciones (script local, aún no incluido en el repo) |
 | Backend: endpoints para YOLO y ESP32 (`/incidents`, `/robot/*`, `/zones/<id>/maquina`) | ✅ Funciona; falta probarlo con el hardware real |
 | Backend: control del robot desde la web (estado, comandos, ruta, video) | ✅ Funciona |
-| Backend: parada automática de la máquina, foto de evidencia, fotos de rostro, push, reportes | 🔜 Pendiente |
-| Frontend: login y lista de alertas (versión inicial) | ✅ Funciona, se rediseña por completo |
-| Frontend: Tailwind, menú por rol, panel, incidencias, robot, mapa, reportes | 🔜 Pendiente (Fases 2 a 4) |
+| Backend: parada automática de la máquina, foto de evidencia, fotos de rostro, push, reportes | 🔜 Pendiente (Fases 5 a 8) |
+| Frontend: login, base visual (claro/oscuro, celular y PC), menú por rol y pantallas del **empleado** (inicio, mis alertas, perfil) | ✅ Funciona; 24 chequeos automáticos con Edge |
+| Frontend: pantallas del **encargado** (panel con mapa de la fábrica, incidencias, empleados, zonas) | ✅ Funciona; 44 chequeos automáticos con Edge |
+| Frontend: control del robot con video en vivo, reportes, auditoría, página pública de SMAT, push | 🔜 Pendiente (Fases 5 a 8 y L) |
 | Hardware e IA (robot, relé, cámara, YOLO, reconocimiento facial) | En desarrollo por Morena; integración pendiente |
 
 El detalle tarea por tarea está en [`docs/PLAN.md`](docs/PLAN.md) y el reporte de avance en [`../docs/SMAT/`](../docs/SMAT/).
