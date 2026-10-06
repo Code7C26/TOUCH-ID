@@ -175,8 +175,8 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase E · Empresa SMAT desde cero (carpeta `../EMPRESA-SMAT/`, rama `SMAT-empresa`)
 Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y deja `TODO (socio)` donde falte una decisión.
-- [ ] E.0 Estructura con plantillas y `EMPRESA-SMAT/README.md` índice
-- [ ] E.1 Un Issue `smat:empresa` por documento · PAUSA: reparto entre Toro y Morena
+- [x] E.0 Estructura con plantillas y `EMPRESA-SMAT/README.md` índice
+- [x] E.1 Issues `smat:empresa` (#29 a #37, uno por carpeta) · PAUSA pendiente: reparto entre Toro y Morena
 - [ ] E.2 Identidad (misión, visión, valores, relación con TOUCH)
 - [ ] E.3 Organización (organigrama TOUCH → SMAT, roles, acuerdo de socios, decisiones, actas)
 - [ ] E.4 Marca (nombre, logo, manual de marca, redes y dominio)
