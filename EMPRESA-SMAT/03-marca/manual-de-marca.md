@@ -1,39 +1,60 @@
 # Manual de marca
 
-> **Estado:** plantilla · **Responsable:** TODO (socio) · **Última actualización:** —
+> **Estado:** completo (v1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** Reglas visuales y de tono. La web toma de acá los colores definitivos (hoy son provisionales).
+**Para qué sirve:** reglas visuales y de tono. La web de DROID-E3D ya usa estos colores (definidos en `DROID-E3D-APP/frontend/src/index.css`).
 
-## Nombre
+## 1. Nombres
 
-- _¿«SMAT», «DROID-E3D by SMAT» o ambos? ¿Cómo se escribe y cuándo se usa cada uno?_
+| Nombre | Qué es | Cómo se escribe |
+|---|---|---|
+| **SMAT** | La empresa (división de TOUCH) | Siempre en mayúsculas. Nunca «Smat» ni «S.M.A.T.» |
+| **DROID-E3D** | El producto (robot + web) | Mayúsculas con guion. Nunca «Droid E3D» ni «droide3d» |
+| **DROID-E3D by SMAT** | Firma del producto | En la web, documentos para clientes y presentaciones |
+| **SMAT · una división de TOUCH** | Firma institucional | En pie de página, contratos y la página «Nosotros» |
 
-TODO (socio): escribir acá.
+**Qué significa «E3D»:** *Equipo de protección · Detección · Decisión · Detención*: el robot ve el equipo de protección, lo detecta con IA, decide si hay una falta y detiene la máquina si hace falta.
 
-## Logo
+## 2. Logo
 
-- _Versiones (color, blanco y negro, íconos), tamaño mínimo y usos incorrectos._
-- _Los archivos van en `logo/`._
+**Isotipo DROID-E3D:** un escudo amarillo (protección) con el visor de un robot y dos «ojos» que escanean.
 
-TODO (socio): escribir acá.
+| Archivo | Uso |
+|---|---|
+| `logo/droid-e3d-icono.svg` | Ícono solo: favicon, app del celular, redes |
+| `logo/droid-e3d.svg` | Ícono + nombre: encabezados, documentos |
+| `logo/smat.svg` | Logotipo de la empresa |
 
-## Colores
+- **Tamaño mínimo:** 24 px de alto en pantalla, 8 mm impreso.
+- **Espacio libre alrededor:** el ancho de un «ojo» del robot, como mínimo, en los cuatro lados.
+- **Sobre fondo oscuro:** el escudo se mantiene amarillo; el texto pasa a blanco.
+- **No hacer:** deformar o rotar el logo, cambiarle los colores, ponerle sombras, ubicarlo sobre fotos que no dejen leerlo.
 
-- _Códigos HEX de cada color. Hoy la web usa de forma provisoria: amarillo `#f5b800`, rojo `#dc2626`, verde `#16a34a`._
+## 3. Colores
 
-TODO (socio): escribir acá.
+| Nombre | HEX | Uso |
+|---|---|---|
+| **Amarillo seguridad** (principal) | `#F5B800` | Botones principales, logo, acentos |
+| Amarillo oscuro | `#C99400` | Botón al pasar el mouse, texto amarillo sobre blanco |
+| **Tinta** | `#1F2328` | Texto sobre amarillo, visor del logo, franja de seguridad |
+| **Rojo alerta** | `#DC2626` | Alertas activas, parada de emergencia, errores |
+| **Verde OK** | `#16A34A` | Todo en orden, alertas resueltas |
+| Naranja | `#F97316` | Advertencias, ojo del robot |
+| Grises | `#F4F4F5` a `#09090B` | Fondos y textos (escala *zinc*) |
 
-## Tipografía
+**Franja de seguridad:** rayas diagonales amarillo/tinta de 12 px, como la cinta de peligro. Se usa arriba de la barra de la web y del login.
 
-- _¿Qué fuentes se usan para títulos y textos?_
+**Contraste:** sobre el amarillo el texto va siempre en tinta, nunca en blanco (no se lee).
 
-TODO (socio): escribir acá.
+## 4. Tipografía
 
-## Tono de voz
+- **En pantalla (web):** la fuente del sistema (*Segoe UI* en Windows, *Roboto* en Android, *San Francisco* en iPhone). Carga rápido y se ve nativa.
+- **En documentos y presentaciones:** **Arial** o **Helvetica**. Títulos en negrita, texto en regular.
+- Números de las tarjetas: cifras de ancho fijo (*tabular*) para que no «salten» al actualizarse.
 
-- _¿Cómo habla SMAT: técnico, cercano, formal? Ejemplos._
+## 5. Tono de voz
 
-TODO (socio): escribir acá.
-
----
-_Cuando esté listo: cambiar el estado a «en revisión», abrir un Pull Request y pedirle la revisión al otro socio._
+- **Claro y directo:** «Tenés 2 alertas activas. Revisá tu equipo de protección.»
+- **Cercano, sin retar:** el sistema avisa, no castiga. Nunca «¡Incumpliste!».
+- **Técnico solo cuando hace falta:** con encargados y clientes se puede hablar de «confianza de la IA» o «parada de máquina»; con empleados, de «alerta» y «equipo».
+- **Voseo** en la web y redes (público argentino); **usted** en contratos y propuestas formales.
