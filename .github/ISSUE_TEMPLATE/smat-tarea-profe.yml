@@ -1,0 +1,28 @@
+name: "SMAT · Tarea del profe"
+description: Un pedido del profe (Classroom) para DROID-E3D o SMAT
+title: "[Profe] "
+labels: ["smat:profe"]
+body:
+  - type: textarea
+    id: pedido
+    attributes:
+      label: Qué pidió el profe
+      description: Pegá el texto de Classroom
+    validations:
+      required: true
+  - type: input
+    id: entrega
+    attributes:
+      label: Fecha de entrega
+      placeholder: "AAAA-MM-DD"
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options: [Web, Hardware, IA, Empresa SMAT, Fábrica cliente]
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Cómo sabemos que está terminada

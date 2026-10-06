@@ -1,0 +1,29 @@
+name: "SMAT · Documento de empresa"
+description: Un documento de EMPRESA-SMAT que alguien tiene que escribir
+title: "[Empresa] "
+labels: ["smat:empresa"]
+body:
+  - type: input
+    id: documento
+    attributes:
+      label: Documento
+      placeholder: "EMPRESA-SMAT/01-identidad/mision-vision-valores.md"
+    validations:
+      required: true
+  - type: dropdown
+    id: responsable
+    attributes:
+      label: Socio responsable
+      options: [Toro, Morena]
+    validations:
+      required: true
+  - type: textarea
+    id: contenido
+    attributes:
+      label: Qué tiene que incluir
+      description: Preguntas guía o puntos que el documento debe responder
+  - type: input
+    id: fecha
+    attributes:
+      label: Fecha objetivo
+      placeholder: "AAAA-MM-DD"

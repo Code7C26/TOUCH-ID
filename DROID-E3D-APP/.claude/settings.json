@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(npx:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(py:*)",
+      "Bash(git status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git init:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(dir:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(rm -rf:*)",
+      "Read(./backend/.env)",
+      "Read(./frontend/.env)"
+    ]
+  }
+}
