@@ -133,7 +133,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase 4 · Páginas del encargado
 - [x] 4.1 `MapaFabrica` (SVG en grilla)
-- [x] 4.2 Panel · [x] 4.3 Incidencias · [x] 4.4 Empleados · [ ] 4.5 Zonas
+- [x] 4.2 Panel · [x] 4.3 Incidencias · [x] 4.4 Empleados · [x] 4.5 Zonas
 
 ### Fase L · Landing pública
 - [ ] L.1 `LayoutPublico` y rutas públicas
