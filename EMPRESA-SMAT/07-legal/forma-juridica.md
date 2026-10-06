@@ -1,28 +1,34 @@
 # Forma jurídica
 
-> **Estado:** plantilla · **Responsable:** TODO (socio) · **Última actualización:** —
+> **Estado:** completo (v1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** Cómo está constituida legalmente SMAT.
+**Para qué sirve:** cómo está y cómo debería constituirse legalmente SMAT.
 
-> ⚠ Orientativo: verificar con un contador o abogado.
+> ⚠ Orientativo, para el proyecto final. Antes de constituir la empresa, consultar con un contador o abogado los requisitos y costos vigentes.
 
 ## Situación actual
 
-- _SMAT es una división de TOUCH. ¿TOUCH tiene personería jurídica propia?_
-
-TODO (socio): escribir acá.
+- SMAT es una **división de TOUCH** dentro del proyecto final del secundario. **No tiene personería jurídica** ni CUIT propio: hoy es un emprendimiento escolar.
+- Los socios son **menores de edad**: no pueden firmar contratos comerciales por sí solos. Cualquier compra, contrato o trámite formal lo hacen o autorizan sus **representantes legales** hasta que cumplan 18 años.
 
 ## Opciones a futuro
 
-- _Monotributo, SAS, sociedad de hecho, cooperativa... con ventajas y costos._
+| Forma | Cómo es | Ventajas | Desventajas |
+|---|---|---|---|
+| **Monotributo de cada socio** | Cada uno factura a su nombre | Barato y rápido; ideal para los primeros clientes | No hay «empresa» separada; los socios responden con sus bienes; límites de facturación anual |
+| **Sociedad de hecho / Sección IV** | Dos personas que comparten un negocio sin estatuto formal | Simple | Responsabilidad ilimitada y solidaria de los socios; poco seria ante clientes grandes |
+| **SAS** (Sociedad por Acciones Simplificada, Ley 27.349) | Sociedad con estatuto, se puede constituir con uno o más socios | Responsabilidad limitada al capital; da imagen de empresa; trámite relativamente ágil | Costos de constitución, contador, libros e impuestos de sociedad; requiere socios mayores de edad (o representados) |
+| **Cooperativa de trabajo** | Asociación de trabajadores con igual voto | Valores de equipo | Mínimo de asociados mayor al de SMAT; más trámites |
 
-TODO (socio): escribir acá.
+## Recomendación
+
+1. **Mientras sea proyecto escolar (2026):** seguir como división de TOUCH, sin forma jurídica.
+2. **Primer cliente piloto (2027):** facturar a través del **monotributo** de un socio mayor de edad o de un representante legal, con un acuerdo escrito de reparto.
+3. **Desde 3 clientes o al cumplir 18 los socios:** constituir una **SAS** con los dos socios al 50 % (coincide con el acuerdo de socios).
 
 ## Qué se necesita para facturar
 
-- _CUIT, inscripción, quién factura._
-
-TODO (socio): escribir acá.
-
----
-_Cuando esté listo: cambiar el estado a «en revisión», abrir un Pull Request y pedirle la revisión al otro socio._
+- CUIT y clave fiscal de quien factura (ARCA, ex AFIP).
+- Alta en el monotributo (o inscripción de la SAS) y en ingresos brutos de la provincia.
+- Talonario o factura electrónica.
+- Cuenta bancaria para cobrar.
