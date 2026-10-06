@@ -9,6 +9,9 @@ No es el código final: cada uno lo adapta. El contrato oficial está en [`../AP
 | `esp32_maquina.ino` | ESP32 de la máquina | Pregunta si la máquina está activa y abre/cierra el relé |
 | `cliente_yolo.py` | Servidor de IA | Lee zonas y EPP, reporta faltas, baja fotos de rostros |
 
+## Sin hardware: el simulador
+`backend/tools/simular_esp32.py` hace lo mismo que `esp32_robot.ino` y `esp32_maquina.ino` (misma API): úsenlo para ver cómo debería comportarse la placa y comparar sus resultados.
+
 ## Antes de probar
 1. Backend corriendo (`python app.py`) y MySQL iniciado.
 2. Pedirle a Toro las claves `YOLO_API_KEY` y `ROBOT_API_KEY` **por fuera de GitHub** (nunca se suben al repo).

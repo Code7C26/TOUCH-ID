@@ -146,7 +146,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 5.3 Incidencia → `maquina_activa=false`; `PUT /api/zones/<id>/reactivar` (encargado, auditado)
 - [x] 5.4 Página Robot + robot visible en el mapa
 - [x] 5.5 `VideoEnVivo` (MJPEG desde `url_video`)
-- [ ] 5.6 `tools/simular_esp32.py`
+- [x] 5.6 `tools/simular_esp32.py`
 
 ### Fase 6 · YOLO y reconocimiento facial
 - [ ] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8

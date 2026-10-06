@@ -167,7 +167,7 @@ Invoke-RestMethod -Uri http://localhost:5000/api/zones/1/maquina -Headers $r
 ```
 
 Ejemplos de código en `docs/integracion/` (`esp32_robot.ino`, `esp32_maquina.ino`, `cliente_yolo.py`).
-Los simuladores `backend/tools/simular_yolo.py` y `simular_esp32.py` llegan en las Fases 5.6 y 6.4.
+**Simulador del robot y las máquinas (✅ ya disponible):** `python backend/tools/simular_esp32.py --maquinas` actúa como el ESP32 del robot (recibe órdenes, recorre la ruta, reporta batería) y vigila las máquinas; sirve para probar la web y para ver el comportamiento esperado antes de programar la placa. `simular_yolo.py` llega en la Fase 6.4.
 
 ## 6. Códigos de respuesta
 
