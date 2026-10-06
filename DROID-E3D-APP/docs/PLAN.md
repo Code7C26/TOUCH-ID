@@ -129,7 +129,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 2.5 `usePolling`, `utils/formato.js`, StatCard, Tabla, Modal, Filtros
 
 ### Fase 3 · Páginas del empleado
-- [ ] 3.1 Inicio · [ ] 3.2 Mis alertas · [ ] 3.3 Perfil
+- [x] 3.1 Inicio · [ ] 3.2 Mis alertas · [ ] 3.3 Perfil
 
 ### Fase 4 · Páginas del encargado
 - [ ] 4.1 `MapaFabrica` (SVG en grilla)

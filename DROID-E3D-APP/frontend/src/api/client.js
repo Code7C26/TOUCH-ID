@@ -54,11 +54,15 @@ async function request(path, options = {}) {
 export const loginUser = (usuario, contrasena) =>
   request('/login', { method: 'POST', body: JSON.stringify({ usuario, contrasena }) })
 
+// Datos del usuario con sesión, con su zona completa (EPP, máquina). Sirve para el inicio y el perfil.
+export const getMe = () => request('/me')
+
 // ---------- Incidencias ----------
 
-// Lista alertas. Por ahora solo se filtra por nombre de zona; el backend ya acepta
-// más filtros (zona_id, estado, tipo, desde, hasta, page) que se usarán en la Fase 4.
-export const getIncidents = (zona) => request(`/incidents${armarConsulta({ zona })}`)
+// Lista alertas. El empleado recibe solo las suyas; el encargado, todas.
+// filtros (todos opcionales): { zona_id, estado, tipo, desde, hasta, page, limit }
+// desde / hasta van como 'AAAA-MM-DD'.
+export const getIncidents = (filtros) => request(`/incidents${armarConsulta(filtros)}`)
 
 export const resolveIncident = (id) => request(`/incidents/${id}/resolver`, { method: 'PUT' })
 

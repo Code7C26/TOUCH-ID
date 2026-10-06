@@ -44,3 +44,17 @@ export const COLOR_ESTADO = {
   activa: 'bg-alerta/10 text-alerta ring-alerta/30',
   resuelta: 'bg-ok/10 text-ok ring-ok/30',
 }
+
+// Date -> 'AAAA-MM-DD' en hora local (es el formato que usa el backend para los filtros de fecha)
+export function fechaISO(fecha) {
+  const mes = String(fecha.getMonth() + 1).padStart(2, '0')
+  const dia = String(fecha.getDate()).padStart(2, '0')
+  return `${fecha.getFullYear()}-${mes}-${dia}`
+}
+
+// La fecha de hace N días, como 'AAAA-MM-DD'
+export function fechaHaceDias(dias) {
+  const fecha = new Date()
+  fecha.setDate(fecha.getDate() - dias)
+  return fechaISO(fecha)
+}
