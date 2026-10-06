@@ -142,8 +142,8 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase 5 · Robot y máquinas
 - [x] 5.1 `/api/robot/estado|ruta|comando` para la web
-- [ ] 5.2 Endpoints ESP32 completos (`comando-pendiente`, `reporte`; robot "desconectado" si no reporta en 10 s)
-- [ ] 5.3 Incidencia → `maquina_activa=false`; `PUT /api/zones/<id>/reactivar` (encargado, auditado)
+- [x] 5.2 Endpoints ESP32 completos (`comando-pendiente`, `reporte`; robot "desconectado" si no reporta en 10 s)
+- [x] 5.3 Incidencia → `maquina_activa=false`; `PUT /api/zones/<id>/reactivar` (encargado, auditado)
 - [ ] 5.4 Página Robot + robot visible en el mapa
 - [ ] 5.5 `VideoEnVivo` (MJPEG desde `url_video`)
 - [ ] 5.6 `tools/simular_esp32.py`

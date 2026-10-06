@@ -109,8 +109,16 @@ def crear_incidencia():
 
     inc = Incidencia(tipo=data["tipo"], zona_id=zona.id, empleado_id=empleado_id, confianza=confianza)
     db.session.add(inc)
+    db.session.flush()  # para conocer el id de la incidencia antes de registrar la parada
+
+    # Seguridad: si la zona tiene máquina, se detiene hasta que el encargado la reactive.
+    # La parada la hace el sistema (no una persona), por eso queda en auditoría sin usuario.
+    parada = bool(zona.maquina and zona.maquina_activa)
+    if parada:
+        zona.maquina_activa = False
+        registrar("parada_maquina", f"Zona '{zona.nombre}': máquina detenida por la incidencia #{inc.id} ({inc.tipo})")
     db.session.commit()
-    return inc.to_dict(), 201
+    return {**inc.to_dict(), "maquina_detenida": parada}, 201
 
 
 @incidents_bp.route("/incidents/<int:inc_id>/resolver", methods=["PUT"])

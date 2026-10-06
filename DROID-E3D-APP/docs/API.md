@@ -43,7 +43,7 @@ Header: `X-API-KEY: <YOLO_API_KEY>`
 | `empleado_id` | no | id del empleado reconocido. Omitilo o mandá `null` si no lo identificó |
 | `confianza` | no | número de 0 a 1 (por defecto 0) |
 
-Respuesta `201` con la incidencia creada (`id`, `timestamp`, `estado: "activa"`...). Errores `400`: tipo inválido, zona o empleado inexistente, confianza fuera de rango.
+Respuesta `201` con la incidencia creada (`id`, `timestamp`, `estado: "activa"`...) y `maquina_detenida`: `true` si **esta falta detuvo la máquina de la zona** (la zona tiene máquina y estaba activa). Errores `400`: tipo inválido, zona o empleado inexistente, confianza fuera de rango.
 
 ### 🔜 `POST /incidents` con foto (Fase 6.1)
 Mismo endpoint, pero `multipart/form-data` con los campos de arriba más `imagen` (JPG/PNG, máx. 5 MB). El JSON simple de arriba va a seguir funcionando.
@@ -133,7 +133,12 @@ Header: `X-API-KEY: <ROBOT_API_KEY>`
 - `maquina_activa: true` → relé cerrado, la máquina funciona.
 - `maquina_activa: false` → **abrir el relé y cortar la máquina**.
 
-Consultar cada 1-2 s. **Si no hay conexión con el backend, decidan juntos qué hace el ESP32** (recomendado: dejar la máquina como está y encender un LED de aviso). Cuando una incidencia nueva llega (Fase 5.3) el backend pone `maquina_activa=false`; solo el encargado puede reactivarla desde la web.
+Consultar cada 1-2 s. **Si no hay conexión con el backend, decidan juntos qué hace el ESP32** (recomendado: dejar la máquina como está y encender un LED de aviso).
+
+**Cuándo cambia `maquina_activa`** (✅ ya funciona):
+- `false` → cuando YOLO registra una incidencia en la zona (si la zona tiene máquina), o cuando el encargado la detiene a mano desde la web.
+- `true` → solo cuando **el encargado la reactiva** desde la web (`PUT /zones/<id>/reactivar`). La IA nunca reactiva una máquina.
+- Todo queda en la auditoría (la parada automática figura como hecha por el «Sistema»).
 
 ---
 
