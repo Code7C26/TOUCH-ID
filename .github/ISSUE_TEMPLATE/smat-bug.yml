@@ -1,0 +1,28 @@
+name: "SMAT · Error en DROID-E3D"
+description: Algo de la web, el backend o la integración no funciona
+title: "[Bug] "
+labels: ["smat:bug"]
+body:
+  - type: textarea
+    id: que
+    attributes:
+      label: Qué pasa
+    validations:
+      required: true
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Cómo reproducirlo
+      value: |
+        1.
+        2.
+        3.
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Qué debería pasar
+  - type: dropdown
+    id: donde
+    attributes:
+      label: Dónde ocurre
+      options: [Frontend, Backend, Base de datos, Hardware / ESP32, YOLO, Despliegue]

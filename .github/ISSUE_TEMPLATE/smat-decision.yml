@@ -1,0 +1,29 @@
+name: "SMAT · Decisión entre socios"
+description: Algo que Toro y Morena tienen que decidir juntos
+title: "[Decisión] "
+labels: ["smat:decision"]
+body:
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Qué hay que decidir y por qué
+    validations:
+      required: true
+  - type: textarea
+    id: opciones
+    attributes:
+      label: Opciones
+      description: Una por línea, con ventajas y desventajas
+    validations:
+      required: true
+  - type: textarea
+    id: votos
+    attributes:
+      label: Votos
+      value: |
+        - Toro:
+        - Morena:
+  - type: input
+    id: resultado
+    attributes:
+      label: Resultado (se completa al cerrar)

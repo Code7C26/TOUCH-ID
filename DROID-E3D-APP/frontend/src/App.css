@@ -1,0 +1,37 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: #f2f4f7; color: #1d2433; }
+h1 { font-size: 1.8rem; margin-bottom: 4px; }
+h3 { margin: 24px 0 10px; }
+.subtitle { color: #667085; font-size: 0.9rem; }
+.error { color: #c0362c; margin: 8px 0; }
+
+.login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.login-card { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 12px; text-align: center; }
+
+input { padding: 12px; border: 1px solid #d0d5dd; border-radius: 8px; font-size: 1rem; }
+button { padding: 12px; border: none; border-radius: 8px; background: #f59e0b; color: #fff; font-weight: 600; cursor: pointer; font-size: 1rem; }
+button:disabled { opacity: .6; }
+.btn-secondary { background: #e4e7ec; color: #1d2433; padding: 8px 14px; }
+.btn-small { padding: 6px 10px; font-size: .85rem; }
+
+.page { max-width: 900px; margin: 0 auto; padding: 16px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+
+.alert-banner { background: #fdecea; color: #a12a20; padding: 14px; border-radius: 10px; font-weight: 600; }
+.ok-banner { background: #e7f6ec; color: #1f7a3d; padding: 14px; border-radius: 10px; font-weight: 600; }
+
+.alert-card { background: #fff; border-left: 5px solid #e5484d; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.alert-card.resuelta { border-left-color: #30a46c; opacity: .7; }
+.alert-card p { color: #475467; font-size: .9rem; }
+.alert-card small { color: #98a2b3; }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stat-card { background: #fff; border-radius: 10px; padding: 16px; text-align: center; }
+.stat-card span { font-size: 2rem; font-weight: 700; color: #f59e0b; }
+.stat-card p { color: #667085; }
+
+table { width: 100%; background: #fff; border-radius: 10px; border-collapse: collapse; overflow: hidden; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #eaecf0; }
+th { background: #f9fafb; font-size: .85rem; color: #667085; }
