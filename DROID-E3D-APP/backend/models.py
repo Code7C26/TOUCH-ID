@@ -77,6 +77,7 @@ class Incidencia(db.Model):
 
     zona = db.relationship("Zona", backref="incidencias")
     empleado = db.relationship("Usuario", foreign_keys=[empleado_id], backref="incidencias")
+    resolutor = db.relationship("Usuario", foreign_keys=[resuelta_por])   # quién la resolvió
 
     def to_dict(self):
         return {
@@ -91,6 +92,7 @@ class Incidencia(db.Model):
             "estado": self.estado,
             "imagen_url": self.imagen_url,
             "resuelta_por": self.resuelta_por,
+            "resuelta_por_nombre": self.resolutor.nombre if self.resolutor else None,
             "resuelta_at": self.resuelta_at.isoformat() if self.resuelta_at else None,
         }
 
