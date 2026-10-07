@@ -27,7 +27,7 @@ FORMA DE TRABAJO (repetir por cada tarea)
    Si falla, arreglalo antes de seguir.
 5. Marcá la tarea como [x] en docs/PLAN.md.
 6. Commit: "Fase X.Y: descripción corta" (+ "closes #N" si hay issue).
-7. Resumime en máximo 4 líneas: qué cambió y cómo lo pruebo yo.
+7. Resumime en máximo 4 líneas: qué cambió y cómo lo pruebo yo. Al cerrar una fase: resumen de 5 líneas + capturas.
 8. Pasá a la siguiente SIN esperarme, salvo en las PAUSAS.
 
 PAUSAS (ahí sí pará y esperame)
@@ -40,6 +40,7 @@ PAUSAS (ahí sí pará y esperame)
 LIBRERÍAS APROBADAS (no requieren pausa)
 Frontend: tailwindcss (+postcss/autoprefixer), recharts, vite-plugin-pwa.
 Backend: pywebpush, reportlab, python-dotenv.
+Pruebas (solo desarrollo): pytest, playwright (con el Edge instalado), pillow.
 
 REGLAS DE CÓDIGO
 - Todo en español: variables, comentarios, textos de la interfaz.
@@ -59,7 +60,9 @@ REGLAS DE CÓDIGO
 REGLAS DE GIT Y CARPETAS
 - Solo podés tocar: esta carpeta, ../EMPRESA-SMAT/ y archivos smat-* de ../.github/.
 - Nunca toques las carpetas de TOUCH (assets/, design/, docs/, src/ de la raíz del repo).
-- Nunca git add . desde la raíz. Nunca pushees ni mergees a main: eso lo hago yo.
+- Nunca git add . desde la raíz. Nunca hagas push directo a main.
+- Al terminar una FASE, si todas las pruebas pasan (también las de GitHub Actions), abrí el PR y mergealo vos.
+  Frená y esperame si algo falla o si el cambio toca la API del hardware (docs/API.md): eso lo revisa Morena.
 - En EMPRESA-SMAT no inventes decisiones de la empresa ni escribas las partes de otros socios:
   dejá "TODO (socio): ..." donde falte una definición.
 

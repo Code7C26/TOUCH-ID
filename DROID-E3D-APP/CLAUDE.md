@@ -20,7 +20,8 @@ El ESP32 consulta por HTTP al backend qué comando ejecutar y si su máquina deb
 ## Repo y equipo
 - Repo `Code7C26/TOUCH-ID`. Ramas: `SMAT-web` (esta), `SMAT-empresa`, `SMAT-hardware`. PR a `main` al final de cada fase.
 - No tocar las carpetas de TOUCH (`assets/`, `design/`, `docs/`, `src/` de la raíz). Permitido: `DROID-E3D-APP/`, `EMPRESA-SMAT/`, `.github/` (archivos `smat-*`).
-- Nunca `git add .` desde la raíz del repo. Nunca pushear ni mergear a `main`.
+- Nunca `git add .` desde la raíz del repo ni push directo a `main`.
+- Al terminar una fase con todas las pruebas en verde, Claude abre el PR y lo mergea; se frena si algo falla o si cambia `docs/API.md` (lo revisa Morena).
 - Tareas del profe llegan por Classroom: el usuario las pasa con `/tarea-profe` → Issue en GitHub + sección "Tareas del profe" del PLAN.
 
 ## Fuentes de verdad
@@ -32,6 +33,7 @@ El ESP32 consulta por HTTP al backend qué comando ejecutar y si su máquina deb
 ## Reglas
 - Español en código, comentarios y UI. Código simple y comentado (autor principiante).
 - Trabajar tarea por tarea del PLAN, marcar [x], commit por tarea (`closes #N` si hay issue), pausa al final de cada fase.
-- Verificar: `python -m py_compile` (backend) y `npm run build` (frontend).
+- Verificar: `python -m py_compile` (backend), `npm run build` (frontend) y las pruebas automáticas (Fase T).
+- Diseño: estilo SaaS moderno (ver Fase R del PLAN). Reportes al usuario: cortos y con capturas.
 - El usuario usa Windows: dar comandos para PowerShell.
 - No borrar archivos ni instalar librerías fuera de las aprobadas sin preguntar.
