@@ -1,10 +1,11 @@
 // Panel del encargado: números del día, mapa de la fábrica, estado del robot y últimas alertas.
 // Todo se actualiza solo cada pocos segundos.
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getIncidents, getRobot, getStats, getZones, resolveIncident } from '../../api/client.js'
+import { getIncidents, getRobot, getRobotRoute, getStats, getZones, reactivateMachine, resolveIncident, stopMachine } from '../../api/client.js'
 import AlertCard from '../../components/AlertCard.jsx'
+import DetalleZona from '../../components/DetalleZona.jsx'
 import MapaFabrica, { LeyendaMapa } from '../../components/MapaFabrica.jsx'
+import PanelLateral from '../../components/PanelLateral.jsx'
 import StatCard from '../../components/StatCard.jsx'
 import Tabla from '../../components/Tabla.jsx'
 import TarjetaRobot from '../../components/TarjetaRobot.jsx'
@@ -17,17 +18,20 @@ import { calcularTendencia } from '../../utils/tendencia.js'
 
 export default function Panel() {
   const avisar = useAvisos()
-  const navegar = useNavigate()
   const [errorAccion, setErrorAccion] = useState('')
+  const [zonaAbierta, setZonaAbierta] = useState(null)   // id de la zona del panel lateral
   const stats = usePolling(() => getStats(), 5000)
   const zonas = usePolling(() => getZones(), 15000)
   const robot = usePolling(() => getRobot(), 4000)
+  const ruta = usePolling(() => getRobotRoute(), 30000)
   const activas = usePolling(() => getIncidents({ estado: 'activa', limit: 200 }), 5000)
   const recientes = usePolling(() => getIncidents({ limit: 6 }), 5000)
 
   const s = stats.datos
   const serie = (s?.serie_14_dias || []).map((d) => d.total)   // alertas por día, para los mini gráficos
-  const alertasPorZona = contarPorZona(activas.datos?.incidencias || [])
+  const listaActivas = activas.datos?.incidencias || []
+  const alertasPorZona = contarPorZona(listaActivas)
+  const zona = zonas.datos?.zonas.find((z) => z.id === zonaAbierta)   // siempre con los datos más nuevos
   const error = [stats, zonas, robot, activas, recientes].map((p) => p.error).find(Boolean) || errorAccion
 
   const resolver = async (id) => {
@@ -39,6 +43,13 @@ export default function Panel() {
     } catch (e) {
       setErrorAccion(e.message)
     }
+  }
+
+  // Desde el panel lateral de la zona: detener o reactivar su máquina (los errores los muestra el panel)
+  const cambiarMaquina = async (accion) => {
+    await (accion === 'detener' ? stopMachine : reactivateMachine)(zona.id)
+    zonas.recargar()
+    avisar(`${zona.maquina} ${accion === 'detener' ? 'detenida' : 'reactivada'}`)
   }
 
   return (
@@ -64,10 +75,11 @@ export default function Panel() {
           {zonas.cargando && <p className="text-sm text-zinc-500">Cargando…</p>}
           {zonas.datos && (
             <MapaFabrica zonas={zonas.datos.zonas} alertasPorZona={alertasPorZona} robot={robot.datos}
-                         onSeleccionar={(z) => navegar(`/app/incidencias?zona_id=${z.id}`)} />
+                         ruta={(ruta.datos?.ruta || []).map((p) => p.zona_id)} seleccionada={zonaAbierta}
+                         onSeleccionar={(z) => setZonaAbierta(z.id)} />
           )}
-          <LeyendaMapa />
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Tocá una zona para ver sus alertas.</p>
+          <LeyendaMapa conRecorrido />
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Tocá una zona para ver su detalle.</p>
         </section>
 
         <div className="space-y-6">
@@ -87,6 +99,12 @@ export default function Panel() {
           {(recientes.datos?.incidencias || []).map((inc) => <AlertCard key={inc.id} incidencia={inc} onResolver={resolver} />)}
         </div>
       </section>
+
+      <PanelLateral abierto={Boolean(zona)} titulo={zona?.nombre} onCerrar={() => setZonaAbierta(null)}
+                    descripcion={zona && (alertasPorZona[zona.id] ? `${alertasPorZona[zona.id]} alerta(s) activa(s)` : 'Todo en orden')}>
+        {zona && <DetalleZona key={zona.id} zona={zona} alertas={listaActivas.filter((i) => i.zona_id === zona.id)}
+                              onResolver={resolver} onMaquina={cambiarMaquina} />}
+      </PanelLateral>
     </>
   )
 }

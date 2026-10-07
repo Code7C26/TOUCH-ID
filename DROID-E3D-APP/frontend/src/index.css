@@ -35,10 +35,15 @@
 /* Animaciones de entrada de los avisos y paneles laterales */
 @keyframes entrar-derecha { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes avanzar-recorrido { to { stroke-dashoffset: -44; } }
 @layer utilities {
   .animar-panel { animation: entrar-derecha 0.22s ease-out; }
+  /* Mapa: el robot se desliza de una zona a otra y el recorrido punteado avanza */
+  .robot-mapa { transition: transform 1.2s ease-in-out; }
+  .recorrido { animation: avanzar-recorrido 1.5s linear infinite; }
   .animar-aviso { animation: aparecer 0.18s ease-out; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .animar-panel, .animar-aviso { animation: none; }
+  .animar-panel, .animar-aviso, .recorrido { animation: none; }
+  .robot-mapa { transition: none; }
 }

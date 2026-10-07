@@ -161,7 +161,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] R.4 Validación en vivo en formularios (login, empleados, zonas, ruta)
 - [x] R.5 Tablas con orden por columna, búsqueda y avatares
 - [x] R.6 Tarjetas del panel con tendencia (vs. semana anterior) y mini gráfico
-- [ ] R.7 Mapa: íconos de máquina y EPP, robot animado con su recorrido, panel lateral con el detalle de la zona
+- [x] R.7 Mapa: íconos de máquina y EPP, robot animado con su recorrido, panel lateral con el detalle de la zona
 
 ### Fase 6 · YOLO y reconocimiento facial
 - [ ] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8
