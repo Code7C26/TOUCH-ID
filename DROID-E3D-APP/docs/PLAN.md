@@ -164,11 +164,11 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] R.7 Mapa: íconos de máquina y EPP, robot animado con su recorrido, panel lateral con el detalle de la zona
 
 ### Fase 6 · YOLO y reconocimiento facial
-- [ ] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8
-- [ ] 6.2 Fotos de rostro con consentimiento (Ley 25.326) + `GET /api/rostros`
-- [ ] 6.3 Evidencia en detalle y en AlertCard
-- [ ] 6.4 `tools/simular_yolo.py`
-- [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`) cuando exista el hardware
+- [x] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8
+- [x] 6.2 Fotos de rostro con consentimiento (Ley 25.326) + `GET /api/rostros`
+- [x] 6.3 Evidencia en detalle y en AlertCard
+- [x] 6.4 `tools/simular_yolo.py`
+- [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`, guía lista) cuando exista el hardware
 
 ### Fase 7 · Tiempo real
 - [ ] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido"

@@ -16,6 +16,7 @@
 - 06/10: **Fase 5**: control del robot desde la web (órdenes, parada de emergencia, ruta), video en vivo, parada automática de la máquina y su reactivación, y simulador del ESP32.
 - 07/10: **Fase T**: pruebas automáticas del backend (pytest) y de la web (Playwright), corriendo solas en GitHub Actions en cada PR.
 - 07/10: **Fase R** (rediseño estilo SaaS): barra lateral, avisos flotantes, paneles laterales, validación en vivo, tablas ordenables con búsqueda, tarjetas con tendencia y mini gráfico, y mapa con íconos de máquina y EPP, robot animado, recorrido numerado y detalle de cada zona.
+- 07/10: **Fase 6**: foto de evidencia en cada alerta, fotos de rostro con consentimiento (Ley 25.326) que maneja el encargado o el propio empleado, `GET /rostros` para la IA, simulador de YOLO y guía de la prueba real.
 
 **Problemas**
 - Node.js y GitHub CLI no estaban instalados (resuelto con winget).
@@ -26,5 +27,5 @@
 - Ver `docs/decisiones/001` a `005`.
 
 **Próximos pasos**
-- Fase 6: foto de evidencia en las alertas, fotos de rostro con consentimiento y simulador de YOLO.
+- Fase L: página pública de SMAT. Fase 6.5: prueba real con el hardware de Morena (`docs/integracion/PRUEBA.md`).
 - Morena: revisar `docs/API.md` y el acuerdo de socios; probar el robot y el relé contra el backend.
