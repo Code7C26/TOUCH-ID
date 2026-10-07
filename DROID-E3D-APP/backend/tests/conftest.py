@@ -6,6 +6,7 @@ Correr desde DROID-E3D-APP:   python -m pytest backend/tests
 """
 import os
 import sys
+import tempfile
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -15,6 +16,7 @@ os.environ["DB_NAME"] = os.getenv("TEST_DB_NAME", "robot_db_test")
 os.environ["YOLO_API_KEY"] = "clave-yolo-de-prueba"
 os.environ["ROBOT_API_KEY"] = "clave-robot-de-prueba"
 os.environ["JWT_SECRET"] = "secreto-de-prueba"
+os.environ["UPLOAD_DIR"] = tempfile.mkdtemp(prefix="droid-uploads-")   # las fotos de prueba no ensucian backend/uploads
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import jwt  # noqa: E402

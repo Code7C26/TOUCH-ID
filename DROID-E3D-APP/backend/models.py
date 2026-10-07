@@ -97,6 +97,23 @@ class Incidencia(db.Model):
         }
 
 
+class FotoRostro(db.Model):
+    """Foto de la cara de un empleado (con su consentimiento), para el reconocimiento facial."""
+    __tablename__ = "fotos_rostro"
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    ruta_archivo = db.Column(db.String(255), nullable=False)     # "/uploads/rostros/3_a1b2c3d4.jpg"
+    consentimiento_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    cargada_por = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="SET NULL"))
+
+    usuario = db.relationship("Usuario", foreign_keys=[usuario_id], backref="fotos_rostro")
+
+    def to_dict(self):
+        return {"id": self.id, "usuario_id": self.usuario_id, "url": self.ruta_archivo,
+                "consentimiento_at": self.consentimiento_at.isoformat() if self.consentimiento_at else None}
+
+
 class Auditoria(db.Model):
     """Registro de quién hizo qué y cuándo (acciones del encargado, parada de máquina...)."""
     __tablename__ = "auditoria"

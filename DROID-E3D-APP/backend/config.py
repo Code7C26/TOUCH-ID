@@ -22,3 +22,8 @@ class Config:
     # Claves para las máquinas (no para personas). Van en el header X-API-KEY.
     YOLO_API_KEY = os.getenv("YOLO_API_KEY", "")      # servidor de IA
     ROBOT_API_KEY = os.getenv("ROBOT_API_KEY", "")    # ESP32 del robot y de las máquinas
+
+    # Fotos (evidencias de las alertas y rostros). La carpeta no se sube a GitHub.
+    UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(os.path.dirname(__file__), "uploads"))
+    MAX_IMAGEN_MB = 5
+    MAX_CONTENT_LENGTH = 6 * 1024 * 1024   # Flask corta antes cualquier envío más grande (error 413)
