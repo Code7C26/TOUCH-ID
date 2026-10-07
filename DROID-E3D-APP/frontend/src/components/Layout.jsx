@@ -1,17 +1,19 @@
-// Marco de todas las páginas con sesión: barra arriba, menú al costado (PC) o abajo (celular).
+// Marco de todas las páginas con sesión.
+//  - PC / tablet: barra lateral fija a la izquierda y el contenido a la derecha
+//  - celular: barra arriba y menú abajo
 // <Outlet /> es donde React Router dibuja la página actual.
 import { Outlet } from 'react-router-dom'
+import BarraLateral from './BarraLateral.jsx'
+import BarraMovil from './BarraMovil.jsx'
 import BottomNav from './BottomNav.jsx'
-import MenuLateral from './MenuLateral.jsx'
-import NavBar from './NavBar.jsx'
 
 export default function Layout() {
   return (
-    <div className="min-h-dvh">
-      <NavBar />
-      <div className="mx-auto flex max-w-6xl gap-6 px-4 pt-5 pb-24 md:pb-10">
-        <MenuLateral />
-        <main className="min-w-0 flex-1">
+    <div className="flex min-h-dvh">
+      <BarraLateral />
+      <div className="min-w-0 flex-1">
+        <BarraMovil />
+        <main className="mx-auto max-w-6xl px-4 pt-6 pb-24 md:px-8 md:pt-8 md:pb-12">
           <Outlet />
         </main>
       </div>
