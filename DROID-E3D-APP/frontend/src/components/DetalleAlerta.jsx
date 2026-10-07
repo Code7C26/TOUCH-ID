@@ -2,6 +2,7 @@
 import { formatearFecha, nombreTipo, porcentaje } from '../utils/formato.js'
 import Avatar from './Avatar.jsx'
 import Etiqueta, { tonoDeEstado } from './Etiqueta.jsx'
+import ImagenProtegida from './ImagenProtegida.jsx'
 
 function Dato({ etiqueta, children }) {
   return (
@@ -16,8 +17,8 @@ export default function DetalleAlerta({ incidencia }) {
   return (
     <div className="space-y-4">
       {incidencia.imagen_url ? (
-        <img src={incidencia.imagen_url} alt={`Evidencia: ${nombreTipo(incidencia.tipo)}`}
-             className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700" />
+        <ImagenProtegida ruta={incidencia.imagen_url} alt={`Evidencia: ${nombreTipo(incidencia.tipo)}`}
+                         className="aspect-video w-full rounded-lg border border-zinc-200 !object-contain bg-zinc-950 dark:border-zinc-700" />
       ) : (
         <div className="grid h-32 place-items-center rounded-lg bg-zinc-100 text-sm text-zinc-500 dark:bg-zinc-800">
           Esta alerta no tiene foto

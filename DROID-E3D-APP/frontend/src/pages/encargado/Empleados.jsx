@@ -7,6 +7,7 @@ import Confirmar from '../../components/Confirmar.jsx'
 import Etiqueta from '../../components/Etiqueta.jsx'
 import Filtros from '../../components/Filtros.jsx'
 import FormEmpleado from '../../components/FormEmpleado.jsx'
+import FotosRostro from '../../components/FotosRostro.jsx'
 import PanelLateral from '../../components/PanelLateral.jsx'
 import Tabla from '../../components/Tabla.jsx'
 import Titulo from '../../components/Titulo.jsx'
@@ -110,12 +111,20 @@ export default function Empleados() {
                     descripcion={formulario?.id ? 'Los cambios se aplican al guardar.' : 'Con el usuario y la contraseña va a entrar a la web.'}>
         {formulario && <FormEmpleado key={formulario.id || 'nuevo'} inicial={formulario.id ? formulario : null} zonas={listaZonas} usuarios={todos}
                                      error={error} guardando={ocupado} onGuardar={guardar} onCancelar={() => setFormulario(null)} />}
+        {/* Las fotos de rostro se cargan después de crear al empleado, y solo si sigue activo */}
+        {formulario?.id && formulario.activo && (
+          <section className="mt-8 border-t border-zinc-200/80 pt-6 dark:border-zinc-800">
+            <h3 className="mb-1 font-semibold">Fotos de rostro</h3>
+            <FotosRostro usuarioId={formulario.id} />
+          </section>
+        )}
       </PanelLateral>
 
       <Confirmar abierto={Boolean(aBaja)} titulo={`Dar de baja a ${aBaja?.nombre || ''}`} accion="Sí, dar de baja" ocupado={ocupado} error={error}
                  onConfirmar={darDeBaja} onCancelar={() => setABaja(null)}>
         <p>Ya no va a poder entrar a la web.</p>
         <p>Su historial de alertas se conserva y lo podés reactivar cuando quieras.</p>
+        <p>Sus fotos de rostro se borran.</p>
       </Confirmar>
     </>
   )

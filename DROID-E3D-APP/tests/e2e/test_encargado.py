@@ -1,5 +1,5 @@
 """Pantallas del encargado: panel con mapa, incidencias, empleados y zonas."""
-from conftest import api, selector, sesion
+from conftest import api, esperar_texto, selector, sesion
 
 
 def token():
@@ -71,8 +71,7 @@ def test_empleados_alta_edicion_baja_y_reactivacion(base_limpia, abrir):
     pag.get_by_label("Contraseña").fill("clave123")
     selector(pag, "Zona", en_ventana=True).select_option(label="Zona C")
     pag.get_by_role("button", name="Crear empleado").click()
-    pag.wait_for_timeout(1000)
-    assert pag.get_by_text("Empleado creado").is_visible()
+    assert esperar_texto(pag, "Empleado creado")      # guardar la contraseña (hash) tarda un poco a propósito
     usuarios = lambda: {u["usuario"]: u for u in api("/users", token=token())["usuarios"]}  # noqa: E731
     assert usuarios()["tester1"]["zona"] == "Zona C"
 
