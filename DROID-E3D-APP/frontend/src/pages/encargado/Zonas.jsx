@@ -1,6 +1,6 @@
 // Gestión de zonas: su máquina, el EPP obligatorio y su lugar en el mapa de la fábrica.
 import { useState } from 'react'
-import { createZone, deleteZone, getZones, updateZone } from '../../api/client.js'
+import { createZone, deleteZone, getIncidents, getZones, reactivateMachine, stopMachine, updateZone } from '../../api/client.js'
 import FormZona from '../../components/FormZona.jsx'
 import MapaFabrica from '../../components/MapaFabrica.jsx'
 import Modal from '../../components/Modal.jsx'
@@ -13,6 +13,7 @@ export default function Zonas() {
   const zonas = usePolling(() => getZones(), 10000)
   const [formulario, setFormulario] = useState(null)   // null = cerrado · {} = nueva · zona = editar
   const [aBorrar, setABorrar] = useState(null)
+  const [maquina, setMaquina] = useState(null)         // { zona, accion: 'reactivar' | 'detener', alertas }
   const [errorModal, setErrorModal] = useState('')
   const [aviso, setAviso] = useState('')
   const [ocupado, setOcupado] = useState(false)
@@ -24,7 +25,7 @@ export default function Zonas() {
     try {
       await accion()
       zonas.recargar(); setAviso(exito); setTimeout(() => setAviso(''), 4000)
-      setFormulario(null); setABorrar(null)
+      setFormulario(null); setABorrar(null); setMaquina(null)
     } catch (e) {
       setErrorModal(e.message)
     } finally {
@@ -32,6 +33,15 @@ export default function Zonas() {
     }
   }
   const abrirFormulario = (zona) => { setErrorModal(''); setFormulario(zona) }
+
+  // Antes de reactivar una máquina se cuenta cuántas alertas siguen sin resolver en la zona
+  const abrirMaquina = async (zona, accion) => {
+    setErrorModal(''); setMaquina({ zona, accion, alertas: null })
+    if (accion === 'reactivar') {
+      try { setMaquina({ zona, accion, alertas: (await getIncidents({ zona_id: zona.id, estado: 'activa', limit: 1 })).total }) }
+      catch (e) { setErrorModal(e.message) }
+    }
+  }
 
   return (
     <>
@@ -67,7 +77,10 @@ export default function Zonas() {
               {z.epp_requerido.map((e) => <li key={e} className="rounded-md bg-marca/15 px-2 py-1 text-xs font-medium">{NOMBRES_EPP[e] || e}</li>)}
             </ul>
             <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">Mapa: columna {z.grilla_x + 1}, fila {z.grilla_y + 1} · {z.ancho}×{z.alto} celdas</p>
-            <div className="mt-3 flex justify-end gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+            <div className="mt-3 flex flex-wrap justify-end gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+              {z.maquina && (z.maquina_activa
+                ? <button type="button" className={botonSecundario} onClick={() => abrirMaquina(z, 'detener')}>Detener máquina</button>
+                : <button type="button" className={botonPrimario} onClick={() => abrirMaquina(z, 'reactivar')}>Reactivar máquina</button>)}
               <button type="button" className={botonSecundario} onClick={() => abrirFormulario(z)}>Editar</button>
               <button type="button" className={botonPeligro} onClick={() => { setErrorModal(''); setABorrar(z) }}>Borrar</button>
             </div>
@@ -81,6 +94,24 @@ export default function Zonas() {
                     onCancelar={() => setFormulario(null)}
                     onGuardar={(datos) => ejecutar(() => (formulario.id ? updateZone(formulario.id, datos) : createZone(datos)), formulario.id ? 'Zona guardada' : 'Zona creada')} />
         )}
+      </Modal>
+
+      <Modal abierto={Boolean(maquina)} titulo={maquina?.accion === 'reactivar' ? 'Reactivar máquina' : 'Detener máquina'} onCerrar={() => setMaquina(null)}
+             pie={<><button type="button" className={botonSecundario} onClick={() => setMaquina(null)}>Cancelar</button>
+                     <button type="button" className={maquina?.accion === 'reactivar' ? botonPrimario : botonPeligro}
+                             disabled={ocupado || (maquina?.accion === 'reactivar' && maquina?.alertas === null && !errorModal)}
+                             onClick={() => ejecutar(() => (maquina.accion === 'reactivar' ? reactivateMachine : stopMachine)(maquina.zona.id),
+                               maquina.accion === 'reactivar' ? `${maquina.zona.maquina} reactivada` : `${maquina.zona.maquina} detenida`)}>
+                       {maquina?.accion === 'reactivar' ? 'Sí, reactivar' : 'Sí, detener'}</button></>}>
+        {maquina?.accion === 'detener'
+          ? <p className="text-sm">¿Detener <strong>{maquina.zona.maquina}</strong> ({maquina.zona.nombre})? Se corta hasta que la reactives.</p>
+          : <>
+              <p className="text-sm">¿Reactivar <strong>{maquina?.zona.maquina}</strong> ({maquina?.zona.nombre})?</p>
+              {maquina?.alertas > 0 && (
+                <p role="alert" className={`mt-3 ${mensajeError}`}>⚠ Hay {maquina.alertas} alerta{maquina.alertas > 1 ? 's' : ''} activa{maquina.alertas > 1 ? 's' : ''} sin resolver en esta zona. Confirmá que ya se corrigió el uso del equipo antes de reactivar.</p>
+              )}
+            </>}
+        {errorModal && <p role="alert" className={`mt-3 ${mensajeError}`}>{errorModal}</p>}
       </Modal>
 
       <Modal abierto={Boolean(aBorrar)} titulo="Borrar zona" onCerrar={() => setABorrar(null)}

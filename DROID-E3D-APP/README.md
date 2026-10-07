@@ -26,11 +26,13 @@ Cámara → servidor YOLO ──POST /api/incidents──▶ Backend Flask ─�
 | Backend: login con roles, zonas, empleados, incidencias, auditoría | ✅ Funciona; verificado con 76 chequeos automáticos de permisos y validaciones (script local, aún no incluido en el repo) |
 | Backend: endpoints para YOLO y ESP32 (`/incidents`, `/robot/*`, `/zones/<id>/maquina`) | ✅ Funciona; falta probarlo con el hardware real |
 | Backend: control del robot desde la web (estado, comandos, ruta, video) | ✅ Funciona |
-| Backend: parada automática de la máquina, foto de evidencia, fotos de rostro, push, reportes | 🔜 Pendiente (Fases 5 a 8) |
+| Backend: parada automática de la máquina al detectar una falta y reactivación por el encargado (auditadas) | ✅ Funciona; 93 chequeos automáticos |
+| Backend: foto de evidencia, fotos de rostro, push, reportes | 🔜 Pendiente (Fases 6 a 8) |
 | Frontend: login, base visual (claro/oscuro, celular y PC), menú por rol y pantallas del **empleado** (inicio, mis alertas, perfil) | ✅ Funciona; 24 chequeos automáticos con Edge |
 | Frontend: pantallas del **encargado** (panel con mapa de la fábrica, incidencias, empleados, zonas) | ✅ Funciona; 44 chequeos automáticos con Edge |
-| Frontend: control del robot con video en vivo, reportes, auditoría, página pública de SMAT, push | 🔜 Pendiente (Fases 5 a 8 y L) |
-| Hardware e IA (robot, relé, cámara, YOLO, reconocimiento facial) | En desarrollo por Morena; integración pendiente |
+| Frontend: **control del robot** (iniciar, pausar, parada de emergencia, ruta) con **video en vivo**; reactivar o detener máquinas | ✅ Funciona con el simulador; 39 chequeos automáticos con Edge |
+| Frontend: reportes, auditoría, página pública de SMAT, notificaciones push | 🔜 Pendiente (Fases 7, 8 y L) |
+| Hardware e IA (robot, relé, cámara, YOLO, reconocimiento facial) | En desarrollo por Morena; integración pendiente. Mientras tanto: `backend/tools/simular_esp32.py` |
 
 El detalle tarea por tarea está en [`docs/PLAN.md`](docs/PLAN.md) y el reporte de avance en [`../docs/SMAT/`](../docs/SMAT/).
 
@@ -96,7 +98,15 @@ Abrí: http://localhost:5173 . Para entrar desde el celular, poné la IP de tu P
 | `pedro` | empleado | Zona C |
 | `sofia` | empleado | Zona D |
 
-### Probar la integración sin hardware
+### Probar el robot sin hardware
+```powershell
+cd backend
+venv\Scriptsctivate
+python tools\simular_esp32.py --velocidad 10 --maquinas
+```
+Con el backend y la web andando, entrá como `maria` a **Robot** y tocá **Iniciar**: el robot simulado recorre las zonas, reporta su batería y obedece pausar, detener y la parada de emergencia. Con `--maquinas` también se ve cuándo se «corta» y se «reactiva» cada máquina.
+
+### Probar la integración con la IA sin hardware
 ```powershell
 $h = @{ "X-API-KEY" = "<tu YOLO_API_KEY>"; "Content-Type" = "application/json" }
 $body = '{"tipo":"sin_casco","zona_id":1,"empleado_id":1,"confianza":0.93}'

@@ -87,7 +87,8 @@ frontend/src/
 
 ## 4. Orden de ejecución y calendario (inicio 05/10/2026, < 1 mes)
 
-`/siguiente` sigue este orden: **0 → E.0-E.1 → 1 → 2 → 3 → 4 → L → 5 → 6 → 7 → 8 → 9**.
+`/siguiente` sigue este orden: **0 → E.0-E.1 → 1 → 2 → 3 → 4 → 5 → T → R → 6 → L → 7 → 8 → 9**.
+(Actualizado 07/10/2026: se suman T (pruebas en el repo) y R (rediseño SaaS) antes de la Fase 6; L pasa después de 6).
 La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes del profe van primero.
 
 | Semana | Web (Toro + Claude) | Empresa (Toro + Morena) | Hardware/IA (Morena) |
@@ -142,11 +143,25 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase 5 · Robot y máquinas
 - [x] 5.1 `/api/robot/estado|ruta|comando` para la web
-- [ ] 5.2 Endpoints ESP32 completos (`comando-pendiente`, `reporte`; robot "desconectado" si no reporta en 10 s)
-- [ ] 5.3 Incidencia → `maquina_activa=false`; `PUT /api/zones/<id>/reactivar` (encargado, auditado)
-- [ ] 5.4 Página Robot + robot visible en el mapa
-- [ ] 5.5 `VideoEnVivo` (MJPEG desde `url_video`)
-- [ ] 5.6 `tools/simular_esp32.py`
+- [x] 5.2 Endpoints ESP32 completos (`comando-pendiente`, `reporte`; robot "desconectado" si no reporta en 10 s)
+- [x] 5.3 Incidencia → `maquina_activa=false`; `PUT /api/zones/<id>/reactivar` (encargado, auditado)
+- [x] 5.4 Página Robot + robot visible en el mapa
+- [x] 5.5 `VideoEnVivo` (MJPEG desde `url_video`)
+- [x] 5.6 `tools/simular_esp32.py`
+
+### Fase T · Pruebas automáticas en el repo
+- [ ] T.1 Pruebas de la API en `backend/tests/` (pytest) con base de datos de prueba
+- [ ] T.2 Pruebas de punta a punta de la web en `frontend/tests/` (Playwright con Edge): empleado, encargado y robot simulado
+- [ ] T.3 GitHub Actions (`.github/workflows/smat-ci.yml`): compila y corre las pruebas en cada PR que toque `DROID-E3D-APP/`
+
+### Fase R · Rediseño estilo SaaS (pedido del usuario, 07/10/2026)
+- [ ] R.1 Sistema visual: colores neutros, sombras suaves, radios, botones, campos, etiquetas y avatares con iniciales
+- [ ] R.2 Barra lateral fija estilo SaaS (logo, usuario abajo, colapsable a íconos); menú inferior en celular
+- [ ] R.3 Avisos flotantes (toast), confirmaciones claras con ícono y nombre de la acción, panel lateral (drawer) para formularios
+- [ ] R.4 Validación en vivo en formularios (login, empleados, zonas, ruta)
+- [ ] R.5 Tablas con orden por columna, búsqueda y avatares
+- [ ] R.6 Tarjetas del panel con tendencia (vs. semana anterior) y mini gráfico
+- [ ] R.7 Mapa: íconos de máquina y EPP, robot animado con su recorrido, panel lateral con el detalle de la zona
 
 ### Fase 6 · YOLO y reconocimiento facial
 - [ ] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8

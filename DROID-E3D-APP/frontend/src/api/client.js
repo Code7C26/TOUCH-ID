@@ -90,3 +90,17 @@ export const deactivateUser = (id) => request(`/users/${id}`, { method: 'DELETE'
 
 // Estado, batería, zona actual y si está conectado
 export const getRobot = () => request('/robot/estado')
+
+// comando: 'iniciar' | 'pausar' | 'detener' | 'emergencia'. El robot lo ejecuta en su próxima consulta (1-2 s).
+export const sendRobotCommand = (comando) => request('/robot/comando', { method: 'POST', body: JSON.stringify({ comando }) })
+
+export const getRobotRoute = () => request('/robot/ruta')
+// ruta: lista [{ zona_id, tiempo_espera_seg }]; el orden de la lista es el orden del recorrido
+export const saveRobotRoute = (ruta) => request('/robot/ruta', { method: 'PUT', body: JSON.stringify({ ruta }) })
+// Dirección del video en vivo (la sirve la PC con la IA). Texto vacío = sin video.
+export const saveRobotVideo = (url_video) => request('/robot/video', { method: 'PUT', body: JSON.stringify({ url_video }) })
+
+// ---------- Máquinas (solo encargado) ----------
+
+export const reactivateMachine = (zonaId) => request(`/zones/${zonaId}/reactivar`, { method: 'PUT' })
+export const stopMachine = (zonaId) => request(`/zones/${zonaId}/detener`, { method: 'PUT' })
