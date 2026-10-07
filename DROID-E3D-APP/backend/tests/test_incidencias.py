@@ -92,3 +92,15 @@ def test_busqueda_por_empleado_o_zona(cliente, encargada, empleado):
     assert por_zona["total"] > 0 and all(i["zona"] == "Zona D" for i in por_zona["incidencias"])
     # el empleado sigue viendo solo lo suyo aunque busque a otro
     assert cliente.get("/api/incidents?q=carl", headers=empleado).json["total"] == 0
+
+
+def test_estadisticas_con_tendencia_y_serie(cliente, encargada):
+    s = cliente.get("/api/stats", headers=encargada).json
+    serie = [d["total"] for d in s["serie_14_dias"]]
+    assert len(serie) == 14
+    assert s["incidencias_hoy"] == serie[-1] and s["incidencias_ayer"] == serie[-2]
+    assert s["incidencias_semana"] == sum(serie[7:]) and s["incidencias_semana_anterior"] == sum(serie[:7])
+    # la serie suma lo mismo que contar en la base las alertas de esos 14 días
+    from datetime import date, timedelta
+    desde = (date.today() - timedelta(days=13)).isoformat()
+    assert sum(serie) == cliente.get(f"/api/incidents?desde={desde}&limit=1", headers=encargada).json["total"]

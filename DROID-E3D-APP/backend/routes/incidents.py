@@ -79,8 +79,18 @@ def listar_incidencias():
 @incidents_bp.route("/stats", methods=["GET"])
 @rol_requerido("encargado")
 def estadisticas():
+    """Números del panel. "Semana" = los últimos 7 días calendario contando hoy.
+    serie_14_dias: alertas por día (la más vieja primero, la última es hoy), para los mini gráficos."""
     inicio_hoy = datetime.combine(datetime.now().date(), datetime.min.time())
-    inicio_semana = inicio_hoy - timedelta(days=7)
+    inicio_quincena = inicio_hoy - timedelta(days=13)
+
+    por_dia = dict(
+        db.session.query(db.func.date(Incidencia.timestamp), db.func.count(Incidencia.id))
+        .filter(Incidencia.timestamp >= inicio_quincena)
+        .group_by(db.func.date(Incidencia.timestamp)).all()
+    )
+    dias = [(inicio_quincena + timedelta(days=n)).date() for n in range(14)]
+    serie = [{"fecha": d.isoformat(), "total": por_dia.get(d, 0)} for d in dias]
 
     top_zonas = (
         db.session.query(Zona.nombre, db.func.count(Incidencia.id))
@@ -91,8 +101,11 @@ def estadisticas():
         .all()
     )
     return {
-        "incidencias_hoy": Incidencia.query.filter(Incidencia.timestamp >= inicio_hoy).count(),
-        "incidencias_semana": Incidencia.query.filter(Incidencia.timestamp >= inicio_semana).count(),
+        "incidencias_hoy": serie[-1]["total"],
+        "incidencias_ayer": serie[-2]["total"],
+        "incidencias_semana": sum(d["total"] for d in serie[7:]),
+        "incidencias_semana_anterior": sum(d["total"] for d in serie[:7]),
+        "serie_14_dias": serie,
         "incidencias_activas": Incidencia.query.filter_by(estado="activa").count(),
         "empleados_activos": Usuario.query.filter_by(rol="empleado", activo=True).count(),
         "top_zonas": [{"zona": z, "incidencias": c} for z, c in top_zonas],

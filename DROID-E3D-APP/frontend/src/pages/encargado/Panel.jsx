@@ -13,6 +13,7 @@ import { useAvisos } from '../../context/AvisosContext.jsx'
 import usePolling from '../../hooks/usePolling.js'
 import { mensajeError, tarjeta } from '../../utils/estilos.js'
 import { contarPorZona } from '../../utils/mapa.js'
+import { calcularTendencia } from '../../utils/tendencia.js'
 
 export default function Panel() {
   const avisar = useAvisos()
@@ -25,6 +26,7 @@ export default function Panel() {
   const recientes = usePolling(() => getIncidents({ limit: 6 }), 5000)
 
   const s = stats.datos
+  const serie = (s?.serie_14_dias || []).map((d) => d.total)   // alertas por día, para los mini gráficos
   const alertasPorZona = contarPorZona(activas.datos?.incidencias || [])
   const error = [stats, zonas, robot, activas, recientes].map((p) => p.error).find(Boolean) || errorAccion
 
@@ -45,10 +47,15 @@ export default function Panel() {
       {error && <p role="alert" className={`mb-4 ${mensajeError}`}>{error}</p>}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard titulo="Alertas activas" valor={s?.incidencias_activas} icono="alerta" tono={s?.incidencias_activas ? 'alerta' : 'ok'} />
-        <StatCard titulo="Hoy" valor={s?.incidencias_hoy} icono="reportes" tono="marca" />
-        <StatCard titulo="Últimos 7 días" valor={s?.incidencias_semana} icono="panel" />
-        <StatCard titulo="Empleados activos" valor={s?.empleados_activos} icono="empleados" tono="ok" />
+        <StatCard titulo="Alertas activas" valor={s?.incidencias_activas} icono="alerta" tono={s?.incidencias_activas ? 'alerta' : 'ok'}
+                  detalle={s?.incidencias_activas ? 'Sin resolver ahora' : 'Todo resuelto'} />
+        <StatCard titulo="Hoy" valor={s?.incidencias_hoy} icono="reportes" tono="marca"
+                  tendencia={s && calcularTendencia(s.incidencias_hoy, s.incidencias_ayer, 'ayer')}
+                  serie={serie.slice(-7)} />
+        <StatCard titulo="Últimos 7 días" valor={s?.incidencias_semana} icono="panel"
+                  tendencia={s && calcularTendencia(s.incidencias_semana, s.incidencias_semana_anterior, 'la semana anterior')}
+                  serie={serie} />
+        <StatCard titulo="Empleados activos" valor={s?.empleados_activos} icono="empleados" tono="ok" detalle="En planta, con usuario activo" />
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[3fr_2fr]">
