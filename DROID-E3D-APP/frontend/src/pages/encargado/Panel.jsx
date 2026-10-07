@@ -9,11 +9,13 @@ import StatCard from '../../components/StatCard.jsx'
 import Tabla from '../../components/Tabla.jsx'
 import TarjetaRobot from '../../components/TarjetaRobot.jsx'
 import Titulo from '../../components/Titulo.jsx'
+import { useAvisos } from '../../context/AvisosContext.jsx'
 import usePolling from '../../hooks/usePolling.js'
 import { mensajeError, tarjeta } from '../../utils/estilos.js'
 import { contarPorZona } from '../../utils/mapa.js'
 
 export default function Panel() {
+  const avisar = useAvisos()
   const navegar = useNavigate()
   const [errorAccion, setErrorAccion] = useState('')
   const stats = usePolling(() => getStats(), 5000)
@@ -31,6 +33,7 @@ export default function Panel() {
     try {
       await resolveIncident(id)
       stats.recargar(); activas.recargar(); recientes.recargar()
+      avisar('Alerta marcada como resuelta')
     } catch (e) {
       setErrorAccion(e.message)
     }

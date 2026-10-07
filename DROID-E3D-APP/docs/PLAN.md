@@ -157,7 +157,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 ### Fase R · Rediseño estilo SaaS (pedido del usuario, 07/10/2026)
 - [x] R.1 Sistema visual: colores neutros, sombras suaves, radios, botones, campos, etiquetas y avatares con iniciales
 - [x] R.2 Barra lateral fija estilo SaaS (logo, usuario abajo, colapsable a íconos); menú inferior en celular
-- [ ] R.3 Avisos flotantes (toast), confirmaciones claras con ícono y nombre de la acción, panel lateral (drawer) para formularios
+- [x] R.3 Avisos flotantes (toast), confirmaciones claras con ícono y nombre de la acción, panel lateral (drawer) para formularios
 - [ ] R.4 Validación en vivo en formularios (login, empleados, zonas, ruta)
 - [ ] R.5 Tablas con orden por columna, búsqueda y avatares
 - [ ] R.6 Tarjetas del panel con tendencia (vs. semana anterior) y mini gráfico

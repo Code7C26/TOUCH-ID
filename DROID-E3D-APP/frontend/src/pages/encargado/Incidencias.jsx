@@ -10,6 +10,7 @@ import Modal from '../../components/Modal.jsx'
 import Paginador from '../../components/Paginador.jsx'
 import Tabla from '../../components/Tabla.jsx'
 import Titulo from '../../components/Titulo.jsx'
+import { useAvisos } from '../../context/AvisosContext.jsx'
 import usePolling from '../../hooks/usePolling.js'
 import { botonPrimario, botonSecundario, mensajeError } from '../../utils/estilos.js'
 import { COLOR_ESTADO, formatearFecha, haceCuanto, nombreTipo, porcentaje } from '../../utils/formato.js'
@@ -18,6 +19,7 @@ const POR_PAGINA = 15
 const TIPOS = ['sin_casco', 'sin_guantes', 'sin_lentes', 'sin_chaleco'].map((t) => ({ valor: t, texto: nombreTipo(t) }))
 
 export default function Incidencias() {
+  const avisar = useAvisos()
   const [params] = useSearchParams()
   const [filtros, setFiltros] = useState({ zona_id: params.get('zona_id') || '', empleado_id: '', tipo: '', estado: '', desde: '', hasta: '' })
   const [pagina, setPagina] = useState(1)
@@ -48,6 +50,7 @@ export default function Incidencias() {
       await resolveIncident(id)
       setElegida(null)
       lista.recargar()
+      avisar('Alerta marcada como resuelta')
     } catch (e) {
       setErrorAccion(e.message)
     } finally {
