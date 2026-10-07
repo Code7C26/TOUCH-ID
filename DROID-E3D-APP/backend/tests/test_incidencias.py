@@ -61,3 +61,34 @@ def test_alta_por_nombre_de_zona(cliente):
 ])
 def test_alta_con_datos_invalidos(cliente, cambio):
     assert cliente.post("/api/incidents", json={**NUEVA, **cambio}, headers=YOLO).status_code == 400
+
+
+def test_orden_por_columna(cliente, encargada):
+    def lista(orden):
+        return cliente.get(f"/api/incidents?limit=200&orden={orden}", headers=encargada).json["incidencias"]
+    confianzas = [i["confianza"] for i in lista("confianza")]
+    assert confianzas == sorted(confianzas)
+    assert [i["confianza"] for i in lista("-confianza")] == sorted(confianzas, reverse=True)
+    zonas = [i["zona"] for i in lista("zona")]
+    assert zonas == sorted(zonas)
+    nombres = [i["empleado_nombre"] for i in lista("-empleado") if i["empleado_id"]]
+    assert nombres == sorted(nombres, reverse=True)
+    fechas = [i["timestamp"] for i in lista("-timestamp")]
+    assert fechas == sorted(fechas, reverse=True)
+    assert cliente.get("/api/incidents?orden=contrasena", headers=encargada).status_code == 400
+
+
+def test_paginado_ordenado_no_repite_filas(cliente, encargada):
+    ids = []
+    for pagina in (1, 2, 3, 4):
+        ids += [i["id"] for i in cliente.get(f"/api/incidents?limit=10&page={pagina}&orden=tipo", headers=encargada).json["incidencias"]]
+    assert len(ids) == 40 and len(set(ids)) == 40
+
+
+def test_busqueda_por_empleado_o_zona(cliente, encargada, empleado):
+    por_persona = cliente.get("/api/incidents?q=carl&limit=200", headers=encargada).json
+    assert por_persona["total"] > 0 and all(i["empleado_nombre"] == "Carlos Díaz" for i in por_persona["incidencias"])
+    por_zona = cliente.get("/api/incidents?q=zona%20d&limit=200", headers=encargada).json
+    assert por_zona["total"] > 0 and all(i["zona"] == "Zona D" for i in por_zona["incidencias"])
+    # el empleado sigue viendo solo lo suyo aunque busque a otro
+    assert cliente.get("/api/incidents?q=carl", headers=empleado).json["total"] == 0
