@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import jwt
 from flask import Blueprint, request
 
 from config import Config
-from models import Usuario
+from models import db, Usuario
 from utils.decoradores import token_required
 
 auth_bp = Blueprint("auth", __name__)
@@ -26,7 +26,7 @@ def login():
         return {"error": "Usuario dado de baja"}, 403
 
     token = jwt.encode(
-        {"user_id": user.id, "rol": user.rol, "exp": datetime.utcnow() + timedelta(hours=24)},
+        {"user_id": user.id, "rol": user.rol, "exp": datetime.now(timezone.utc) + timedelta(hours=24)},
         Config.JWT_SECRET,
         algorithm="HS256",
     )
@@ -37,7 +37,7 @@ def login():
 @token_required
 def mi_perfil():
     """Datos del usuario con sesión, incluida su zona completa (EPP, máquina...)."""
-    user = Usuario.query.get(request.user_id)
+    user = db.session.get(Usuario, request.user_id)
     if not user or not user.activo:
         return {"error": "Usuario no encontrado"}, 404
     return {**user.to_dict(), "zona_detalle": user.zona.to_dict() if user.zona else None}

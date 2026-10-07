@@ -1,0 +1,83 @@
+# Pruebas automáticas de DROID-E3D (SMAT). Corre solo cuando cambia DROID-E3D-APP/,
+# así no afecta al resto del repositorio de TOUCH.
+name: SMAT · DROID-E3D pruebas
+
+on:
+  pull_request:
+    paths: ["DROID-E3D-APP/**", ".github/workflows/smat-ci.yml"]
+  push:
+    branches: [main]
+    paths: ["DROID-E3D-APP/**", ".github/workflows/smat-ci.yml"]
+  workflow_dispatch:
+
+jobs:
+  pruebas:
+    name: Compilar y probar
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: DROID-E3D-APP
+
+    # Base de datos de prueba (la misma familia que el MySQL de XAMPP)
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_USER: root
+      DB_PASS: ""
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            DROID-E3D-APP/backend/requirements.txt
+            DROID-E3D-APP/backend/requirements-dev.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: DROID-E3D-APP/frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r backend/requirements.txt -r backend/requirements-dev.txt
+          npm ci --prefix frontend
+
+      - name: Backend compila
+        run: python -m compileall -q backend
+
+      - name: Frontend compila
+        run: npm run build --prefix frontend
+
+      - name: Pruebas de la API
+        run: python -m pytest backend/tests -q
+
+      - name: Instalar el navegador de prueba
+        run: python -m playwright install --with-deps chromium
+
+      - name: Pruebas de punta a punta
+        run: python tests/correr_e2e.py --navegador chromium
+
+      - name: Guardar capturas y registros si algo falló
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-y-registros
+          path: |
+            DROID-E3D-APP/tests/e2e/capturas
+            DROID-E3D-APP/tests/e2e/logs
+          if-no-files-found: ignore

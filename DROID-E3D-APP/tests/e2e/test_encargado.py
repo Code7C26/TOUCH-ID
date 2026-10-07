@@ -1,0 +1,109 @@
+"""Pantallas del encargado: panel con mapa, incidencias, empleados y zonas."""
+from conftest import api, selector, sesion
+
+
+def token():
+    return sesion("maria")["token"]
+
+
+def test_panel_mapa_lleva_a_las_incidencias_de_la_zona(base_limpia, abrir):
+    pag = abrir("maria", "/app/panel")
+    assert pag.locator('svg g[role="button"]').count() == 4
+    pag.locator('svg g[role="button"]', has_text="Zona B").click()
+    pag.wait_for_timeout(1200)
+    assert "/app/incidencias" in pag.url and "zona_id=2" in pag.url
+    total = api("/incidents?zona_id=2&limit=1", token=token())["total"]
+    assert pag.get_by_text(f"{total} en total").is_visible()
+    assert selector(pag, "Zona").evaluate("e => e.options[e.selectedIndex].text") == "Zona B"
+    assert not pag.errores
+
+
+def test_incidencias_filtros_y_resolver(base_limpia, abrir):
+    pag = abrir("maria", "/app/incidencias")
+    selector(pag, "Estado").select_option("activa")
+    pag.wait_for_timeout(900)
+    antes = api("/incidents?estado=activa&limit=1", token=token())["total"]
+    assert pag.get_by_text(f"{antes} en total").is_visible()
+
+    pag.get_by_role("button", name="Ver detalle").first.click()
+    pag.get_by_role("button", name="Marcar como resuelta").click()
+    pag.wait_for_timeout(1200)
+    assert api("/incidents?estado=activa&limit=1", token=token())["total"] == antes - 1
+    assert not pag.get_by_role("dialog").is_visible()
+
+    selector(pag, "Estado").select_option("resuelta")
+    pag.wait_for_timeout(900)
+    pag.get_by_role("button", name="Ver detalle").first.click()
+    assert pag.get_by_text("Resuelta por").is_visible()
+
+
+def test_incidencias_en_celular_usa_tarjetas(abrir):
+    pag = abrir("maria", "/app/incidencias", ancho=390, alto=844)
+    assert pag.locator("article").count() > 0 and not pag.locator("table").first.is_visible()
+    assert pag.evaluate("document.documentElement.scrollWidth") <= 390
+
+
+def test_empleados_alta_edicion_baja_y_reactivacion(base_limpia, abrir):
+    pag = abrir("maria", "/app/empleados")
+    pag.get_by_role("button", name="+ Nuevo empleado").click()
+    pag.get_by_label("Nombre completo").fill("Prueba Tester")
+    pag.get_by_label("Usuario").fill("tester1")
+    pag.get_by_label("Contraseña").fill("clave123")
+    selector(pag, "Zona", en_ventana=True).select_option(label="Zona C")
+    pag.get_by_role("button", name="Crear empleado").click()
+    pag.wait_for_timeout(1000)
+    assert pag.get_by_text("Empleado creado").is_visible()
+    usuarios = lambda: {u["usuario"]: u for u in api("/users", token=token())["usuarios"]}  # noqa: E731
+    assert usuarios()["tester1"]["zona"] == "Zona C"
+
+    # usuario repetido: el error del servidor se ve y la ventana no se cierra
+    pag.get_by_role("button", name="+ Nuevo empleado").click()
+    pag.get_by_label("Nombre completo").fill("Otro"); pag.get_by_label("Usuario").fill("tester1"); pag.get_by_label("Contraseña").fill("clave123")
+    pag.get_by_role("button", name="Crear empleado").click()
+    pag.wait_for_timeout(800)
+    assert pag.get_by_text("Ya existe un usuario").is_visible() and pag.get_by_role("dialog").is_visible()
+    pag.get_by_role("button", name="Cancelar").click()
+
+    pag.get_by_label("Buscar").fill("tester")
+    pag.get_by_role("button", name="Editar").first.click()
+    selector(pag, "Zona", en_ventana=True).select_option(label="Zona D")
+    pag.get_by_role("button", name="Guardar cambios").click()
+    pag.wait_for_timeout(900)
+    assert usuarios()["tester1"]["zona"] == "Zona D"
+
+    pag.get_by_role("button", name="Dar de baja").first.click()
+    pag.get_by_role("button", name="Sí, dar de baja").click()
+    pag.wait_for_timeout(900)
+    assert usuarios()["tester1"]["activo"] is False
+    selector(pag, "Estado").select_option("false")
+    pag.get_by_role("button", name="Reactivar").first.click()
+    pag.wait_for_timeout(900)
+    assert usuarios()["tester1"]["activo"] is True
+    assert not pag.errores
+
+
+def test_zonas_superposicion_alta_y_borrado(base_limpia, abrir):
+    pag = abrir("maria", "/app/zonas")
+    assert pag.locator("article").count() == 4
+    pag.get_by_role("button", name="+ Nueva zona").click()
+    pag.get_by_label("Nombre de la zona").fill("Zona E")
+    pag.get_by_label("Máquina", exact=True).fill("Torno CNC")
+    assert pag.get_by_text("se superpone con").is_visible() and pag.get_by_role("button", name="Crear zona").is_disabled()
+    pag.get_by_label("Columna").fill("6")
+    assert pag.get_by_role("button", name="Crear zona").is_enabled()
+    pag.get_by_role("dialog").get_by_text("Casco", exact=True).click()
+    pag.get_by_role("button", name="Crear zona").click()
+    pag.wait_for_timeout(1000)
+    zonas = {z["nombre"]: z for z in api("/zones", token=token())["zonas"]}
+    assert zonas["Zona E"]["grilla_x"] == 6 and zonas["Zona E"]["epp_requerido"] == ["casco"]
+
+    pag.locator("article", has_text="Zona A").get_by_role("button", name="Borrar").click()
+    pag.get_by_role("button", name="Sí, borrar").click()
+    pag.wait_for_timeout(800)
+    assert pag.get_by_text("No se puede borrar").is_visible()        # tiene alertas
+    pag.get_by_role("button", name="Cancelar").click()
+    pag.locator("article", has_text="Zona E").get_by_role("button", name="Borrar").click()
+    pag.get_by_role("button", name="Sí, borrar").click()
+    pag.wait_for_timeout(900)
+    assert "Zona E" not in {z["nombre"] for z in api("/zones", token=token())["zonas"]}
+    assert not pag.errores

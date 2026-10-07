@@ -93,14 +93,14 @@ def crear_incidencia():
     if data.get("tipo") not in TIPOS_VALIDOS:
         return {"error": f"'tipo' debe ser uno de: {', '.join(TIPOS_VALIDOS)}"}, 400
 
-    zona = Zona.query.get(data["zona_id"]) if data.get("zona_id") else None
+    zona = db.session.get(Zona, data["zona_id"]) if data.get("zona_id") else None
     if not zona and data.get("zona"):
         zona = Zona.query.filter_by(nombre=data["zona"]).first()
     if not zona:
         return {"error": "Zona inexistente: indicá 'zona_id' o 'zona'"}, 400
 
     empleado_id = data.get("empleado_id")
-    if empleado_id is not None and not Usuario.query.get(empleado_id):
+    if empleado_id is not None and not db.session.get(Usuario, empleado_id):
         return {"error": "empleado_id inexistente"}, 400
 
     confianza = data.get("confianza", 0.0)
@@ -124,7 +124,7 @@ def crear_incidencia():
 @incidents_bp.route("/incidents/<int:inc_id>/resolver", methods=["PUT"])
 @rol_requerido("encargado")
 def resolver_incidencia(inc_id):
-    inc = Incidencia.query.get_or_404(inc_id)
+    inc = db.get_or_404(Incidencia, inc_id)
     if inc.estado == "resuelta":
         return {"error": "La incidencia ya estaba resuelta"}, 409
     inc.estado = "resuelta"

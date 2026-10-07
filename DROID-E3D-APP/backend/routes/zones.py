@@ -52,7 +52,7 @@ def listar_zonas():
 @zones_bp.route("/zones/<int:zona_id>", methods=["GET"])
 @token_required
 def ver_zona(zona_id):
-    return Zona.query.get_or_404(zona_id).to_dict()
+    return db.get_or_404(Zona, zona_id).to_dict()
 
 
 @zones_bp.route("/zones", methods=["POST"])
@@ -72,7 +72,7 @@ def crear_zona():
 @zones_bp.route("/zones/<int:zona_id>", methods=["PUT"])
 @rol_requerido("encargado")
 def editar_zona(zona_id):
-    zona = Zona.query.get_or_404(zona_id)
+    zona = db.get_or_404(Zona, zona_id)
     data = request.get_json(silent=True) or {}
     error = aplicar_datos(zona, data, es_nueva=False)
     if error:
@@ -87,7 +87,7 @@ def editar_zona(zona_id):
 def reactivar_maquina(zona_id):
     """El encargado vuelve a habilitar la máquina de la zona (la que se detuvo por una falta de EPP).
     Se puede aunque queden alertas sin resolver: la decisión es del encargado y queda auditada."""
-    zona = Zona.query.get_or_404(zona_id)
+    zona = db.get_or_404(Zona, zona_id)
     if not zona.maquina:
         return {"error": "Esta zona no tiene máquina"}, 400
     if zona.maquina_activa:
@@ -103,7 +103,7 @@ def reactivar_maquina(zona_id):
 @rol_requerido("encargado")
 def detener_maquina(zona_id):
     """Parada manual de la máquina de una zona (por ejemplo, ante un riesgo que la IA no ve)."""
-    zona = Zona.query.get_or_404(zona_id)
+    zona = db.get_or_404(Zona, zona_id)
     if not zona.maquina:
         return {"error": "Esta zona no tiene máquina"}, 400
     if not zona.maquina_activa:
@@ -117,7 +117,7 @@ def detener_maquina(zona_id):
 @zones_bp.route("/zones/<int:zona_id>", methods=["DELETE"])
 @rol_requerido("encargado")
 def borrar_zona(zona_id):
-    zona = Zona.query.get_or_404(zona_id)
+    zona = db.get_or_404(Zona, zona_id)
     if Usuario.query.filter_by(zona_id=zona.id).count() or Incidencia.query.filter_by(zona_id=zona.id).count():
         return {"error": "No se puede borrar: la zona tiene empleados o incidencias"}, 409
     registrar("borrar_zona", f"Zona '{zona.nombre}'")

@@ -114,6 +114,19 @@ Invoke-RestMethod -Method Post -Uri http://localhost:5000/api/incidents -Headers
 ```
 Después entrá como `maria` (o como `juan`) y la alerta aparece en la lista. Más ejemplos en [`docs/API.md`](docs/API.md) y [`docs/integracion/`](docs/integracion/).
 
+## Pruebas automáticas
+
+```powershell
+cd DROID-E3D-APP
+backendenv\Scriptsctivate
+pip install -r backendequirements-dev.txt      # una sola vez
+
+python -m pytest backend	ests        # 37 pruebas de la API (~15 s), usan la base robot_db_test
+python tests\correr_e2e.py            # 15 pruebas con navegador real (~90 s), usan robot_db_e2e
+```
+Las pruebas **nunca tocan la base de desarrollo** (`robot_db`). Las de punta a punta levantan su propio backend (puerto 5001) y su propia web (5174), y prueban también el robot con el ESP32 simulado.
+En GitHub corren solas en cada Pull Request (`.github/workflows/smat-ci.yml`): si algo se rompe, el PR muestra una cruz roja.
+
 ## API (resumen)
 
 Todas las rutas llevan el prefijo `/api`. Contrato completo en [`docs/API.md`](docs/API.md).

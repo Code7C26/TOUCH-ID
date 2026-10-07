@@ -45,4 +45,4 @@ def crear_datos_iniciales():
 if __name__ == "__main__":
     with app.app_context():
         crear_datos_iniciales()
-    app.run(debug=True, host="0.0.0.0", port=Config.PORT)
+    app.run(debug=Config.DEBUG, host="0.0.0.0", port=Config.PORT)

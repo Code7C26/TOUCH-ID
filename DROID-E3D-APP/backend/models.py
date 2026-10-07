@@ -169,7 +169,7 @@ class PuntoRuta(db.Model):
 
 def obtener_robot():
     """Devuelve la fila del robot; la crea si todavía no existe."""
-    robot = Robot.query.get(1)
+    robot = db.session.get(Robot, 1)
     if not robot:
         robot = Robot(id=1)
         db.session.add(robot)
