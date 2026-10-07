@@ -53,9 +53,12 @@ def sesion(usuario):
 
 
 def selector(pagina, etiqueta, en_ventana=False):
-    """El <select> de la etiqueta que empieza con ese texto (el nombre accesible incluye sus opciones)."""
-    raiz = pagina.get_by_role("dialog") if en_ventana else pagina
-    return raiz.locator("label", has_text=re.compile(f"^{etiqueta}")).locator("select").first
+    """El <select> de una etiqueta.
+    - En los filtros el select está ADENTRO de la etiqueta (su nombre accesible incluye las opciones).
+    - En los formularios (ventanas y paneles) la etiqueta lo apunta con htmlFor."""
+    if en_ventana:
+        return pagina.get_by_role("dialog").get_by_label(etiqueta, exact=True)
+    return pagina.locator("label", has_text=re.compile(f"^{etiqueta}")).locator("select").first
 
 
 def esperar_texto(pagina, texto, segundos=9, exacto=True):

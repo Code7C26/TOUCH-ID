@@ -2,7 +2,7 @@
 // Estilo SaaS: botón principal oscuro, el amarillo de la marca queda para acentos.
 
 export const campo = 'w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-xs outline-none transition placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-4 focus:ring-marca/25 disabled:bg-zinc-100 disabled:text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400 dark:disabled:bg-zinc-800'
-export const campoConError = 'border-alerta focus:border-alerta focus:ring-alerta/20 dark:border-alerta'
+export const campoConError = '!border-alerta focus:!border-alerta focus:!ring-alerta/20' // el ! gana sobre el borde gris del campo
 
 const boton = 'inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium whitespace-nowrap transition disabled:pointer-events-none disabled:opacity-50'
 export const botonPrimario = `${boton} bg-zinc-900 text-white shadow-sm hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white`
