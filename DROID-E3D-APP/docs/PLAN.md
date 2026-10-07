@@ -155,13 +155,13 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] T.3 GitHub Actions (`.github/workflows/smat-ci.yml`): compila y corre las pruebas en cada PR que toque `DROID-E3D-APP/`
 
 ### Fase R · Rediseño estilo SaaS (pedido del usuario, 07/10/2026)
-- [ ] R.1 Sistema visual: colores neutros, sombras suaves, radios, botones, campos, etiquetas y avatares con iniciales
-- [ ] R.2 Barra lateral fija estilo SaaS (logo, usuario abajo, colapsable a íconos); menú inferior en celular
-- [ ] R.3 Avisos flotantes (toast), confirmaciones claras con ícono y nombre de la acción, panel lateral (drawer) para formularios
-- [ ] R.4 Validación en vivo en formularios (login, empleados, zonas, ruta)
-- [ ] R.5 Tablas con orden por columna, búsqueda y avatares
-- [ ] R.6 Tarjetas del panel con tendencia (vs. semana anterior) y mini gráfico
-- [ ] R.7 Mapa: íconos de máquina y EPP, robot animado con su recorrido, panel lateral con el detalle de la zona
+- [x] R.1 Sistema visual: colores neutros, sombras suaves, radios, botones, campos, etiquetas y avatares con iniciales
+- [x] R.2 Barra lateral fija estilo SaaS (logo, usuario abajo, colapsable a íconos); menú inferior en celular
+- [x] R.3 Avisos flotantes (toast), confirmaciones claras con ícono y nombre de la acción, panel lateral (drawer) para formularios
+- [x] R.4 Validación en vivo en formularios (login, empleados, zonas, ruta)
+- [x] R.5 Tablas con orden por columna, búsqueda y avatares
+- [x] R.6 Tarjetas del panel con tendencia (vs. semana anterior) y mini gráfico
+- [x] R.7 Mapa: íconos de máquina y EPP, robot animado con su recorrido, panel lateral con el detalle de la zona
 
 ### Fase 6 · YOLO y reconocimiento facial
 - [ ] 6.1 `POST /api/incidents` acepta imagen (multipart → `uploads/`); la clave `YOLO_API_KEY` ya se exige desde 1.8

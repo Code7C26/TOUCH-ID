@@ -1,29 +1,37 @@
 // Panel del encargado: números del día, mapa de la fábrica, estado del robot y últimas alertas.
 // Todo se actualiza solo cada pocos segundos.
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getIncidents, getRobot, getStats, getZones, resolveIncident } from '../../api/client.js'
+import { getIncidents, getRobot, getRobotRoute, getStats, getZones, reactivateMachine, resolveIncident, stopMachine } from '../../api/client.js'
 import AlertCard from '../../components/AlertCard.jsx'
+import DetalleZona from '../../components/DetalleZona.jsx'
 import MapaFabrica, { LeyendaMapa } from '../../components/MapaFabrica.jsx'
+import PanelLateral from '../../components/PanelLateral.jsx'
 import StatCard from '../../components/StatCard.jsx'
 import Tabla from '../../components/Tabla.jsx'
 import TarjetaRobot from '../../components/TarjetaRobot.jsx'
 import Titulo from '../../components/Titulo.jsx'
+import { useAvisos } from '../../context/AvisosContext.jsx'
 import usePolling from '../../hooks/usePolling.js'
 import { mensajeError, tarjeta } from '../../utils/estilos.js'
 import { contarPorZona } from '../../utils/mapa.js'
+import { calcularTendencia } from '../../utils/tendencia.js'
 
 export default function Panel() {
-  const navegar = useNavigate()
+  const avisar = useAvisos()
   const [errorAccion, setErrorAccion] = useState('')
+  const [zonaAbierta, setZonaAbierta] = useState(null)   // id de la zona del panel lateral
   const stats = usePolling(() => getStats(), 5000)
   const zonas = usePolling(() => getZones(), 15000)
   const robot = usePolling(() => getRobot(), 4000)
+  const ruta = usePolling(() => getRobotRoute(), 30000)
   const activas = usePolling(() => getIncidents({ estado: 'activa', limit: 200 }), 5000)
   const recientes = usePolling(() => getIncidents({ limit: 6 }), 5000)
 
   const s = stats.datos
-  const alertasPorZona = contarPorZona(activas.datos?.incidencias || [])
+  const serie = (s?.serie_14_dias || []).map((d) => d.total)   // alertas por día, para los mini gráficos
+  const listaActivas = activas.datos?.incidencias || []
+  const alertasPorZona = contarPorZona(listaActivas)
+  const zona = zonas.datos?.zonas.find((z) => z.id === zonaAbierta)   // siempre con los datos más nuevos
   const error = [stats, zonas, robot, activas, recientes].map((p) => p.error).find(Boolean) || errorAccion
 
   const resolver = async (id) => {
@@ -31,9 +39,17 @@ export default function Panel() {
     try {
       await resolveIncident(id)
       stats.recargar(); activas.recargar(); recientes.recargar()
+      avisar('Alerta marcada como resuelta')
     } catch (e) {
       setErrorAccion(e.message)
     }
+  }
+
+  // Desde el panel lateral de la zona: detener o reactivar su máquina (los errores los muestra el panel)
+  const cambiarMaquina = async (accion) => {
+    await (accion === 'detener' ? stopMachine : reactivateMachine)(zona.id)
+    zonas.recargar()
+    avisar(`${zona.maquina} ${accion === 'detener' ? 'detenida' : 'reactivada'}`)
   }
 
   return (
@@ -42,10 +58,15 @@ export default function Panel() {
       {error && <p role="alert" className={`mb-4 ${mensajeError}`}>{error}</p>}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard titulo="Alertas activas" valor={s?.incidencias_activas} icono="alerta" tono={s?.incidencias_activas ? 'alerta' : 'ok'} />
-        <StatCard titulo="Hoy" valor={s?.incidencias_hoy} icono="reportes" tono="marca" />
-        <StatCard titulo="Últimos 7 días" valor={s?.incidencias_semana} icono="panel" />
-        <StatCard titulo="Empleados activos" valor={s?.empleados_activos} icono="empleados" tono="ok" />
+        <StatCard titulo="Alertas activas" valor={s?.incidencias_activas} icono="alerta" tono={s?.incidencias_activas ? 'alerta' : 'ok'}
+                  detalle={s?.incidencias_activas ? 'Sin resolver ahora' : 'Todo resuelto'} />
+        <StatCard titulo="Hoy" valor={s?.incidencias_hoy} icono="reportes" tono="marca"
+                  tendencia={s && calcularTendencia(s.incidencias_hoy, s.incidencias_ayer, 'ayer')}
+                  serie={serie.slice(-7)} />
+        <StatCard titulo="Últimos 7 días" valor={s?.incidencias_semana} icono="panel"
+                  tendencia={s && calcularTendencia(s.incidencias_semana, s.incidencias_semana_anterior, 'la semana anterior')}
+                  serie={serie} />
+        <StatCard titulo="Empleados activos" valor={s?.empleados_activos} icono="empleados" tono="ok" detalle="En planta, con usuario activo" />
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-[3fr_2fr]">
@@ -54,10 +75,11 @@ export default function Panel() {
           {zonas.cargando && <p className="text-sm text-zinc-500">Cargando…</p>}
           {zonas.datos && (
             <MapaFabrica zonas={zonas.datos.zonas} alertasPorZona={alertasPorZona} robot={robot.datos}
-                         onSeleccionar={(z) => navegar(`/app/incidencias?zona_id=${z.id}`)} />
+                         ruta={(ruta.datos?.ruta || []).map((p) => p.zona_id)} seleccionada={zonaAbierta}
+                         onSeleccionar={(z) => setZonaAbierta(z.id)} />
           )}
-          <LeyendaMapa />
-          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Tocá una zona para ver sus alertas.</p>
+          <LeyendaMapa conRecorrido />
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Tocá una zona para ver su detalle.</p>
         </section>
 
         <div className="space-y-6">
@@ -77,6 +99,12 @@ export default function Panel() {
           {(recientes.datos?.incidencias || []).map((inc) => <AlertCard key={inc.id} incidencia={inc} onResolver={resolver} />)}
         </div>
       </section>
+
+      <PanelLateral abierto={Boolean(zona)} titulo={zona?.nombre} onCerrar={() => setZonaAbierta(null)}
+                    descripcion={zona && (alertasPorZona[zona.id] ? `${alertasPorZona[zona.id]} alerta(s) activa(s)` : 'Todo en orden')}>
+        {zona && <DetalleZona key={zona.id} zona={zona} alertas={listaActivas.filter((i) => i.zona_id === zona.id)}
+                              onResolver={resolver} onMaquina={cambiarMaquina} />}
+      </PanelLateral>
     </>
   )
 }

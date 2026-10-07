@@ -6,10 +6,30 @@ def token():
     return sesion("maria")["token"]
 
 
-def test_panel_mapa_lleva_a_las_incidencias_de_la_zona(base_limpia, abrir):
+def test_panel_mapa_abre_el_detalle_de_la_zona(base_limpia, abrir):
     pag = abrir("maria", "/app/panel")
     assert pag.locator('svg g[role="button"]').count() == 4
     pag.locator('svg g[role="button"]', has_text="Zona B").click()
+    panel = pag.get_by_role("dialog", name="Zona B")
+    activas = api("/incidents?zona_id=2&estado=activa&limit=1", token=token())["total"]
+    assert panel.get_by_text(f"Alertas activas ({activas})").is_visible()
+    assert panel.get_by_text("Soldadora MIG").is_visible()
+    assert panel.get_by_text("Carlos Díaz").first.is_visible()
+
+    # Detener la máquina desde el panel lateral pide confirmación
+    panel.get_by_role("button", name="Detener máquina").click()
+    panel.get_by_role("button", name="Sí, detener").click()
+    pag.wait_for_timeout(900)
+    assert panel.get_by_text("Detenida").is_visible()
+    zona_b = next(z for z in api("/zones", token=token())["zonas"] if z["id"] == 2)
+    assert zona_b["maquina_activa"] is False
+    assert not pag.errores
+
+
+def test_panel_detalle_de_zona_lleva_a_sus_incidencias(base_limpia, abrir):
+    pag = abrir("maria", "/app/panel")
+    pag.locator('svg g[role="button"]', has_text="Zona B").click()
+    pag.get_by_role("link", name="Ver todas las incidencias de la zona").click()
     pag.wait_for_timeout(1200)
     assert "/app/incidencias" in pag.url and "zona_id=2" in pag.url
     total = api("/incidents?zona_id=2&limit=1", token=token())["total"]

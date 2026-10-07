@@ -3,16 +3,18 @@
 //                         opciones: [{ valor: 'activa', texto: 'Activas' }] },
 //                       { nombre: 'desde', etiqueta: 'Desde', tipo: 'fecha' }]}
 //              valores={filtros} onCambiar={setFiltros} />
-const claseCampo = 'w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900'
+import { campo } from '../utils/estilos.js'
+
+const claseCampo = campo
 
 export default function Filtros({ campos, valores, onCambiar }) {
   const cambiar = (nombre, valor) => onCambiar({ ...valores, [nombre]: valor })
   const hayFiltros = Object.values(valores).some((v) => v !== '' && v != null)
 
   return (
-    <div className="flex flex-wrap items-end gap-3 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="grid grid-cols-2 items-end gap-3 rounded-2xl border border-zinc-200/80 bg-white p-4 shadow-xs sm:grid-cols-[repeat(auto-fill,minmax(150px,1fr))] dark:border-zinc-800 dark:bg-zinc-900">
       {campos.map((campo) => (
-        <label key={campo.nombre} className="min-w-36 flex-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+        <label key={campo.nombre} className="min-w-0 text-xs font-medium text-zinc-500 dark:text-zinc-400">
           {campo.etiqueta}
           <div className="mt-1">
             {campo.tipo === 'select' ? (

@@ -61,3 +61,46 @@ def test_alta_por_nombre_de_zona(cliente):
 ])
 def test_alta_con_datos_invalidos(cliente, cambio):
     assert cliente.post("/api/incidents", json={**NUEVA, **cambio}, headers=YOLO).status_code == 400
+
+
+def test_orden_por_columna(cliente, encargada):
+    def lista(orden):
+        return cliente.get(f"/api/incidents?limit=200&orden={orden}", headers=encargada).json["incidencias"]
+    confianzas = [i["confianza"] for i in lista("confianza")]
+    assert confianzas == sorted(confianzas)
+    assert [i["confianza"] for i in lista("-confianza")] == sorted(confianzas, reverse=True)
+    zonas = [i["zona"] for i in lista("zona")]
+    assert zonas == sorted(zonas)
+    nombres = [i["empleado_nombre"] for i in lista("-empleado") if i["empleado_id"]]
+    assert nombres == sorted(nombres, reverse=True)
+    fechas = [i["timestamp"] for i in lista("-timestamp")]
+    assert fechas == sorted(fechas, reverse=True)
+    assert cliente.get("/api/incidents?orden=contrasena", headers=encargada).status_code == 400
+
+
+def test_paginado_ordenado_no_repite_filas(cliente, encargada):
+    ids = []
+    for pagina in (1, 2, 3, 4):
+        ids += [i["id"] for i in cliente.get(f"/api/incidents?limit=10&page={pagina}&orden=tipo", headers=encargada).json["incidencias"]]
+    assert len(ids) == 40 and len(set(ids)) == 40
+
+
+def test_busqueda_por_empleado_o_zona(cliente, encargada, empleado):
+    por_persona = cliente.get("/api/incidents?q=carl&limit=200", headers=encargada).json
+    assert por_persona["total"] > 0 and all(i["empleado_nombre"] == "Carlos Díaz" for i in por_persona["incidencias"])
+    por_zona = cliente.get("/api/incidents?q=zona%20d&limit=200", headers=encargada).json
+    assert por_zona["total"] > 0 and all(i["zona"] == "Zona D" for i in por_zona["incidencias"])
+    # el empleado sigue viendo solo lo suyo aunque busque a otro
+    assert cliente.get("/api/incidents?q=carl", headers=empleado).json["total"] == 0
+
+
+def test_estadisticas_con_tendencia_y_serie(cliente, encargada):
+    s = cliente.get("/api/stats", headers=encargada).json
+    serie = [d["total"] for d in s["serie_14_dias"]]
+    assert len(serie) == 14
+    assert s["incidencias_hoy"] == serie[-1] and s["incidencias_ayer"] == serie[-2]
+    assert s["incidencias_semana"] == sum(serie[7:]) and s["incidencias_semana_anterior"] == sum(serie[:7])
+    # la serie suma lo mismo que contar en la base las alertas de esos 14 días
+    from datetime import date, timedelta
+    desde = (date.today() - timedelta(days=13)).isoformat()
+    assert sum(serie) == cliente.get(f"/api/incidents?desde={desde}&limit=1", headers=encargada).json["total"]

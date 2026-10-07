@@ -4,22 +4,30 @@ import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { getIncidents, getUsers, getZones, resolveIncident } from '../../api/client.js'
 import AlertCard from '../../components/AlertCard.jsx'
+import Avatar from '../../components/Avatar.jsx'
 import DetalleAlerta from '../../components/DetalleAlerta.jsx'
+import Etiqueta, { tonoDeEstado } from '../../components/Etiqueta.jsx'
 import Filtros from '../../components/Filtros.jsx'
 import Modal from '../../components/Modal.jsx'
 import Paginador from '../../components/Paginador.jsx'
 import Tabla from '../../components/Tabla.jsx'
 import Titulo from '../../components/Titulo.jsx'
+import { useAvisos } from '../../context/AvisosContext.jsx'
+import useDemora from '../../hooks/useDemora.js'
 import usePolling from '../../hooks/usePolling.js'
 import { botonPrimario, botonSecundario, mensajeError } from '../../utils/estilos.js'
-import { COLOR_ESTADO, formatearFecha, haceCuanto, nombreTipo, porcentaje } from '../../utils/formato.js'
+import { formatearFecha, haceCuanto, nombreTipo, porcentaje } from '../../utils/formato.js'
 
 const POR_PAGINA = 15
 const TIPOS = ['sin_casco', 'sin_guantes', 'sin_lentes', 'sin_chaleco'].map((t) => ({ valor: t, texto: nombreTipo(t) }))
+// Columna de la tabla -> nombre del orden en la API (?orden=)
+const ORDEN_API = { timestamp: 'timestamp', zona: 'zona', empleado_nombre: 'empleado', tipo: 'tipo', confianza: 'confianza', estado: 'estado' }
 
 export default function Incidencias() {
+  const avisar = useAvisos()
   const [params] = useSearchParams()
-  const [filtros, setFiltros] = useState({ zona_id: params.get('zona_id') || '', empleado_id: '', tipo: '', estado: '', desde: '', hasta: '' })
+  const [filtros, setFiltros] = useState({ q: '', zona_id: params.get('zona_id') || '', empleado_id: '', tipo: '', estado: '', desde: '', hasta: '' })
+  const [orden, setOrden] = useState({ clave: 'timestamp', asc: false })   // por defecto: las más nuevas primero
   const [pagina, setPagina] = useState(1)
   const [elegida, setElegida] = useState(null)
   const [resolviendo, setResolviendo] = useState(false)
@@ -27,12 +35,15 @@ export default function Incidencias() {
 
   const zonas = usePolling(() => getZones(), 0)
   const empleados = usePolling(() => getUsers({ rol: 'empleado' }), 0)
-  const lista = usePolling(() => getIncidents({ ...filtros, page: pagina, limit: POR_PAGINA }), 8000, [filtros, pagina])
+  const busqueda = useDemora(filtros.q)   // espera a que se deje de escribir para buscar
+  const consulta = { ...filtros, q: busqueda, orden: `${orden.asc ? '' : '-'}${ORDEN_API[orden.clave]}`, page: pagina, limit: POR_PAGINA }
+  const lista = usePolling(() => getIncidents(consulta), 8000, [JSON.stringify(consulta)])
 
   const filas = lista.datos?.incidencias || []
   const total = lista.datos?.total ?? 0
 
   const campos = [
+    { nombre: 'q', etiqueta: 'Buscar', tipo: 'texto', placeholder: 'Empleado o zona' },
     { nombre: 'zona_id', etiqueta: 'Zona', tipo: 'select', opciones: (zonas.datos?.zonas || []).map((z) => ({ valor: z.id, texto: z.nombre })) },
     { nombre: 'empleado_id', etiqueta: 'Empleado', tipo: 'select', opciones: (empleados.datos?.usuarios || []).map((u) => ({ valor: u.id, texto: u.nombre })) },
     { nombre: 'tipo', etiqueta: 'Qué faltaba', tipo: 'select', opciones: TIPOS },
@@ -48,6 +59,7 @@ export default function Incidencias() {
       await resolveIncident(id)
       setElegida(null)
       lista.recargar()
+      avisar('Alerta marcada como resuelta')
     } catch (e) {
       setErrorAccion(e.message)
     } finally {
@@ -56,16 +68,16 @@ export default function Incidencias() {
   }
 
   const columnas = [
-    { clave: 'timestamp', titulo: 'Cuándo', render: (i) => <span title={formatearFecha(i.timestamp)}>{haceCuanto(i.timestamp)}</span> },
-    { clave: 'zona', titulo: 'Zona' },
-    { clave: 'empleado_nombre', titulo: 'Empleado' },
-    { clave: 'tipo', titulo: 'Qué faltaba', render: (i) => nombreTipo(i.tipo) },
-    { clave: 'confianza', titulo: 'Confianza', clase: 'tabular-nums', render: (i) => porcentaje(i.confianza) },
-    { clave: 'estado', titulo: 'Estado', render: (i) => (
-      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ${COLOR_ESTADO[i.estado]}`}>{i.estado}</span>
+    { clave: 'timestamp', titulo: 'Cuándo', ordenable: true, render: (i) => <span title={formatearFecha(i.timestamp)}>{haceCuanto(i.timestamp)}</span> },
+    { clave: 'zona', titulo: 'Zona', ordenable: true },
+    { clave: 'empleado_nombre', titulo: 'Empleado', ordenable: true, render: (i) => (
+      <span className="flex items-center gap-2.5"><Avatar nombre={i.empleado_nombre} tamano="sm" />{i.empleado_nombre}</span>
     ) },
+    { clave: 'tipo', titulo: 'Qué faltaba', ordenable: true, render: (i) => nombreTipo(i.tipo) },
+    { clave: 'confianza', titulo: 'Confianza', ordenable: true, clase: 'tabular-nums', render: (i) => porcentaje(i.confianza) },
+    { clave: 'estado', titulo: 'Estado', ordenable: true, render: (i) => <Etiqueta tono={tonoDeEstado(i.estado)} punto={i.estado === 'activa'}>{i.estado}</Etiqueta> },
     { clave: 'acciones', titulo: '', clase: 'text-right', render: (i) => (
-      <button type="button" className="font-medium text-marca-oscuro hover:underline dark:text-marca" onClick={() => setElegida(i)}>Ver detalle</button>
+      <button type="button" className="rounded-md px-2 py-1 font-medium text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" onClick={() => setElegida(i)}>Ver detalle</button>
     ) },
   ]
 
@@ -77,7 +89,7 @@ export default function Incidencias() {
       {(lista.error || errorAccion) && <p role="alert" className={`mt-4 ${mensajeError}`}>{lista.error || errorAccion}</p>}
 
       <div className="mt-4 hidden md:block">
-        <Tabla columnas={columnas} filas={filas} vacio="No hay alertas con esos filtros" />
+        <Tabla columnas={columnas} filas={filas} vacio="No hay alertas con esos filtros" orden={orden} onOrdenar={(o) => { setPagina(1); setOrden(o) }} />
       </div>
       <div className="mt-4 space-y-2 md:hidden">
         {!lista.cargando && filas.length === 0 && <p className="rounded-xl bg-white p-6 text-center text-sm text-zinc-500 dark:bg-zinc-900">No hay alertas con esos filtros.</p>}

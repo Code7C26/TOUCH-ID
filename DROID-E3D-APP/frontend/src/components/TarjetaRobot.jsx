@@ -25,13 +25,14 @@ export default function TarjetaRobot({ robot }) {
             <h2 className="font-semibold">Robot DROID-E3D</h2>
             <p className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
               <span className={`size-2 rounded-full ${robot.conectado ? 'bg-ok' : 'bg-zinc-400'}`} />
-              {robot.conectado ? 'Conectado' : robot.ultima_conexion ? `Sin conexión · ${haceCuanto(robot.ultima_conexion)}` : 'Nunca se conectó'}
+              {robot.conectado ? 'Conectado' : robot.ultima_conexion ? `Último dato ${haceCuanto(robot.ultima_conexion)} (${robot.estado})` : 'Nunca se conectó'}
             </p>
           </div>
         </div>
-        <span className={`rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ${ESTADOS[robot.estado] || ESTADOS.detenido}`}>
-          {robot.estado}
-        </span>
+        {/* Sin conexión no se muestra "recorriendo": sería el último dato, no lo que pasa ahora */}
+        {robot.conectado
+          ? <span className={`rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ${ESTADOS[robot.estado] || ESTADOS.detenido}`}>{robot.estado}</span>
+          : <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-500 ring-1 ring-zinc-300 dark:bg-zinc-800 dark:ring-zinc-700">Sin conexión</span>}
       </div>
 
       <div className="mt-4">

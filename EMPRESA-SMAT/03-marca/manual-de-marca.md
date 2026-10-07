@@ -34,9 +34,9 @@
 
 | Nombre | HEX | Uso |
 |---|---|---|
-| **Amarillo seguridad** (principal) | `#F5B800` | Botones principales, logo, acentos |
+| **Amarillo seguridad** (principal) | `#F5B800` | Logo, acentos, elemento activo del menú y foco del teclado |
 | Amarillo oscuro | `#C99400` | Botón al pasar el mouse, texto amarillo sobre blanco |
-| **Tinta** | `#1F2328` | Texto sobre amarillo, visor del logo, franja de seguridad |
+| **Tinta** | `#1F2328` | Botones principales de la web, texto sobre amarillo, visor del logo, franja de seguridad |
 | **Rojo alerta** | `#DC2626` | Alertas activas, parada de emergencia, errores |
 | **Verde OK** | `#16A34A` | Todo en orden, alertas resueltas |
 | Naranja | `#F97316` | Advertencias, ojo del robot |
@@ -45,6 +45,8 @@
 **Franja de seguridad:** rayas diagonales amarillo/tinta de 12 px, como la cinta de peligro. Se usa arriba de la barra de la web y del login.
 
 **Contraste:** sobre el amarillo el texto va siempre en tinta, nunca en blanco (no se lee).
+
+**Estilo de la web (desde el 07/10/2026):** moderno tipo SaaS. El amarillo se usa como **acento** (no para todos los botones), con fondos claros, sombras suaves y bordes redondeados.
 
 ## 4. Tipografía
 

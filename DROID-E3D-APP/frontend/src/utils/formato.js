@@ -39,12 +39,6 @@ export function porcentaje(valor) {
   return `${Math.round((valor || 0) * 100)}%`
 }
 
-// Clases de Tailwind para la etiqueta de estado de una incidencia
-export const COLOR_ESTADO = {
-  activa: 'bg-alerta/10 text-alerta ring-alerta/30',
-  resuelta: 'bg-ok/10 text-ok ring-ok/30',
-}
-
 // Date -> 'AAAA-MM-DD' en hora local (es el formato que usa el backend para los filtros de fecha)
 export function fechaISO(fecha) {
   const mes = String(fecha.getMonth() + 1).padStart(2, '0')

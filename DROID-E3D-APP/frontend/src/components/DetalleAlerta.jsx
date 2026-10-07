@@ -1,5 +1,7 @@
 // Contenido de la ventana con el detalle de una alerta (se muestra dentro de <Modal>).
-import { COLOR_ESTADO, formatearFecha, nombreTipo, porcentaje } from '../utils/formato.js'
+import { formatearFecha, nombreTipo, porcentaje } from '../utils/formato.js'
+import Avatar from './Avatar.jsx'
+import Etiqueta, { tonoDeEstado } from './Etiqueta.jsx'
 
 function Dato({ etiqueta, children }) {
   return (
@@ -25,12 +27,10 @@ export default function DetalleAlerta({ incidencia }) {
       <dl className="grid grid-cols-2 gap-4">
         <Dato etiqueta="Qué faltaba">{nombreTipo(incidencia.tipo)}</Dato>
         <Dato etiqueta="Estado">
-          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ${COLOR_ESTADO[incidencia.estado] || ''}`}>
-            {incidencia.estado}
-          </span>
+          <Etiqueta tono={tonoDeEstado(incidencia.estado)} punto={incidencia.estado === 'activa'}>{incidencia.estado}</Etiqueta>
         </Dato>
         <Dato etiqueta="Zona">{incidencia.zona}</Dato>
-        <Dato etiqueta="Detectado como">{incidencia.empleado_nombre}</Dato>
+        <Dato etiqueta="Detectado como"><span className="flex items-center gap-2"><Avatar nombre={incidencia.empleado_nombre} tamano="sm" />{incidencia.empleado_nombre}</span></Dato>
         <Dato etiqueta="Cuándo">{formatearFecha(incidencia.timestamp)}</Dato>
         <Dato etiqueta="Confianza de la IA">{porcentaje(incidencia.confianza)}</Dato>
         {incidencia.resuelta_at && <Dato etiqueta="Resuelta el">{formatearFecha(incidencia.resuelta_at)}</Dato>}

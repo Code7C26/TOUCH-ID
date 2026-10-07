@@ -4,20 +4,46 @@
 /* Modo oscuro manual: se activa cuando <html> tiene la clase "dark" (lo maneja TemaContext). */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Colores de seguridad industrial (provisionales hasta el manual de marca de SMAT, tarea E.4).
+/* Colores de la marca (EMPRESA-SMAT/03-marca/manual-de-marca.md).
+   Estilo SaaS: el amarillo es el ACENTO (logo, elemento activo, foco); los botones principales usan tinta.
    Se usan como clases: bg-marca, text-alerta, border-ok, etc. */
 @theme {
-  --color-marca: #f5b800;        /* amarillo de seguridad: botones y acentos */
-  --color-marca-oscuro: #c99400; /* hover del amarillo */
-  --color-naranja: #f97316;      /* advertencias */
+  --color-marca: #f5b800;        /* amarillo de seguridad: acentos */
+  --color-marca-oscuro: #c99400; /* amarillo para texto sobre fondo claro */
+  --color-naranja: #f97316;      /* advertencias, máquina detenida */
   --color-alerta: #dc2626;       /* rojo: alertas activas, emergencia */
   --color-ok: #16a34a;           /* verde: todo en orden */
   --color-tinta: #1f2328;        /* texto oscuro sobre amarillo */
+
+  /* sombras más suaves que las de fábrica, típicas de un panel SaaS */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-lg: 0 12px 32px -8px rgb(0 0 0 / 0.18);
 }
 
-/* Colores de fondo y texto de toda la página, en claro y en oscuro */
 @layer base {
+  /* Fondo y texto de toda la página, en claro y en oscuro */
   body {
-    @apply bg-zinc-100 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+    @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
   }
+  /* Borde amarillo visible al moverse con el teclado (Tab), en todos los elementos */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-marca;
+  }
+}
+
+/* Animaciones de entrada de los avisos y paneles laterales */
+@keyframes entrar-derecha { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes aparecer { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes avanzar-recorrido { to { stroke-dashoffset: -44; } }
+@layer utilities {
+  .animar-panel { animation: entrar-derecha 0.22s ease-out; }
+  /* Mapa: el robot se desliza de una zona a otra y el recorrido punteado avanza */
+  .robot-mapa { transition: transform 1.2s ease-in-out; }
+  .recorrido { animation: avanzar-recorrido 1.5s linear infinite; }
+  .animar-aviso { animation: aparecer 0.18s ease-out; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animar-panel, .animar-aviso, .recorrido { animation: none; }
+  .robot-mapa { transition: none; }
 }
