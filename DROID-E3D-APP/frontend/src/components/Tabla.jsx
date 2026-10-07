@@ -5,12 +5,12 @@
 // render(fila) permite dibujar algo distinto al valor (un botón, una etiqueta de color...).
 export default function Tabla({ columnas, filas, claveFila = 'id', vacio = 'No hay datos para mostrar' }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="overflow-x-auto rounded-2xl border border-zinc-200/80 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
       <table className="w-full text-left text-sm">
-        <thead className="bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
+        <thead className="border-b border-zinc-200/80 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
           <tr>
             {columnas.map((col) => (
-              <th key={col.clave} scope="col" className={`px-4 py-3 font-semibold ${col.clase || ''}`}>{col.titulo}</th>
+              <th key={col.clave} scope="col" className={`px-4 py-3 font-medium ${col.clase || ''}`}>{col.titulo}</th>
             ))}
           </tr>
         </thead>
@@ -19,7 +19,7 @@ export default function Tabla({ columnas, filas, claveFila = 'id', vacio = 'No h
             <tr><td colSpan={columnas.length} className="px-4 py-6 text-center text-zinc-500">{vacio}</td></tr>
           )}
           {filas.map((fila) => (
-            <tr key={fila[claveFila]} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+            <tr key={fila[claveFila]} className="transition hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
               {columnas.map((col) => (
                 <td key={col.clave} className={`px-4 py-3 ${col.clase || ''}`}>
                   {col.render ? col.render(fila) : fila[col.clave]}

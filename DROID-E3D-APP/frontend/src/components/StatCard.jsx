@@ -11,7 +11,7 @@ const TONOS = {
 // icono es opcional: en pantallas angostas conviene omitirlo para que el título tenga lugar.
 export default function StatCard({ titulo, valor, detalle, icono, tono = 'neutro' }) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-start justify-between gap-2">
         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{titulo}</p>
         {icono && (
@@ -20,7 +20,7 @@ export default function StatCard({ titulo, valor, detalle, icono, tono = 'neutro
           </span>
         )}
       </div>
-      <p className="mt-1 text-3xl font-bold tabular-nums">{valor ?? '—'}</p>
+      <p className="mt-2 text-3xl font-semibold tracking-tight tabular-nums">{valor ?? '—'}</p>
       {detalle && <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{detalle}</p>}
     </div>
   )
