@@ -15,3 +15,8 @@ Thumbs.db
 
 # Archivos subidos en ejecucion (evidencias y rostros)
 backend/uploads/
+
+# Pruebas automáticas (se generan al correrlas)
+.pytest_cache/
+tests/e2e/capturas/
+tests/e2e/logs/

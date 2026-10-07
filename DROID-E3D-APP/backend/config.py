@@ -16,6 +16,8 @@ class Config:
 
     JWT_SECRET = os.getenv("JWT_SECRET", "clave_secreta")
     PORT = int(os.getenv("FLASK_PORT", 5000))
+    # Modo debug (recarga sola al guardar). Las pruebas automáticas lo apagan con FLASK_DEBUG=0.
+    DEBUG = os.getenv("FLASK_DEBUG", "1") == "1"
 
     # Claves para las máquinas (no para personas). Van en el header X-API-KEY.
     YOLO_API_KEY = os.getenv("YOLO_API_KEY", "")      # servidor de IA
