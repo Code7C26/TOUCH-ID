@@ -39,7 +39,7 @@ def reporte_del_robot():
             return {"error": "'bateria' debe ser un entero entre 0 y 100"}, 400
         robot.bateria = b
     if "zona_actual_id" in data:
-        if data["zona_actual_id"] is not None and not Zona.query.get(data["zona_actual_id"]):
+        if data["zona_actual_id"] is not None and not db.session.get(Zona, data["zona_actual_id"]):
             return {"error": "zona_actual_id inexistente"}, 400
         robot.zona_actual_id = data["zona_actual_id"]
     # Cuando el robot confirma el comando que tenía pendiente, se limpia
@@ -105,7 +105,7 @@ def guardar_ruta():
     for i, paso in enumerate(ruta, start=1):
         zona_id = paso.get("zona_id") if isinstance(paso, dict) else None
         espera = paso.get("tiempo_espera_seg", 30) if isinstance(paso, dict) else None
-        if not zona_id or not Zona.query.get(zona_id):
+        if not zona_id or not db.session.get(Zona, zona_id):
             return {"error": f"Paso {i}: la zona no existe"}, 400
         if not isinstance(espera, int) or isinstance(espera, bool) or not 5 <= espera <= 3600:
             return {"error": f"Paso {i}: 'tiempo_espera_seg' debe ser un entero entre 5 y 3600"}, 400
@@ -142,5 +142,5 @@ def guardar_url_video():
 def estado_de_maquina(zona_id):
     """El ESP32 de la máquina (relé) pregunta si su máquina puede funcionar.
     maquina_activa = false -> hay que cortarla."""
-    zona = Zona.query.get_or_404(zona_id)
+    zona = db.get_or_404(Zona, zona_id)
     return {"zona_id": zona.id, "maquina": zona.maquina, "maquina_activa": bool(zona.maquina_activa)}

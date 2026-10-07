@@ -38,7 +38,7 @@ def aplicar_datos(user, data, es_nuevo):
         user.legajo = legajo
 
     if "zona_id" in data:
-        if data["zona_id"] is not None and not Zona.query.get(data["zona_id"]):
+        if data["zona_id"] is not None and not db.session.get(Zona, data["zona_id"]):
             return "La zona indicada no existe"
         user.zona_id = data["zona_id"]
 
@@ -66,7 +66,7 @@ def listar_usuarios():
 @users_bp.route("/users/<int:user_id>", methods=["GET"])
 @rol_requerido("encargado")
 def ver_usuario(user_id):
-    return Usuario.query.get_or_404(user_id).to_dict()
+    return db.get_or_404(Usuario, user_id).to_dict()
 
 
 @users_bp.route("/users", methods=["POST"])
@@ -86,7 +86,7 @@ def crear_usuario():
 @users_bp.route("/users/<int:user_id>", methods=["PUT"])
 @rol_requerido("encargado")
 def editar_usuario(user_id):
-    user = Usuario.query.get_or_404(user_id)
+    user = db.get_or_404(Usuario, user_id)
     data = request.get_json(silent=True) or {}
     if user.id == request.user_id and (data.get("activo") is False or data.get("rol") == "empleado"):
         return {"error": "No podés darte de baja ni quitarte el rol de encargado"}, 400
@@ -102,7 +102,7 @@ def editar_usuario(user_id):
 @rol_requerido("encargado")
 def dar_de_baja(user_id):
     """No borra la fila (se perdería el historial de incidencias): lo marca como inactivo."""
-    user = Usuario.query.get_or_404(user_id)
+    user = db.get_or_404(Usuario, user_id)
     if user.id == request.user_id:
         return {"error": "No podés darte de baja a vos mismo"}, 400
     user.activo = False
