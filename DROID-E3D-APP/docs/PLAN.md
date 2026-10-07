@@ -150,7 +150,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 5.6 `tools/simular_esp32.py`
 
 ### Fase T · Pruebas automáticas en el repo
-- [ ] T.1 Pruebas de la API en `backend/tests/` (pytest) con base de datos de prueba
+- [x] T.1 Pruebas de la API en `backend/tests/` (pytest) con base de datos de prueba
 - [ ] T.2 Pruebas de punta a punta de la web en `frontend/tests/` (Playwright con Edge): empleado, encargado y robot simulado
 - [ ] T.3 GitHub Actions (`.github/workflows/smat-ci.yml`): compila y corre las pruebas en cada PR que toque `DROID-E3D-APP/`
 
