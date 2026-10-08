@@ -94,14 +94,15 @@ def base_limpia():
 
 @pytest.fixture
 def abrir(navegador, request):
-    """abrir(usuario, ruta) -> página ya logueada. Al final de la prueba guarda una captura."""
+    """abrir(usuario, ruta) -> página ya logueada (usuario=None: sin sesión). Al final de la prueba guarda una captura."""
     contextos = []
 
     def _abrir(usuario, ruta, ancho=1280, alto=900, tema="claro"):
         celular = ancho < 700
         ctx = navegador.new_context(viewport={"width": ancho, "height": alto}, is_mobile=celular, has_touch=celular, locale="es-AR")
-        ctx.add_init_script(f"localStorage.setItem('tema', '{tema}');"
-                            f"localStorage.setItem('user', {json.dumps(json.dumps(sesion(usuario)))});")
+        guardar_sesion = (f"localStorage.setItem('user', {json.dumps(json.dumps(sesion(usuario)))});"
+                          if usuario else "localStorage.removeItem('user');")
+        ctx.add_init_script(f"localStorage.setItem('tema', '{tema}');" + guardar_sesion)
         pagina = ctx.new_page()
         pagina.errores = []
         pagina.on("pageerror", lambda e: pagina.errores.append(str(e)))

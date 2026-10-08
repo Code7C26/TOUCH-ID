@@ -41,7 +41,9 @@ CONFIG = {
     "YOLO_API_KEY": "clave-yolo-e2e", "ROBOT_API_KEY": "clave-robot-e2e", "JWT_SECRET": "secreto-e2e",
     "API_URL": f"http://127.0.0.1:{PUERTO_API}/api", "WEB_URL": f"http://localhost:{PUERTO_WEB}",
     "VITE_API_URL": f"http://127.0.0.1:{PUERTO_API}/api",
-    "UPLOAD_DIR": tempfile.mkdtemp(prefix="droid-e2e-uploads-"),   # las fotos de prueba no ensucian backend/uploads
+    "UPLOAD_DIR": tempfile.mkdtemp(prefix="droid-e2e-uploads-"),
+    # Contacto de la página pública: datos de mentira, solo para probar que el mensaje se arma bien
+    "VITE_CONTACTO_EMAIL": "demo@ejemplo.com", "VITE_CONTACTO_WHATSAPP": "5491100000000",   # las fotos de prueba no ensucian backend/uploads
 }
 
 
