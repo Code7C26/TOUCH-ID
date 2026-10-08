@@ -17,8 +17,12 @@ LOG_SIMULADOR = os.path.join(os.path.dirname(__file__), "logs", "simulador.log")
 
 
 class VideoDePrueba(BaseHTTPRequestHandler):
-    """Hace lo mismo que la PC con la IA: manda imágenes JPEG seguidas (MJPEG)."""
+    """Hace lo mismo que la PC con la IA: manda imágenes JPEG seguidas (MJPEG).
+    En /colgada acepta la conexión y nunca contesta, como una cámara apagada o con otra IP."""
     def do_GET(self):
+        if self.path == "/colgada":
+            time.sleep(15)
+            return
         self.send_response(200)
         self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")
         self.end_headers()
@@ -99,6 +103,13 @@ def test_video_en_vivo(robot_simulado, abrir):
     pag.get_by_label("Dirección del video").fill("http://127.0.0.1:9/video")
     pag.get_by_role("button", name="Guardar", exact=True).click()
     assert esperar_texto(pag, "Sin señal de video", 6)
+    # Cámara que no contesta: primero "Conectando…" (no "EN VIVO") y a los 10 s "Sin señal"
+    pag.get_by_label("Dirección del video").fill(f"http://127.0.0.1:{PUERTO_VIDEO}/colgada")
+    pag.get_by_role("button", name="Guardar", exact=True).click()
+    assert esperar_texto(pag, "Conectando con la cámara…", 3)
+    assert not pag.get_by_text("EN VIVO", exact=True).is_visible()
+    assert esperar_texto(pag, "Sin señal de video", 13)
+    assert esperar_texto(pag, "la dirección termina en /video", 1, exacto=False)
 
 
 def test_la_falta_detiene_la_maquina_y_el_encargado_la_reactiva(robot_simulado, abrir):
