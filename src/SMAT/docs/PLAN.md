@@ -172,7 +172,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`, guía lista) con la cámara, el robot y la máquina (#48)
 
 ### Fase 7 · Tiempo real
-- [ ] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido" (#49)
+- [x] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido" (#49)
 - [ ] 7.2 PWA con `vite-plugin-pwa` (#50)
 - [ ] 7.3 Web Push (VAPID, `/api/push/suscribir`, `useNotificaciones`) (#51)
 
