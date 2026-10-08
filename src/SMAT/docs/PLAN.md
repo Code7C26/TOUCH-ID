@@ -1,4 +1,4 @@
-# PLAN DE DESARROLLO · DROID-E3D-APP
+# PLAN DE DESARROLLO · DROID-E3D (src/SMAT)
 
 > Hoja de ruta que sigue Claude Code. Cada tarea se marca `[x]` al terminarla.
 > Orden de ejecución: ver sección 4 (no es siempre el número de fase).
@@ -152,7 +152,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 ### Fase T · Pruebas automáticas en el repo
 - [x] T.1 Pruebas de la API en `backend/tests/` (pytest) con base de datos de prueba
 - [x] T.2 Pruebas de punta a punta de la web en `tests/e2e/` (Playwright con Edge o Chromium): empleado, encargado y robot simulado
-- [x] T.3 GitHub Actions (`.github/workflows/smat-ci.yml`): compila y corre las pruebas en cada PR que toque `DROID-E3D-APP/`
+- [x] T.3 GitHub Actions (`.github/workflows/smat-ci.yml`): compila y corre las pruebas en cada PR que toque `src/SMAT/`
 
 ### Fase R · Rediseño estilo SaaS (pedido del usuario, 07/10/2026)
 - [x] R.1 Sistema visual: colores neutros, sombras suaves, radios, botones, campos, etiquetas y avatares con iniciales
@@ -188,7 +188,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [ ] 9.3 PythonAnywhere + Vercel/Netlify (`docs/DESPLIEGUE.md`)
 - [ ] 9.4 README final con capturas y guion de demo
 
-### Fase E · Empresa SMAT desde cero (carpeta `../EMPRESA-SMAT/`, rama `SMAT-empresa`)
+### Fase E · Empresa SMAT desde cero (carpeta `docs/SMAT/EMPRESA-SMAT/` de la raíz, rama `SMAT-empresa`)
 Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y deja `TODO (socio)` donde falte una decisión.
 - [x] E.0 Estructura con plantillas y `EMPRESA-SMAT/README.md` índice
 - [x] E.1 Issues `smat:empresa` (#29 a #37, uno por carpeta), asignados a Toro con revisión de Morena

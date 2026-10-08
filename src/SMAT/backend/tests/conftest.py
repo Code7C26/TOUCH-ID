@@ -2,7 +2,7 @@
 
 Usa una base de datos SEPARADA (robot_db_test) que se recrea antes de cada prueba,
 así las pruebas no dependen entre sí y nunca tocan los datos de desarrollo.
-Correr desde DROID-E3D-APP:   python -m pytest backend/tests
+Correr desde src/SMAT:   python -m pytest backend/tests
 """
 import os
 import sys

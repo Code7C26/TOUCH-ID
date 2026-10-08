@@ -4,7 +4,7 @@
 /* Modo oscuro manual: se activa cuando <html> tiene la clase "dark" (lo maneja TemaContext). */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Colores de la marca (EMPRESA-SMAT/03-marca/manual-de-marca.md).
+/* Colores de la marca (docs/SMAT/EMPRESA-SMAT/03-marca/manual-de-marca.md).
    Estilo SaaS: el amarillo es el ACENTO (logo, elemento activo, foco); los botones principales usan tinta.
    Se usan como clases: bg-marca, text-alerta, border-ok, etc. */
 @theme {

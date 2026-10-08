@@ -11,7 +11,7 @@
 | Qué es | Empresa madre (equipo del proyecto final) | División de TOUCH |
 | Integrantes | Alexandra, Sol y Lola | Toro y Morena (socios) |
 | Producto | **Touch ID**: asistencia por huella dactilar | **DROID-E3D**: robot que controla el uso de EPP |
-| Carpetas en el repo | `assets/`, `design/`, `docs/`, `src/` (`TOUCH-ID`) | `DROID-E3D-APP/`, `EMPRESA-SMAT/`, `docs/SMAT/` |
+| Carpetas en el repo | `assets/`, `design/`, `docs/`, `src/` → subcarpeta `TOUCH-ID/` | Las mismas → subcarpeta `SMAT/` (`src/SMAT/` web e IA, `docs/SMAT/` empresa) |
 
 ## Qué comparten
 

@@ -2,7 +2,7 @@
 
 > **Estado:** completo (v1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 06/10/2026
 
-**Para qué sirve:** reglas visuales y de tono. La web de DROID-E3D ya usa estos colores (definidos en `DROID-E3D-APP/frontend/src/index.css`).
+**Para qué sirve:** reglas visuales y de tono. La web de DROID-E3D ya usa estos colores (definidos en `src/SMAT/frontend/src/index.css`).
 
 ## 1. Nombres
 
