@@ -35,11 +35,14 @@ export default function ControlesRobot({ robot, onComando }) {
     <section className={tarjeta}>
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Control del robot</h2>
-        <span className={`rounded-full px-3 py-1 text-sm font-bold ${estado.clase}`}>{estado.texto}</span>
+        {/* Sin conexión no se muestra el estado: sería el último que reportó, no lo que pasa ahora */}
+        {robot.conectado
+          ? <span className={`rounded-full px-3 py-1 text-sm font-bold ${estado.clase}`}>{estado.texto}</span>
+          : <span className="rounded-full bg-zinc-200 px-3 py-1 text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">Sin conexión</span>}
       </div>
       <p className="mt-1 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
         <span className={`size-2 rounded-full ${robot.conectado ? 'bg-ok' : 'bg-zinc-400'}`} />
-        {robot.conectado ? 'Conectado' : robot.ultima_conexion ? `Sin conexión · último dato ${haceCuanto(robot.ultima_conexion)}` : 'Nunca se conectó'}
+        {robot.conectado ? 'Conectado' : robot.ultima_conexion ? `Último dato ${haceCuanto(robot.ultima_conexion)} (${estado.texto.toLowerCase()})` : 'Nunca se conectó'}
         {' · '}Batería {robot.bateria}% · Zona: {robot.zona_actual || 'sin datos'}
       </p>
 

@@ -88,10 +88,10 @@ export default function Incidencias() {
 
       {(lista.error || errorAccion) && <p role="alert" className={`mt-4 ${mensajeError}`}>{lista.error || errorAccion}</p>}
 
-      <div className="mt-4 hidden md:block">
+      <div className="mt-4 hidden lg:block">
         <Tabla columnas={columnas} filas={filas} vacio="No hay alertas con esos filtros" orden={orden} onOrdenar={(o) => { setPagina(1); setOrden(o) }} />
       </div>
-      <div className="mt-4 space-y-2 md:hidden">
+      <div className="mt-4 space-y-2 lg:hidden">
         {!lista.cargando && filas.length === 0 && <p className="rounded-xl bg-white p-6 text-center text-sm text-zinc-500 dark:bg-zinc-900">No hay alertas con esos filtros.</p>}
         {filas.map((inc) => <AlertCard key={inc.id} incidencia={inc} onResolver={resolver} onVer={setElegida} />)}
       </div>

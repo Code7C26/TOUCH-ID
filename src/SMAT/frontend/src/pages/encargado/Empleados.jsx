@@ -79,8 +79,8 @@ export default function Empleados() {
 
   const columnas = [
     { clave: 'nombre', titulo: 'Nombre', ordenable: true, render: persona },
-    { clave: 'usuario', titulo: 'Usuario', ordenable: true, render: (u) => <span className="text-zinc-600 dark:text-zinc-300">@{u.usuario}</span> },
-    { clave: 'rol', titulo: 'Rol', ordenable: true, render: (u) => <Etiqueta tono={u.rol === 'encargado' ? 'marca' : 'neutro'}>{u.rol}</Etiqueta> },
+    { clave: 'usuario', titulo: 'Usuario', ordenable: true, clase: 'hidden lg:table-cell', render: (u) => <span className="text-zinc-600 dark:text-zinc-300">@{u.usuario}</span> },
+    { clave: 'rol', titulo: 'Rol', ordenable: true, clase: 'hidden lg:table-cell', render: (u) => <Etiqueta tono={u.rol === 'encargado' ? 'marca' : 'neutro'}>{u.rol}</Etiqueta> },
     { clave: 'zona', titulo: 'Zona', ordenable: true, render: (u) => u.zona || '—' },
     { clave: 'activo', titulo: 'Estado', render: estado },
     { clave: 'acciones', titulo: '', clase: 'text-right', render: acciones },
