@@ -11,6 +11,7 @@ from routes.users import users_bp
 from routes.robot import robot_bp
 from routes.rostros import rostros_bp
 from routes.uploads import uploads_bp
+from routes.push import push_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -25,6 +26,7 @@ app.register_blueprint(users_bp, url_prefix="/api")
 app.register_blueprint(robot_bp, url_prefix="/api")
 app.register_blueprint(rostros_bp, url_prefix="/api")
 app.register_blueprint(uploads_bp, url_prefix="/api")
+app.register_blueprint(push_bp, url_prefix="/api")
 
 
 @app.errorhandler(HTTPException)

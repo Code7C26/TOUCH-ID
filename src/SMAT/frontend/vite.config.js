@@ -28,6 +28,7 @@ const pwa = VitePWA({
   workbox: {
     globPatterns: ['**/*.{js,css,html,svg,png,webp}'],
     navigateFallback: '/index.html',     // sin conexión, cualquier página abre la app guardada
+    importScripts: ['sw-push.js'],       // public/sw-push.js: recibe y muestra las notificaciones push
   },
 })
 

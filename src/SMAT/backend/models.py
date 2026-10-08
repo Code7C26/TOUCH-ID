@@ -114,6 +114,19 @@ class FotoRostro(db.Model):
                 "consentimiento_at": self.consentimiento_at.isoformat() if self.consentimiento_at else None}
 
 
+class SuscripcionPush(db.Model):
+    """Un navegador (celular o PC) donde el usuario activó las notificaciones push.
+    Los datos los da el navegador al suscribirse: a dónde mandar (endpoint) y con qué cifrar (p256dh, auth)."""
+    __tablename__ = "suscripciones_push"
+
+    id = db.Column(db.Integer, primary_key=True)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
+    endpoint = db.Column(db.String(500), unique=True, nullable=False)
+    p256dh = db.Column(db.String(255), nullable=False)
+    auth = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+
 class Auditoria(db.Model):
     """Registro de quién hizo qué y cuándo (acciones del encargado, parada de máquina...)."""
     __tablename__ = "auditoria"

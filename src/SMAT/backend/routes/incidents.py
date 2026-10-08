@@ -7,6 +7,7 @@ from models import db, Incidencia, Usuario, Zona, obtener_robot
 from utils.archivos import ImagenInvalida, guardar_imagen
 from utils.auditoria import registrar
 from utils.decoradores import token_required, rol_requerido, api_key_requerida
+from utils.push import notificar_alerta
 from utils.validacion import id_valido, leer_json
 
 incidents_bp = Blueprint("incidents", __name__)
@@ -185,6 +186,7 @@ def crear_incidencia():
         zona.maquina_activa = False
         registrar("parada_maquina", f"Zona '{zona.nombre}': máquina detenida por la incidencia #{inc.id} ({inc.tipo})")
     db.session.commit()
+    notificar_alerta(inc, parada)   # notificación push a los encargados y al empleado (si la activaron)
     return {**inc.to_dict(), "maquina_detenida": parada}, 201
 
 

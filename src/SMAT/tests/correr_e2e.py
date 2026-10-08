@@ -37,12 +37,25 @@ def _cargar_base_datos():
 
 recrear_base = _cargar_base_datos()
 
+
+def _claves_push_nuevas():
+    """Claves VAPID creadas en el momento (nunca se guardan): así se prueban las notificaciones push."""
+    ruta = os.path.join(BACKEND, "tools", "generar_claves_push.py")
+    spec = importlib.util.spec_from_file_location("generar_claves_push", ruta)
+    modulo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modulo)
+    return modulo.generar_claves()
+
+
+VAPID_PUBLICA, VAPID_PRIVADA = _claves_push_nuevas()
+
 PUERTO_API, PUERTO_WEB, PUERTO_PWA = 5001, 5174, 5175
 CONFIG = {
     "DB_NAME": "robot_db_e2e", "FLASK_PORT": str(PUERTO_API), "FLASK_DEBUG": "0",
     "YOLO_API_KEY": "clave-yolo-e2e", "ROBOT_API_KEY": "clave-robot-e2e", "JWT_SECRET": "secreto-e2e",
     "API_URL": f"http://127.0.0.1:{PUERTO_API}/api", "WEB_URL": f"http://localhost:{PUERTO_WEB}",
     "PWA_URL": f"http://localhost:{PUERTO_PWA}",
+    "VAPID_PUBLIC_KEY": VAPID_PUBLICA, "VAPID_PRIVATE_KEY": VAPID_PRIVADA,
     "VITE_API_URL": f"http://127.0.0.1:{PUERTO_API}/api",
     "UPLOAD_DIR": tempfile.mkdtemp(prefix="droid-e2e-uploads-"),
     # Contacto de la página pública: datos de mentira, solo para probar que el mensaje se arma bien
