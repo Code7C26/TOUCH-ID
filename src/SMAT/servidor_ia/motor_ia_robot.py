@@ -10,6 +10,8 @@ import requests
 import mysql.connector
 from ultralytics import YOLO
 
+from conexion_droid import reportar_a_la_web   # manda cada alerta (con foto) a la web DROID-E3D
+
 # ==========================================
 # 1. CAMBIAR ESTO CON TUS DATOS
 # ==========================================
@@ -275,6 +277,7 @@ def iniciar_patrullaje():
             print(f"\n[ALERTA] Persona sin equipo de proteccion: {ultimo_nombre}")
             registrar_incidencia_bd("Falta de Casco", ultimo_nombre, mejor_confianza)
             enviar_alerta_esp32(ultimo_nombre)
+            reportar_a_la_web("Falta de Casco", ultimo_nombre, mejor_confianza, frame)
             ultimo_aviso = ahora
             frames_seguidos = 0
 

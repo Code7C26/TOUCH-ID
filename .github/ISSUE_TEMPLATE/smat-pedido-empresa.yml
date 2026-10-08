@@ -7,7 +7,7 @@ body:
     id: documento
     attributes:
       label: Documento
-      placeholder: "EMPRESA-SMAT/01-identidad/mision-vision-valores.md"
+      placeholder: "docs/SMAT/EMPRESA-SMAT/01-identidad/mision-vision-valores.md"
     validations:
       required: true
   - type: dropdown

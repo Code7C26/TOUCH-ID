@@ -4,7 +4,7 @@ Levanta su PROPIO backend (puerto 5001) y su PROPIA web (puerto 5174) con una ba
 (robot_db_e2e), corre las pruebas de tests/e2e y apaga todo al terminar. No toca tus datos
 ni los servidores que estés usando para desarrollar.
 
-Uso, desde DROID-E3D-APP (con el venv del backend activado y MySQL andando):
+Uso, desde src/SMAT (con el venv del backend activado y MySQL andando):
     python tests/correr_e2e.py                      # en Windows usa Edge
     python tests/correr_e2e.py --navegador chromium # el que usa GitHub Actions
     python tests/correr_e2e.py -k robot             # se le pueden pasar opciones de pytest
@@ -15,6 +15,7 @@ import os
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 
@@ -40,6 +41,7 @@ CONFIG = {
     "YOLO_API_KEY": "clave-yolo-e2e", "ROBOT_API_KEY": "clave-robot-e2e", "JWT_SECRET": "secreto-e2e",
     "API_URL": f"http://127.0.0.1:{PUERTO_API}/api", "WEB_URL": f"http://localhost:{PUERTO_WEB}",
     "VITE_API_URL": f"http://127.0.0.1:{PUERTO_API}/api",
+    "UPLOAD_DIR": tempfile.mkdtemp(prefix="droid-e2e-uploads-"),   # las fotos de prueba no ensucian backend/uploads
 }
 
 

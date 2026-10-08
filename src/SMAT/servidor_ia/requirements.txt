@@ -1,0 +1,6 @@
+# Librerías que usa el servidor de IA (las mismas que ya importa motor_ia_robot.py)
+# Instalar con:  pip install -r requirements.txt
+ultralytics
+opencv-python
+requests
+mysql-connector-python

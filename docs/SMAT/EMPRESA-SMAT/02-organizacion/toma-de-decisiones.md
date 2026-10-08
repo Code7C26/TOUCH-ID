@@ -18,7 +18,7 @@
 2. Cada socio **vota en el Issue** (comentario) en un máximo de **48 horas**.
 3. Si están de acuerdo, se anota el **resultado** y se cierra el Issue.
 4. Si no hay acuerdo: se vuelve a discutir en la reunión semanal. Si sigue el empate, se pide la opinión del profe supervisor y se respeta.
-5. Si la decisión cambia algo técnico, se agrega un archivo en `DROID-E3D-APP/docs/decisiones/`.
+5. Si la decisión cambia algo técnico, se agrega un archivo en `src/SMAT/docs/decisiones/`.
 
 ## Reuniones
 

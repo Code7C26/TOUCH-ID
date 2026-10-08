@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 
 from models import db, Usuario, Zona
+from routes.rostros import borrar_fotos_de
 from utils.auditoria import registrar
 from utils.decoradores import rol_requerido
 
@@ -101,11 +102,13 @@ def editar_usuario(user_id):
 @users_bp.route("/users/<int:user_id>", methods=["DELETE"])
 @rol_requerido("encargado")
 def dar_de_baja(user_id):
-    """No borra la fila (se perdería el historial de incidencias): lo marca como inactivo."""
+    """No borra la fila (se perdería el historial de incidencias): lo marca como inactivo.
+    Sí borra sus fotos de rostro."""
     user = db.get_or_404(Usuario, user_id)
     if user.id == request.user_id:
         return {"error": "No podés darte de baja a vos mismo"}, 400
     user.activo = False
+    borrar_fotos_de(user)     # sus fotos de rostro ya no se necesitan (Ley 25.326)
     registrar("baja_usuario", f"Usuario '{user.usuario}'")
     db.session.commit()
     return user.to_dict()

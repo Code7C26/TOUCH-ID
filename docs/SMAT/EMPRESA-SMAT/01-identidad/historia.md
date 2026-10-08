@@ -21,6 +21,7 @@ De ahí surgió la idea de un robot que recorra la planta y haga ese control de 
 | 05/10/2026 | Backend sólido: roles, zonas, incidencias, auditoría y conexión para el robot. Primer reporte de avance: **38 %** del MVP. |
 | 06/10/2026 | Nueva web con diseño propio (claro y oscuro, celular y PC) y pantallas del empleado. |
 | 06/10/2026 | Se crea la carpeta `EMPRESA-SMAT` y se documenta la empresa completa. |
+| 08/10/2026 | Morena reorganiza el repo con el mismo formato que TOUCH: la web pasa a `src/SMAT/`, la empresa a `docs/SMAT/EMPRESA-SMAT/` y se suma el servidor de IA. |
 
 ## Qué sigue
 

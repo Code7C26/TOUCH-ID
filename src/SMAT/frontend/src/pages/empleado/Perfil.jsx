@@ -1,5 +1,6 @@
-// Perfil del empleado: sus datos, su zona y las opciones que se suman en fases futuras.
+// Perfil del empleado: sus datos, su zona, sus fotos de rostro y las opciones que se suman en fases futuras.
 import { getMe } from '../../api/client.js'
+import FotosRostro from '../../components/FotosRostro.jsx'
 import Icono from '../../components/Icono.jsx'
 import Titulo from '../../components/Titulo.jsx'
 import ZonaCard from '../../components/ZonaCard.jsx'
@@ -79,8 +80,10 @@ export default function Perfil() {
             </button>
           </section>
 
-          <Proximamente icono="perfil" titulo="Mis fotos de rostro" fase="Fase 6"
-                        texto="Vas a poder ver y retirar las fotos que se usan para reconocerte, siempre con tu consentimiento." />
+          <section className={tarjeta}>
+            <h2 className="mb-1 font-semibold">Mis fotos de rostro</h2>
+            <FotosRostro usuarioId={yo.id} propias />
+          </section>
           <Proximamente icono="alerta" titulo="Notificaciones en el celular" fase="Fase 7"
                         texto="Un aviso en el celular apenas se detecta una falta, aunque tengas la web cerrada." />
 

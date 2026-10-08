@@ -24,7 +24,9 @@ function armarConsulta(filtros = {}) {
 // Hace la llamada al backend y devuelve el JSON.
 // Si algo sale mal lanza un Error con un mensaje en español, listo para mostrar en pantalla.
 async function request(path, options = {}) {
-  const headers = { 'Content-Type': 'application/json', ...options.headers }
+  // Con FormData (fotos) el navegador arma solo el Content-Type multipart; con el resto mandamos JSON
+  const esArchivo = options.body instanceof FormData
+  const headers = { ...(esArchivo ? {} : { 'Content-Type': 'application/json' }), ...options.headers }
   const token = getToken()
   if (token) headers.Authorization = `Bearer ${token}` // sin sesión (login) no se manda
 
@@ -104,3 +106,33 @@ export const saveRobotVideo = (url_video) => request('/robot/video', { method: '
 
 export const reactivateMachine = (zonaId) => request(`/zones/${zonaId}/reactivar`, { method: 'PUT' })
 export const stopMachine = (zonaId) => request(`/zones/${zonaId}/detener`, { method: 'PUT' })
+
+// ---------- Fotos (evidencias y rostros) ----------
+
+// Las fotos no son públicas (muestran caras): se piden con el token y se convierten en una
+// dirección local del navegador (blob:) que se puede poner en <img src>. Se guardan en memoria
+// para no descargarlas de nuevo cada vez que se actualiza la pantalla.
+const fotosEnMemoria = new Map()
+export function getImagen(ruta) {
+  if (!fotosEnMemoria.has(ruta)) {
+    const pedido = fetch(`${API_URL}${ruta}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+      .then((res) => {
+        if (!res.ok) throw new Error('No se pudo cargar la foto')
+        return res.blob()
+      })
+      .then((blob) => URL.createObjectURL(blob))
+    pedido.catch(() => fotosEnMemoria.delete(ruta))   // si falló, la próxima vez se reintenta
+    fotosEnMemoria.set(ruta, pedido)
+  }
+  return fotosEnMemoria.get(ruta)
+}
+
+// Fotos de rostro: las maneja el encargado o el mismo empleado. Solo se suben con consentimiento.
+export const getRostros = (usuarioId) => request(`/users/${usuarioId}/rostros`)
+export function uploadRostro(usuarioId, archivo) {
+  const datos = new FormData()
+  datos.append('imagen', archivo)
+  datos.append('consentimiento', 'true')
+  return request(`/users/${usuarioId}/rostros`, { method: 'POST', body: datos })
+}
+export const deleteRostro = (usuarioId, fotoId) => request(`/users/${usuarioId}/rostros/${fotoId}`, { method: 'DELETE' })

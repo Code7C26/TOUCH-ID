@@ -43,4 +43,4 @@ El **responsable de seguridad e higiene** suele ser quien abre la puerta; el **d
 
 ## Fábrica cliente actual
 
-Para el proyecto final se usa una fábrica modelo con 4 zonas, descripta en `DROID-E3D-APP/docs/FABRICA-CLIENTE.md`. Sus datos se reemplazan por los de la primera fábrica real cuando se haga el piloto.
+Para el proyecto final se usa una fábrica modelo con 4 zonas, descripta en `src/SMAT/docs/FABRICA-CLIENTE.md`. Sus datos se reemplazan por los de la primera fábrica real cuando se haga el piloto.

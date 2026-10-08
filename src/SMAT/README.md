@@ -19,27 +19,28 @@ Cámara → servidor YOLO ──POST /api/incidents──▶ Backend Flask ─�
 - **Encargado:** ve todas las alertas y las resuelve, gestiona zonas y empleados, controla el robot (iniciar, pausar, parada de emergencia, ruta) y ve el estado de las máquinas.
 - **Máquinas (YOLO y ESP32):** no tienen usuario; se identifican con una clave en el header `X-API-KEY`.
 
-## Estado técnico (06/10/2026)
+## Estado técnico (07/10/2026)
+
+Pruebas automáticas en el repo: **53 de la API** (pytest) y **17 de punta a punta** en el navegador (Playwright). Corren solas en GitHub Actions en cada PR.
 
 | Área | Estado |
 |---|---|
-| Backend: login con roles, zonas, empleados, incidencias, auditoría | ✅ Funciona; verificado con 76 chequeos automáticos de permisos y validaciones (script local, aún no incluido en el repo) |
-| Backend: endpoints para YOLO y ESP32 (`/incidents`, `/robot/*`, `/zones/<id>/maquina`) | ✅ Funciona; falta probarlo con el hardware real |
-| Backend: control del robot desde la web (estado, comandos, ruta, video) | ✅ Funciona |
-| Backend: parada automática de la máquina al detectar una falta y reactivación por el encargado (auditadas) | ✅ Funciona; 93 chequeos automáticos |
-| Backend: foto de evidencia, fotos de rostro, push, reportes | 🔜 Pendiente (Fases 6 a 8) |
-| Frontend: login, base visual (claro/oscuro, celular y PC), menú por rol y pantallas del **empleado** (inicio, mis alertas, perfil) | ✅ Funciona; 24 chequeos automáticos con Edge |
-| Frontend: pantallas del **encargado** (panel con mapa de la fábrica, incidencias, empleados, zonas) | ✅ Funciona; 44 chequeos automáticos con Edge |
-| Frontend: **control del robot** (iniciar, pausar, parada de emergencia, ruta) con **video en vivo**; reactivar o detener máquinas | ✅ Funciona con el simulador; 39 chequeos automáticos con Edge |
-| Frontend: reportes, auditoría, página pública de SMAT, notificaciones push | 🔜 Pendiente (Fases 7, 8 y L) |
-| Hardware e IA (robot, relé, cámara, YOLO, reconocimiento facial) | En desarrollo por Morena; integración pendiente. Mientras tanto: `backend/tools/simular_esp32.py` |
+| Backend: login con roles, zonas, empleados, incidencias (filtros, orden, búsqueda, estadísticas), auditoría | ✅ Funciona |
+| Backend: endpoints para YOLO y ESP32 (`/incidents`, `/rostros`, `/robot/*`, `/zones/<id>/maquina`) | ✅ Funciona; falta probarlo con el hardware real |
+| Backend: parada automática de la máquina al detectar una falta y reactivación por el encargado | ✅ Funciona |
+| Backend: foto de evidencia en las alertas y fotos de rostro con consentimiento (Ley 25.326) | ✅ Funciona |
+| Frontend: diseño estilo SaaS (claro/oscuro, celular y PC), pantallas del empleado y del encargado | ✅ Funciona |
+| Frontend: control del robot con video en vivo, mapa con recorrido, detalle de cada zona | ✅ Funciona con el simulador |
+| Frontend: evidencia en las alertas, fotos de rostro (encargado y empleado) | ✅ Funciona |
+| Push, reportes, auditoría (pantalla), página pública de SMAT | 🔜 Pendiente (Fases 7, 8 y L) |
+| Hardware e IA (robot, relé, cámara, YOLO, reconocimiento facial) | En desarrollo por Morena. Mientras tanto: `backend/tools/simular_esp32.py` y `backend/tools/simular_yolo.py` |
 
-El detalle tarea por tarea está en [`docs/PLAN.md`](docs/PLAN.md) y el reporte de avance en [`../docs/SMAT/`](../docs/SMAT/).
+El detalle tarea por tarea está en [`docs/PLAN.md`](docs/PLAN.md) y los documentos de la empresa y el reporte de avance en [`docs/SMAT/`](../../docs/SMAT/) (en la raíz del repo).
 
 ## Estructura
 
 ```
-DROID-E3D-APP/
+src/SMAT/
 ├── backend/            Flask + MySQL → puerto 5000
 │   ├── app.py  config.py  models.py
 │   ├── routes/         auth · incidents · zones · users · robot · rostros
@@ -47,6 +48,7 @@ DROID-E3D-APP/
 │   └── database/       schema.sql (tablas + datos de ejemplo)
 ├── frontend/           React + Vite → puerto 5173
 │   └── src/            api/client.js (todas las llamadas al backend) · components/
+├── servidor_ia/        IA de Morena: YOLO + reconocimiento facial → manda las alertas a la web
 └── docs/               PLAN · API · FABRICA-CLIENTE · BITACORA · decisiones/ · integracion/
 ```
 
@@ -101,7 +103,7 @@ Abrí: http://localhost:5173 . Para entrar desde el celular, poné la IP de tu P
 ### Probar el robot sin hardware
 ```powershell
 cd backend
-venv\Scriptsctivate
+venv\Scripts\activate
 python tools\simular_esp32.py --velocidad 10 --maquinas
 ```
 Con el backend y la web andando, entrá como `maria` a **Robot** y tocá **Iniciar**: el robot simulado recorre las zonas, reporta su batería y obedece pausar, detener y la parada de emergencia. Con `--maquinas` también se ve cuándo se «corta» y se «reactiva» cada máquina.
@@ -117,12 +119,12 @@ Después entrá como `maria` (o como `juan`) y la alerta aparece en la lista. M�
 ## Pruebas automáticas
 
 ```powershell
-cd DROID-E3D-APP
-backendenv\Scriptsctivate
-pip install -r backendequirements-dev.txt      # una sola vez
+cd C:\Users\tomas\Fat\TOUCH-ID\src\SMAT
+backend\venv\Scripts\activate
+pip install -r backend\requirements-dev.txt      # una sola vez
 
-python -m pytest backend	ests        # 37 pruebas de la API (~15 s), usan la base robot_db_test
-python tests\correr_e2e.py            # 15 pruebas con navegador real (~90 s), usan robot_db_e2e
+python -m pytest backend\tests        # 53 pruebas de la API (~20 s), usan la base robot_db_test
+python tests\correr_e2e.py            # 17 pruebas con navegador real (~2 min), usan robot_db_e2e
 ```
 Las pruebas **nunca tocan la base de desarrollo** (`robot_db`). Las de punta a punta levantan su propio backend (puerto 5001) y su propia web (5174), y prueban también el robot con el ESP32 simulado.
 En GitHub corren solas en cada Pull Request (`.github/workflows/smat-ci.yml`): si algo se rompe, el PR muestra una cruz roja.
@@ -147,4 +149,4 @@ Todas las rutas llevan el prefijo `/api`. Contrato completo en [`docs/API.md`](d
 - Contraseñas guardadas con hash (pbkdf2-sha256), nunca en texto.
 - El rol se valida **en el backend**, no solo en la web.
 - Las máquinas usan claves distintas por función; si falta o es incorrecta, la respuesta es `401`.
-- Las fotos de rostro (Fase 6) solo se guardan con consentimiento del empleado (Ley 25.326).
+- Las fotos de rostro solo se guardan con consentimiento del empleado (Ley 25.326); él mismo puede borrarlas desde su perfil y se borran al darlo de baja. Ninguna foto es pública: se piden con sesión o con la clave de la IA.

@@ -5,6 +5,7 @@ import { botonPrimario, botonSecundario } from '../utils/estilos.js'
 import { formatearFecha, haceCuanto, nombreTipo, porcentaje } from '../utils/formato.js'
 import Avatar from './Avatar.jsx'
 import Etiqueta, { tonoDeEstado } from './Etiqueta.jsx'
+import ImagenProtegida from './ImagenProtegida.jsx'
 
 const chico = '!px-2.5 !py-1 !text-xs'
 
@@ -13,7 +14,10 @@ export default function AlertCard({ incidencia, onResolver, onVer }) {
 
   return (
     <article className={`flex items-center gap-3 rounded-2xl border border-zinc-200/80 bg-white p-3.5 shadow-xs transition hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${activa ? '' : 'opacity-80'}`}>
-      <Avatar nombre={incidencia.empleado_nombre} />
+      {/* Con foto de evidencia se muestra la miniatura; sin foto, las iniciales del empleado */}
+      {incidencia.imagen_url
+        ? <ImagenProtegida ruta={incidencia.imagen_url} alt={`Evidencia: ${nombreTipo(incidencia.tipo)}`} className="size-12 shrink-0 rounded-lg" />
+        : <Avatar nombre={incidencia.empleado_nombre} />}
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">

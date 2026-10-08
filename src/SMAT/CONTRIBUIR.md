@@ -1,15 +1,15 @@
 # Cómo trabajamos · SMAT en el repo TOUCH-ID
 
 SMAT es una división de TOUCH. Este repo es compartido: **no se tocan** las carpetas de TOUCH
-(`assets/`, `design/`, `docs/`, `src/` de la raíz). SMAT trabaja en `DROID-E3D-APP/`, `EMPRESA-SMAT/`
-y en los archivos `smat-*` de `.github/`.
+(las subcarpetas `TOUCH-ID/` de `assets/`, `design/`, `docs/` y `src/`). SMAT trabaja en `src/SMAT/` (web y
+servidor de IA), `docs/SMAT/` (empresa, costos y reportes) y en los archivos `smat-*` de `.github/`.
 
 ## Ramas
 | Rama | Quién | Para qué |
 |---|---|---|
 | `SMAT-web` | Toro (con Claude) | App web de DROID-E3D |
 | `SMAT-hardware` | Morena | ESP32, relé, cámara, YOLO, reconocimiento facial |
-| `SMAT-empresa` | Toro y Morena | Documentos de `EMPRESA-SMAT/` |
+| `SMAT-empresa` | Toro y Morena | Documentos de `docs/SMAT/EMPRESA-SMAT/` |
 | `main` | — | Siempre funciona. Solo se entra por Pull Request |
 
 ## Flujo

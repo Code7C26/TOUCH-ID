@@ -39,14 +39,31 @@ Header: `X-API-KEY: <YOLO_API_KEY>`
 | Campo | Obligatorio | Detalle |
 |---|---|---|
 | `tipo` | sí | `sin_casco`, `sin_guantes`, `sin_lentes` o `sin_chaleco` |
-| `zona_id` | sí* | id de la zona donde está el robot. *Alternativa: `"zona": "Zona A"` (por nombre) |
+| `zona_id` | no* | id de la zona. *Alternativa: `"zona": "Zona A"` (por nombre). **Si no mandás ninguna, se usa la zona que reportó el robot** (la cámara va en el robot); si el robot nunca reportó su zona → `400` |
 | `empleado_id` | no | id del empleado reconocido. Omitilo o mandá `null` si no lo identificó |
+| `empleado` | no | Alternativa a `empleado_id`: el **nombre** del empleado tal como está en la web (ej. el de la carpeta de fotos de la IA). Sin importar mayúsculas. Si no hay nadie con ese nombre (o es `"Desconocido"`), la alerta se guarda igual, sin empleado |
 | `confianza` | no | número de 0 a 1 (por defecto 0) |
 
 Respuesta `201` con la incidencia creada (`id`, `timestamp`, `estado: "activa"`...) y `maquina_detenida`: `true` si **esta falta detuvo la máquina de la zona** (la zona tiene máquina y estaba activa). Errores `400`: tipo inválido, zona o empleado inexistente, confianza fuera de rango.
 
-### 🔜 `POST /incidents` con foto (Fase 6.1)
-Mismo endpoint, pero `multipart/form-data` con los campos de arriba más `imagen` (JPG/PNG, máx. 5 MB). El JSON simple de arriba va a seguir funcionando.
+### ✅ `POST /incidents` con foto de evidencia
+Mismo endpoint, pero `multipart/form-data` con los campos de arriba (como texto) más `imagen` (JPG o PNG, máx. **5 MB**). El JSON simple de arriba sigue funcionando.
+
+```python
+requests.post(f"{URL}/incidents", headers={"X-API-KEY": CLAVE},
+              data={"tipo": "sin_casco", "zona_id": 1, "empleado_id": 3, "confianza": 0.93},
+              files={"imagen": ("deteccion.jpg", jpg_en_bytes, "image/jpeg")})
+```
+- `empleado_id` vacío (`""`) = no se reconoció a la persona.
+- La respuesta trae `imagen_url` (ej. `"/uploads/evidencias/41_a1b2c3d4.jpg"`).
+- Errores: `400` si la imagen no es JPG/PNG o está vacía (no se guarda la incidencia), `413` si pesa más de 5 MB.
+- El servidor revisa el contenido del archivo, no la extensión, y le pone un nombre propio.
+
+### ✅ Servidor de IA de Morena (`src/SMAT/servidor_ia/`)
+`motor_ia_robot.py` manda cada alerta a la web con `conexion_droid.py`: multipart con la foto del momento,
+`empleado` = nombre de la carpeta en `fotos_trabajadores/` y sin zona (usa la del robot).
+Para que la alerta quede a nombre de alguien, ese nombre tiene que existir como empleado en la web:
+`python backend/tools/cargar_trabajadores_ia.py --clave-inicial <clave>` los da de alta.
 
 ### ✅ `GET /zones` · zonas y EPP obligatorio
 Header: `X-API-KEY` (la de YOLO o la del robot). Sirve para saber qué EPP exigir en cada zona:
@@ -55,15 +72,21 @@ Header: `X-API-KEY` (la de YOLO o la del robot). Sirve para saber qué EPP exigi
                "epp_requerido": ["casco", "lentes", "guantes"], "maquina_activa": true } ] }
 ```
 
-### 🔜 `GET /rostros` (Fase 6.2)
-Header: `X-API-KEY: <YOLO_API_KEY>`. Devuelve las fotos de cada empleado para entrenar/comparar. Hoy responde `{"rostros": []}`.
+### ✅ `GET /rostros` · fotos para el reconocimiento facial
+Header: `X-API-KEY: <YOLO_API_KEY>`. Devuelve las fotos de cada empleado para entrenar/comparar.
 
 ```json
-{ "rostros": [ { "empleado_id": 1, "nombre": "Juan Pérez", "fotos": ["/uploads/rostros/1_a.jpg"] } ] }
+{ "rostros": [ { "empleado_id": 1, "nombre": "Juan Pérez", "fotos": ["/uploads/rostros/1_a1b2c3d4.jpg"] } ] }
 ```
-Solo se incluyen empleados que dieron su consentimiento (Ley 25.326).
+- Solo aparecen empleados **activos** que tienen fotos, y una foto solo se puede subir con el **consentimiento** marcado (Ley 25.326).
+- Las fotos las cargan el encargado (Empleados → Editar) o el propio empleado (Mi perfil); hasta 5 por persona.
+- Si alguien borra su foto o lo dan de baja, desaparece de esta lista: **volvé a pedirla seguido** (ej. cada 5 minutos) y no guardes copias viejas.
 
-### 🔜 Video en vivo (Fase 5.5)
+### ✅ `GET /uploads/<carpeta>/<archivo>` · descargar una foto
+Header: `X-API-KEY: <YOLO_API_KEY>`. Se usa con las rutas que devuelve `/rostros` (o `imagen_url`): `GET {URL}/uploads/rostros/1_a1b2c3d4.jpg`.
+Las fotos **no son públicas**: sin clave ni sesión responde `401`. `404` si ya no existe.
+
+### ✅ Video en vivo
 La web muestra un stream **MJPEG** que sirve la PC de YOLO (con las cajas de detección). Morena define la URL (ej. `http://<IP-PC-YOLO>:8080/video`) y se guarda en `robot.url_video`.
 
 ---
@@ -167,9 +190,11 @@ Invoke-RestMethod -Uri http://localhost:5000/api/zones/1/maquina -Headers $r
 ```
 
 Ejemplos de código en `docs/integracion/` (`esp32_robot.ino`, `esp32_maquina.ino`, `cliente_yolo.py`).
-**Simulador del robot y las máquinas (✅ ya disponible):** `python backend/tools/simular_esp32.py --maquinas` actúa como el ESP32 del robot (recibe órdenes, recorre la ruta, reporta batería) y vigila las máquinas; sirve para probar la web y para ver el comportamiento esperado antes de programar la placa. `simular_yolo.py` llega en la Fase 6.4.
+**Simulador del robot y las máquinas (✅ ya disponible):** `python backend/tools/simular_esp32.py --maquinas` actúa como el ESP32 del robot (recibe órdenes, recorre la ruta, reporta batería) y vigila las máquinas; sirve para probar la web y para ver el comportamiento esperado antes de programar la placa. 
+
+**Simulador de la IA (✅ ya disponible):** `python backend/tools/simular_yolo.py` hace de servidor YOLO: lee las zonas y los rostros y cada 20 s manda una alerta con una foto de evidencia dibujada por el script (o la tuya con `--imagen foto.jpg`). Opciones: `--cada 5`, `--cantidad 3`, `--zona 2`, `--empleado 4` (`0` = no reconocido). Cada alerta detiene la máquina de la zona, como en la fábrica.
 
 ## 6. Códigos de respuesta
 
 `200` ok · `201` creado · `400` datos inválidos · `401` falta o es incorrecta la clave/sesión ·
-`403` sin permiso · `404` no existe · `409` conflicto · `503` servidor sin configurar.
+`403` sin permiso · `404` no existe · `409` conflicto · `413` archivo demasiado grande · `503` servidor sin configurar.

@@ -24,13 +24,20 @@ def zonas():
     return r.json()["zonas"]
 
 
-def reportar_falta(epp_faltante, zona_id, empleado_id=None, confianza=0.0):
+def reportar_falta(epp_faltante, zona_id, empleado_id=None, confianza=0.0, foto_jpg=None):
     """Registra una incidencia. empleado_id puede ser None si no se reconoció la cara.
+    foto_jpg: bytes del cuadro de la cámara (con las cajas de YOLO), ej. cv2.imencode(".jpg", frame)[1].tobytes()
     Devuelve la incidencia creada o None si falló (no tires abajo la detección por esto)."""
     datos = {"tipo": TIPOS[epp_faltante], "zona_id": zona_id,
              "empleado_id": empleado_id, "confianza": round(confianza, 2)}
     try:
-        r = requests.post(f"{URL}/incidents", json=datos, headers=CABECERAS, timeout=5)
+        if foto_jpg:
+            # Con foto: multipart. Los campos van como texto y empleado_id vacío = no reconocido
+            datos["empleado_id"] = "" if empleado_id is None else empleado_id
+            r = requests.post(f"{URL}/incidents", data=datos, headers=CABECERAS, timeout=10,
+                              files={"imagen": ("deteccion.jpg", foto_jpg, "image/jpeg")})
+        else:
+            r = requests.post(f"{URL}/incidents", json=datos, headers=CABECERAS, timeout=5)
         r.raise_for_status()
         return r.json()
     except requests.RequestException as e:
@@ -39,10 +46,18 @@ def reportar_falta(epp_faltante, zona_id, empleado_id=None, confianza=0.0):
 
 
 def rostros():
-    """Fotos de los empleados para el reconocimiento facial (disponible desde la Fase 6.2)."""
+    """Empleados con fotos para el reconocimiento facial. Pedilo seguido (ej. cada 5 min):
+    si alguien retira su consentimiento, deja de aparecer y no hay que reconocerlo más."""
     r = requests.get(f"{URL}/rostros", headers=CABECERAS, timeout=10)
     r.raise_for_status()
     return r.json()["rostros"]
+
+
+def descargar_foto(ruta):
+    """Bytes de una foto, con la ruta que viene en rostros() (ej. "/uploads/rostros/1_ab.jpg")."""
+    r = requests.get(f"{URL}{ruta}", headers=CABECERAS, timeout=10)
+    r.raise_for_status()
+    return r.content
 
 
 if __name__ == "__main__":

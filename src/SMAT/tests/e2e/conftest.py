@@ -73,8 +73,8 @@ def pytest_sessionstart(session):
     try:
         urllib.request.urlopen(f"{API}/health", timeout=3)
         urllib.request.urlopen(WEB, timeout=3)
-    except Exception:
-        pytest.exit("Los servidores de prueba no están andando. Corré:  python tests/correr_e2e.py", returncode=2)
+    except Exception as e:
+        pytest.exit(f"Los servidores de prueba no están andando ({e}). Corré:  python tests/correr_e2e.py", returncode=2)
 
 
 @pytest.fixture(scope="session")

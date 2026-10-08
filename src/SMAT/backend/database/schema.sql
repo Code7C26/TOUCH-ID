@@ -51,6 +51,18 @@ CREATE TABLE IF NOT EXISTS incidencias (
     FOREIGN KEY (resuelta_por) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
+-- Fotos de la cara de cada empleado, para que la IA lo reconozca.
+-- Solo se guardan con consentimiento (Ley 25.326 de datos personales).
+CREATE TABLE IF NOT EXISTS fotos_rostro (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT NOT NULL,
+    ruta_archivo VARCHAR(255) NOT NULL,             -- "/uploads/rostros/3_a1b2c3d4.jpg"
+    consentimiento_at DATETIME NOT NULL,            -- cuándo se registró el consentimiento
+    cargada_por INT NULL,                           -- quién subió la foto
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (cargada_por) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
 CREATE TABLE IF NOT EXISTS auditoria (
     id INT PRIMARY KEY AUTO_INCREMENT,
     usuario_id INT NULL,                            -- NULL = lo hizo una máquina (YOLO/ESP32)

@@ -1,13 +1,13 @@
-# Pruebas automáticas de DROID-E3D (SMAT). Corre solo cuando cambia DROID-E3D-APP/,
+# Pruebas automáticas de DROID-E3D (SMAT). Corre solo cuando cambia src/SMAT/,
 # así no afecta al resto del repositorio de TOUCH.
 name: SMAT · DROID-E3D pruebas
 
 on:
   pull_request:
-    paths: ["DROID-E3D-APP/**", ".github/workflows/smat-ci.yml"]
+    paths: ["src/SMAT/**", ".github/workflows/smat-ci.yml"]
   push:
     branches: [main]
-    paths: ["DROID-E3D-APP/**", ".github/workflows/smat-ci.yml"]
+    paths: ["src/SMAT/**", ".github/workflows/smat-ci.yml"]
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 20
     defaults:
       run:
-        working-directory: DROID-E3D-APP
+        working-directory: src/SMAT
 
     # Base de datos de prueba (la misma familia que el MySQL de XAMPP)
     services:
@@ -43,14 +43,14 @@ jobs:
           python-version: "3.11"
           cache: pip
           cache-dependency-path: |
-            DROID-E3D-APP/backend/requirements.txt
-            DROID-E3D-APP/backend/requirements-dev.txt
+            src/SMAT/backend/requirements.txt
+            src/SMAT/backend/requirements-dev.txt
 
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: DROID-E3D-APP/frontend/package-lock.json
+          cache-dependency-path: src/SMAT/frontend/package-lock.json
 
       - name: Instalar dependencias
         run: |
@@ -78,6 +78,6 @@ jobs:
         with:
           name: capturas-y-registros
           path: |
-            DROID-E3D-APP/tests/e2e/capturas
-            DROID-E3D-APP/tests/e2e/logs
+            src/SMAT/tests/e2e/capturas
+            src/SMAT/tests/e2e/logs
           if-no-files-found: ignore

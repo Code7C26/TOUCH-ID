@@ -68,3 +68,27 @@ def test_el_empleado_no_entra_a_pantallas_del_encargado(abrir):
 def test_en_celular_no_hay_scroll_horizontal(abrir):
     for ruta in ("/app", "/app/mis-alertas", "/app/perfil"):
         assert abrir("carlos", ruta, ancho=390, alto=844).evaluate("document.documentElement.scrollWidth") <= 390
+
+
+def test_perfil_fotos_de_rostro_con_consentimiento(base_limpia, abrir):
+    # PNG mínimo válido de 1x1 píxel
+    png = bytes.fromhex("89504e470d0a1a0a0000000d4948445200000001000000010802000000907753de"
+                        "0000000c4944415408d763f8cfc0000003010100c9fe92ef0000000049454e44ae426082")
+    pag = abrir("juan", "/app/perfil")
+    assert pag.get_by_text("Todavía no hay fotos.").is_visible()
+
+    pag.get_by_label("Nueva foto").set_input_files({"name": "cara.png", "mimeType": "image/png", "buffer": png})
+    subir = pag.get_by_role("button", name="Subir foto")
+    assert subir.is_disabled()                                  # sin consentimiento no se puede subir
+    pag.get_by_label("Doy mi consentimiento", exact=False).check()
+    subir.click()
+    pag.get_by_text("Foto guardada").wait_for()
+    fotos = api("/users/1/rostros", token=sesion("juan")["token"])["fotos"]
+    assert len(fotos) == 1
+    pag.get_by_role("img", name="Foto de rostro").wait_for()   # la foto se descarga con el token
+
+    pag.get_by_role("button", name="Borrar").click()
+    pag.get_by_role("button", name="Tocá para borrar").click()
+    pag.get_by_text("Foto borrada").wait_for()
+    assert api("/users/1/rostros", token=sesion("juan")["token"])["fotos"] == []
+    assert not pag.errores

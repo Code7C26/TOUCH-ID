@@ -10,6 +10,7 @@ from routes.zones import zones_bp
 from routes.users import users_bp
 from routes.robot import robot_bp
 from routes.rostros import rostros_bp
+from routes.uploads import uploads_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -23,12 +24,18 @@ app.register_blueprint(zones_bp, url_prefix="/api")
 app.register_blueprint(users_bp, url_prefix="/api")
 app.register_blueprint(robot_bp, url_prefix="/api")
 app.register_blueprint(rostros_bp, url_prefix="/api")
+app.register_blueprint(uploads_bp, url_prefix="/api")
 
 
 @app.errorhandler(HTTPException)
 def error_http(e):
     """Todos los errores (404, 405...) salen como JSON {"error": "..."} en vez de HTML."""
     return {"error": e.description}, e.code
+
+
+@app.errorhandler(413)
+def archivo_muy_grande(e):
+    return {"error": f"El archivo supera los {Config.MAX_IMAGEN_MB} MB"}, 413
 
 
 @app.route("/api/health")
