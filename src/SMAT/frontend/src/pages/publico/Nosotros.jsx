@@ -39,7 +39,7 @@ export default function Nosotros() {
             <ul className="mt-4 space-y-1.5 text-sm text-zinc-600 dark:text-zinc-300">
               <li>· 25 fábricas usando DROID-E3D.</li>
               <li>· Una segunda versión que también detecte riesgos del entorno (derrames, pasillos obstruidos).</li>
-              <li>· Soporte técnico propio en el AMBA y en otra provincia industrial.</li>
+              <li>· Soporte técnico propio en Córdoba, donde empezamos, y en el AMBA.</li>
             </ul>
           </div>
         </div>
