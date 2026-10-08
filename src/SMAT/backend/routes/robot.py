@@ -2,12 +2,14 @@
  - Para los ESP32: exigen el header X-API-KEY (ROBOT_API_KEY).
  - Para la web: exigen sesión de encargado (header Authorization)."""
 from datetime import datetime
+from urllib.parse import urlsplit
 
 from flask import Blueprint, request
 
 from models import db, Robot, Zona, PuntoRuta, obtener_robot
 from utils.auditoria import registrar
 from utils.decoradores import api_key_requerida, rol_requerido, sesion_o_api_key
+from utils.validacion import es_entero, id_valido, leer_json
 
 robot_bp = Blueprint("robot", __name__)
 
@@ -26,7 +28,7 @@ def comando_pendiente():
 def reporte_del_robot():
     """El ESP32 informa cómo está. Todos los campos son opcionales:
     estado, bateria (0-100), zona_actual_id, comando_ejecutado (para confirmar que ya lo hizo)."""
-    data = request.get_json(silent=True) or {}
+    data = leer_json()
     robot = obtener_robot()
 
     if "estado" in data:
@@ -35,11 +37,12 @@ def reporte_del_robot():
         robot.estado = data["estado"]
     if "bateria" in data:
         b = data["bateria"]
-        if not isinstance(b, int) or isinstance(b, bool) or not 0 <= b <= 100:
+        if not es_entero(b) or not 0 <= b <= 100:
             return {"error": "'bateria' debe ser un entero entre 0 y 100"}, 400
         robot.bateria = b
     if "zona_actual_id" in data:
-        if data["zona_actual_id"] is not None and not db.session.get(Zona, data["zona_actual_id"]):
+        zid = data["zona_actual_id"]
+        if zid is not None and not (id_valido(zid) and db.session.get(Zona, zid)):
             return {"error": "zona_actual_id inexistente"}, 400
         robot.zona_actual_id = data["zona_actual_id"]
     # Cuando el robot confirma el comando que tenía pendiente, se limpia
@@ -67,7 +70,7 @@ def estado_del_robot():
 def enviar_comando():
     """El encargado le manda una orden al robot. Body: {"comando": "iniciar"}.
     El ESP32 la recibe en su próxima consulta a /robot/comando-pendiente."""
-    comando = (request.get_json(silent=True) or {}).get("comando")
+    comando = leer_json().get("comando")
     if comando not in Robot.COMANDOS:
         return {"error": f"'comando' debe ser uno de: {', '.join(Robot.COMANDOS)}"}, 400
 
@@ -97,17 +100,19 @@ def ver_ruta():
 def guardar_ruta():
     """Reemplaza toda la ruta. Body: {"ruta": [{"zona_id": 1, "tiempo_espera_seg": 30}, ...]}.
     El orden de la lista es el orden del recorrido."""
-    ruta = (request.get_json(silent=True) or {}).get("ruta")
+    ruta = leer_json().get("ruta")
     if not isinstance(ruta, list) or not ruta:
         return {"error": "'ruta' debe ser una lista con al menos una zona"}, 400
+    if len(ruta) > 50:
+        return {"error": "La ruta puede tener como máximo 50 paradas"}, 400
 
     nuevos = []
     for i, paso in enumerate(ruta, start=1):
         zona_id = paso.get("zona_id") if isinstance(paso, dict) else None
         espera = paso.get("tiempo_espera_seg", 30) if isinstance(paso, dict) else None
-        if not zona_id or not db.session.get(Zona, zona_id):
+        if not id_valido(zona_id) or not db.session.get(Zona, zona_id):
             return {"error": f"Paso {i}: la zona no existe"}, 400
-        if not isinstance(espera, int) or isinstance(espera, bool) or not 5 <= espera <= 3600:
+        if not es_entero(espera) or not 5 <= espera <= 3600:
             return {"error": f"Paso {i}: 'tiempo_espera_seg' debe ser un entero entre 5 y 3600"}, 400
         nuevos.append(PuntoRuta(orden=i, zona_id=zona_id, tiempo_espera_seg=espera))
 
@@ -118,14 +123,35 @@ def guardar_ruta():
     return {"ruta": [p.to_dict() for p in nuevos]}
 
 
+def error_en_url(url):
+    """Revisa que la dirección del video sea válida. Devuelve el problema o None si está bien."""
+    if len(url) > 255:
+        return "La URL es demasiado larga (máximo 255 caracteres)"
+    if not url.startswith(("http://", "https://")):
+        return "La URL debe empezar con http:// o https://"
+    try:
+        partes = urlsplit(url)
+        partes.port            # da error si el puerto no es un número válido (ej. ":92:8080")
+    except ValueError:
+        return "La URL tiene un puerto inválido (ej. correcto: http://192.168.0.20:8080/video)"
+    if not partes.hostname or " " in url:
+        return "La URL no es válida (ej. correcto: http://192.168.0.20:8080/video)"
+    return None
+
+
 @robot_bp.route("/robot/video", methods=["PUT"])
 @rol_requerido("encargado")
 def guardar_url_video():
     """Guarda la URL del stream de video (la sirve la PC con YOLO). Body: {"url_video": "http://..."}.
     Texto vacío = sin video."""
-    url = ((request.get_json(silent=True) or {}).get("url_video") or "").strip()
-    if url and not url.startswith(("http://", "https://")):
-        return {"error": "La URL debe empezar con http:// o https://"}, 400
+    url = leer_json().get("url_video") or ""
+    if not isinstance(url, str):
+        return {"error": "La URL debe ser un texto"}, 400
+    url = url.strip()
+    if url:
+        error = error_en_url(url)
+        if error:
+            return {"error": error}, 400
     robot = obtener_robot()
     robot.url_video = url
     registrar("editar_video_robot", url or "(sin video)")

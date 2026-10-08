@@ -33,6 +33,16 @@ def error_http(e):
     return {"error": e.description}, e.code
 
 
+@app.errorhandler(Exception)
+def error_inesperado(e):
+    """Red de seguridad: si algo falla sin control, se responde JSON (y el detalle queda en la consola)."""
+    if isinstance(e, HTTPException):
+        return error_http(e)
+    app.logger.exception("Error inesperado")
+    db.session.rollback()
+    return {"error": "Error interno del servidor"}, 500
+
+
 @app.errorhandler(413)
 def archivo_muy_grande(e):
     return {"error": f"El archivo supera los {Config.MAX_IMAGEN_MB} MB"}, 413

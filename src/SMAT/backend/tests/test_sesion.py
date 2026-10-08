@@ -46,4 +46,19 @@ def test_usuario_de_baja_no_puede_entrar(cliente, encargada):
 
 def test_token_de_un_usuario_de_baja_no_ve_su_perfil(cliente, encargada):
     cliente.delete("/api/users/3", headers=encargada)
-    assert cliente.get("/api/me", headers=cabecera_de(3, "empleado")).status_code == 404
+    assert cliente.get("/api/me", headers=cabecera_de(3, "empleado")).status_code == 401   # la sesión se corta al instante
+
+
+def test_baja_corta_la_sesion_al_instante(cliente, encargada):
+    from tests.conftest import cabecera_de
+    carlos = cabecera_de(4, "empleado")
+    assert cliente.get("/api/me", headers=carlos).status_code == 200
+    assert cliente.delete("/api/users/4", headers=encargada).status_code == 200
+    r = cliente.get("/api/me", headers=carlos)
+    assert r.status_code == 401 and "sesión" in r.get_json()["error"]
+
+
+def test_el_rol_se_toma_de_la_base_y_no_del_token(cliente):
+    from tests.conftest import cabecera_de
+    falso_encargado = cabecera_de(1, "encargado")          # Juan es empleado aunque el token diga otra cosa
+    assert cliente.get("/api/users", headers=falso_encargado).status_code == 403

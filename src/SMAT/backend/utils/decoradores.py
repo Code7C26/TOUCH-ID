@@ -19,8 +19,14 @@ def token_required(f):
             datos = jwt.decode(header.split(" ")[1], Config.JWT_SECRET, algorithms=["HS256"])
         except jwt.PyJWTError:
             return {"error": "Token expirado o inválido"}, 401
-        request.user_id = datos["user_id"]
-        request.user_rol = datos["rol"]
+        # Se mira la base en cada pedido: si lo dieron de baja o le cambiaron el rol,
+        # vale desde ese momento (no recién cuando vence el token, a las 24 h)
+        from models import db, Usuario   # acá adentro para no importar en círculo
+        usuario = db.session.get(Usuario, datos.get("user_id")) if isinstance(datos.get("user_id"), int) else None
+        if not usuario or not usuario.activo:
+            return {"error": "Tu sesión ya no es válida. Volvé a ingresar."}, 401
+        request.user_id = usuario.id
+        request.user_rol = usuario.rol
         return f(*args, **kwargs)
     return decorated
 

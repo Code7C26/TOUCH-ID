@@ -6,24 +6,35 @@ import RutaRobot from '../../components/RutaRobot.jsx'
 import Titulo from '../../components/Titulo.jsx'
 import VideoEnVivo from '../../components/VideoEnVivo.jsx'
 import usePolling from '../../hooks/usePolling.js'
-import { botonPrimario, campo, mensajeError, tarjeta } from '../../utils/estilos.js'
+import { botonPrimario, campo, campoConError, mensajeError, tarjeta } from '../../utils/estilos.js'
+
+// ¿La dirección del video es válida? Devuelve el problema o '' (vacía = sin video, también vale)
+function problemaEnUrl(url) {
+  if (!url) return ''
+  if (!/^https?:\/\//.test(url)) return 'Tiene que empezar con http:// o https://'
+  try { new URL(url) } catch { return 'No es una dirección válida (revisá el puerto). Ej: http://192.168.0.20:8080/video' }
+  return ''
+}
 
 // Dirección del video: la sirve la PC con la IA (la configura quien arma el robot)
 function ConfigVideo({ actual, onGuardar }) {
   const [url, setUrl] = useState(actual)
   const [estado, setEstado] = useState({ error: '', ok: false })
+  const problema = problemaEnUrl(url.trim())
   const guardar = async (e) => {
     e.preventDefault()
+    if (problema) return
     try { await onGuardar(url.trim()); setEstado({ error: '', ok: true }) } catch (err) { setEstado({ error: err.message, ok: false }) }
   }
   return (
     <form onSubmit={guardar} className="mt-3">
       <label className="block text-sm font-medium">Dirección del video
         <div className="mt-1 flex gap-2">
-          <input className={campo} value={url} onChange={(e) => { setUrl(e.target.value); setEstado({ error: '', ok: false }) }} placeholder="http://192.168.0.20:8080/video" />
-          <button type="submit" className={botonPrimario} disabled={url.trim() === actual}>Guardar</button>
+          <input className={`${campo} ${problema ? campoConError : ''}`} aria-invalid={Boolean(problema)} value={url} onChange={(e) => { setUrl(e.target.value); setEstado({ error: '', ok: false }) }} placeholder="http://192.168.0.20:8080/video" />
+          <button type="submit" className={botonPrimario} disabled={url.trim() === actual || Boolean(problema)}>Guardar</button>
         </div>
       </label>
+      {problema && <p className={`mt-2 ${mensajeError}`}>{problema}</p>}
       {estado.error && <p role="alert" className={`mt-2 ${mensajeError}`}>{estado.error}</p>}
       {estado.ok && <p role="status" className="mt-2 text-sm text-ok">Dirección guardada.</p>}
     </form>

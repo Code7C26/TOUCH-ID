@@ -4,6 +4,7 @@ from models import db, Usuario, Zona
 from routes.rostros import borrar_fotos_de
 from utils.auditoria import registrar
 from utils.decoradores import rol_requerido
+from utils.validacion import id_valido, leer_json, texto
 
 users_bp = Blueprint("users", __name__)
 
@@ -11,21 +12,26 @@ users_bp = Blueprint("users", __name__)
 def aplicar_datos(user, data, es_nuevo):
     """Copia los datos del JSON al usuario. Devuelve un mensaje de error o None si está todo bien."""
     if es_nuevo:
-        if not (data.get("usuario") or "").strip():
-            return "El usuario es obligatorio"
-        if Usuario.query.filter_by(usuario=data["usuario"].strip()).first():
+        usuario, error = texto(data, "usuario", "El usuario", 50, obligatorio=True)
+        if error:
+            return error
+        if Usuario.query.filter_by(usuario=usuario).first():
             return "Ya existe un usuario con ese nombre"
-        user.usuario = data["usuario"].strip()
+        user.usuario = usuario
 
     if es_nuevo or "contrasena" in data:
-        if len(data.get("contrasena") or "") < 6:
+        clave = data.get("contrasena")
+        if not isinstance(clave, str) or len(clave) < 6:
             return "La contraseña debe tener al menos 6 caracteres"
-        user.set_password(data["contrasena"])
+        if len(clave) > 128:
+            return "La contraseña puede tener como máximo 128 caracteres"
+        user.set_password(clave)
 
     if es_nuevo or "nombre" in data:
-        if not (data.get("nombre") or "").strip():
-            return "El nombre es obligatorio"
-        user.nombre = data["nombre"].strip()
+        nombre, error = texto(data, "nombre", "El nombre", 100, obligatorio=True)
+        if error:
+            return error
+        user.nombre = nombre
 
     if es_nuevo or "rol" in data:
         if data.get("rol") not in ("empleado", "encargado"):
@@ -33,13 +39,15 @@ def aplicar_datos(user, data, es_nuevo):
         user.rol = data["rol"]
 
     if "legajo" in data:
-        legajo = (data["legajo"] or "").strip() or None
+        legajo, error = texto(data, "legajo", "El legajo", 20)
+        if error:
+            return error
         if legajo and Usuario.query.filter(Usuario.legajo == legajo, Usuario.id != (user.id or 0)).first():
             return "Ya existe un empleado con ese legajo"
         user.legajo = legajo
 
     if "zona_id" in data:
-        if data["zona_id"] is not None and not db.session.get(Zona, data["zona_id"]):
+        if data["zona_id"] is not None and not (id_valido(data["zona_id"]) and db.session.get(Zona, data["zona_id"])):
             return "La zona indicada no existe"
         user.zona_id = data["zona_id"]
 
@@ -73,7 +81,7 @@ def ver_usuario(user_id):
 @users_bp.route("/users", methods=["POST"])
 @rol_requerido("encargado")
 def crear_usuario():
-    data = request.get_json(silent=True) or {}
+    data = leer_json()
     user = Usuario()
     error = aplicar_datos(user, data, es_nuevo=True)
     if error:
@@ -88,7 +96,7 @@ def crear_usuario():
 @rol_requerido("encargado")
 def editar_usuario(user_id):
     user = db.get_or_404(Usuario, user_id)
-    data = request.get_json(silent=True) or {}
+    data = leer_json()
     if user.id == request.user_id and (data.get("activo") is False or data.get("rol") == "empleado"):
         return {"error": "No podés darte de baja ni quitarte el rol de encargado"}, 400
     error = aplicar_datos(user, data, es_nuevo=False)

@@ -10,7 +10,8 @@ import './index.css'
 // Los "Provider" envuelven la app para que cualquier página pueda usar la sesión, el tema y los avisos
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    {/* future: activa ya el comportamiento de React Router 7 (y saca los avisos en la consola) */}
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <TemaProvider>
         <AuthProvider>
           <AvisosProvider>

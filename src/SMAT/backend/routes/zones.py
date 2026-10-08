@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from models import db, Zona, Usuario, Incidencia
 from utils.auditoria import registrar
 from utils.decoradores import token_required, rol_requerido, sesion_o_api_key
+from utils.validacion import es_entero, leer_json, texto
 
 zones_bp = Blueprint("zones", __name__)
 
@@ -12,31 +13,34 @@ EPP_VALIDOS = ("casco", "guantes", "lentes", "chaleco")
 def aplicar_datos(zona, data, es_nueva):
     """Copia los datos del JSON a la zona. Devuelve un mensaje de error o None si todo está bien."""
     if "nombre" in data or es_nueva:
-        nombre = (data.get("nombre") or "").strip()
-        if not nombre:
-            return "El nombre es obligatorio"
+        nombre, error = texto(data, "nombre", "El nombre", 100, obligatorio=True)
+        if error:
+            return error
         repetida = Zona.query.filter(Zona.nombre == nombre, Zona.id != (zona.id or 0)).first()
         if repetida:
             return "Ya existe una zona con ese nombre"
         zona.nombre = nombre
 
     if "maquina" in data:
-        zona.maquina = (data["maquina"] or "").strip() or None
+        maquina, error = texto(data, "maquina", "La máquina", 100)
+        if error:
+            return error
+        zona.maquina = maquina
 
     if "epp_requerido" in data:
         epp = data["epp_requerido"]
         if isinstance(epp, str):
             epp = [e.strip() for e in epp.split(",") if e.strip()]
-        if not isinstance(epp, list) or any(e not in EPP_VALIDOS for e in epp):
+        if not isinstance(epp, list) or any(not isinstance(e, str) or e not in EPP_VALIDOS for e in epp):
             return f"epp_requerido solo puede tener: {', '.join(EPP_VALIDOS)}"
-        zona.epp_requerido = ",".join(epp)
+        zona.epp_requerido = ",".join(dict.fromkeys(epp))   # sin repetidos
 
     for campo in ("grilla_x", "grilla_y", "ancho", "alto"):
         if campo in data:
             valor = data[campo]
             minimo = 1 if campo in ("ancho", "alto") else 0
-            if not isinstance(valor, int) or isinstance(valor, bool) or valor < minimo:
-                return f"{campo} debe ser un número entero mayor o igual a {minimo}"
+            if not es_entero(valor) or not minimo <= valor <= 50:
+                return f"{campo} debe ser un número entero entre {minimo} y 50"
             setattr(zona, campo, valor)
     return None
 
@@ -58,7 +62,7 @@ def ver_zona(zona_id):
 @zones_bp.route("/zones", methods=["POST"])
 @rol_requerido("encargado")
 def crear_zona():
-    data = request.get_json(silent=True) or {}
+    data = leer_json()
     zona = Zona()
     error = aplicar_datos(zona, data, es_nueva=True)
     if error:
@@ -73,7 +77,7 @@ def crear_zona():
 @rol_requerido("encargado")
 def editar_zona(zona_id):
     zona = db.get_or_404(Zona, zona_id)
-    data = request.get_json(silent=True) or {}
+    data = leer_json()
     error = aplicar_datos(zona, data, es_nueva=False)
     if error:
         return {"error": error}, 400

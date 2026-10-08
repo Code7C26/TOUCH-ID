@@ -65,6 +65,9 @@ def test_ruta(cliente, encargada, empleado):
 def test_video(cliente, encargada):
     assert cliente.put("/api/robot/video", json={"url_video": "http://192.168.0.20:8080/video"}, headers=encargada).status_code == 200
     assert cliente.put("/api/robot/video", json={"url_video": "ftp://x"}, headers=encargada).status_code == 400
+    for mala in ("https://172.100.177.92:92:8080", "http://", "http://mi pc:8080/video", "http://x/" + "a" * 260):
+        assert cliente.put("/api/robot/video", json={"url_video": mala}, headers=encargada).status_code == 400, mala
+    assert cliente.put("/api/robot/video", json={"url_video": ""}, headers=encargada).status_code == 200   # vacía = sin video
 
 
 def maquina_activa(cliente, zona):

@@ -7,6 +7,7 @@ from models import db, Incidencia, Usuario, Zona, obtener_robot
 from utils.archivos import ImagenInvalida, guardar_imagen
 from utils.auditoria import registrar
 from utils.decoradores import token_required, rol_requerido, api_key_requerida
+from utils.validacion import id_valido, leer_json
 
 incidents_bp = Blueprint("incidents", __name__)
 
@@ -137,25 +138,25 @@ def crear_incidencia():
     empleado_id (o empleado = nombre; opcional), confianza (0 a 1).
     También acepta multipart/form-data con esos campos más "imagen" (JPG/PNG, máx. 5 MB): la foto de evidencia."""
     multipart = request.content_type and request.content_type.startswith("multipart/form-data")
-    data = leer_formulario() if multipart else (request.get_json(silent=True) or {})
+    data = leer_formulario() if multipart else leer_json()
     imagen = request.files.get("imagen") if multipart else None
 
     if data.get("tipo") not in TIPOS_VALIDOS:
         return {"error": f"'tipo' debe ser uno de: {', '.join(TIPOS_VALIDOS)}"}, 400
 
-    zona = db.session.get(Zona, data["zona_id"]) if data.get("zona_id") else None
-    if not zona and data.get("zona"):
+    zona = db.session.get(Zona, data["zona_id"]) if id_valido(data.get("zona_id")) else None
+    if not zona and isinstance(data.get("zona"), str) and data["zona"]:
         zona = Zona.query.filter_by(nombre=data["zona"]).first()
-    elif not zona and not data.get("zona_id"):
+    elif not zona and data.get("zona_id") is None and not data.get("zona"):
         # Sin zona: la cámara va en el robot, así que se usa la zona que el robot reportó
         zona = obtener_robot().zona_actual
     if not zona:
         return {"error": "Zona inexistente: indicá 'zona_id' o 'zona' (o que el robot reporte en qué zona está)"}, 400
 
     empleado_id = data.get("empleado_id")
-    if empleado_id is not None and not db.session.get(Usuario, empleado_id):
+    if empleado_id is not None and not (id_valido(empleado_id) and db.session.get(Usuario, empleado_id)):
         return {"error": "empleado_id inexistente"}, 400
-    if empleado_id is None and data.get("empleado"):
+    if empleado_id is None and isinstance(data.get("empleado"), str) and data["empleado"].strip():
         # La IA reconoce por nombre (el de la carpeta de fotos). Si no hay nadie con ese nombre
         # (o es "Desconocido"), la alerta queda sin empleado en vez de perderse.
         nombre = str(data["empleado"]).strip()
@@ -163,7 +164,7 @@ def crear_incidencia():
         empleado_id = encontrado.id if encontrado else None
 
     confianza = data.get("confianza", 0.0)
-    if not isinstance(confianza, (int, float)) or not 0 <= confianza <= 1:
+    if not isinstance(confianza, (int, float)) or isinstance(confianza, bool) or not 0 <= confianza <= 1:
         return {"error": "'confianza' debe ser un número entre 0 y 1"}, 400
 
     inc = Incidencia(tipo=data["tipo"], zona_id=zona.id, empleado_id=empleado_id, confianza=confianza)

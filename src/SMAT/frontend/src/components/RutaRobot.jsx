@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { botonPrimario, botonSecundario, campo, mensajeError, tarjeta } from '../utils/estilos.js'
 
 const MIN = 5, MAX = 3600
-const flecha = 'grid size-8 place-items-center rounded-lg border border-zinc-300 text-sm hover:bg-zinc-100 disabled:opacity-30 dark:border-zinc-700 dark:hover:bg-zinc-800'
+const flecha = 'grid size-7 shrink-0 place-items-center sm:size-8 rounded-lg border border-zinc-300 text-sm hover:bg-zinc-100 disabled:opacity-30 dark:border-zinc-700 dark:hover:bg-zinc-800'
 
 export default function RutaRobot({ ruta, zonas, onGuardar }) {
   const [pasos, setPasos] = useState(ruta)          // copia que se edita
@@ -38,11 +38,11 @@ export default function RutaRobot({ ruta, zonas, onGuardar }) {
       <ol className="mt-3 space-y-2">
         {pasos.length === 0 && <li className="text-sm text-zinc-500">La ruta está vacía: agregá al menos una zona.</li>}
         {pasos.map((p, i) => (
-          <li key={`${i}-${p.zona_id}`} className="flex items-center gap-2 rounded-lg bg-zinc-50 p-2 dark:bg-zinc-800/50">
+          <li key={`${i}-${p.zona_id}`} className="flex items-center gap-1.5 rounded-lg sm:gap-2 bg-zinc-50 p-2 dark:bg-zinc-800/50">
             <span className="grid size-7 shrink-0 place-items-center rounded-full bg-marca text-sm font-bold text-tinta">{i + 1}</span>
             <span className="min-w-0 flex-1 truncate font-medium">{nombre(p.zona_id)}</span>
             <label className="flex items-center gap-1 text-xs text-zinc-500">
-              <input type="number" min={MIN} max={MAX} aria-label={`Segundos de espera en ${nombre(p.zona_id)}`} className={`${campo} !w-20 !py-1.5`}
+              <input type="number" min={MIN} max={MAX} aria-label={`Segundos de espera en ${nombre(p.zona_id)}`} className={`${campo} !w-16 !px-2 !py-1.5 sm:!w-20`}
                      value={p.tiempo_espera_seg} onChange={(e) => editar(pasos.map((q, j) => (j === i ? { ...q, tiempo_espera_seg: e.target.value } : q)))} /> s
             </label>
             <button type="button" className={flecha} aria-label="Subir" disabled={i === 0} onClick={() => mover(i, -1)}>↑</button>
