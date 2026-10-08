@@ -31,6 +31,15 @@ El proyecto se desarrolla bajo una estructura de trabajo colaborativo, formado p
 *   María Sol Kassar
 *   Lola Rozandal
 
+## 🚀 Pasos para usar el proyecto
+
+* Para poner en marcha la aplicación, el usuario primero debe clonar el repositorio e instalar el entorno de desarrollo con sus dependencias en el editor de código. Posteriormente, se debe conectar el lector biométrico portátil al equipo y verificar que exista vinculación correcta entre el dispositivo físico y la aplicación. Finalmente, cuando el trabajador coloca su huella en el lector al ingresar o salir de la obra, la aplicación procesa la marca biométrica y registra automáticamente la fecha y la hora exacta en la base de datos del sistema y alguna información necesaria mas.
+
+## 🛠️ Estado Técnico Actual
+
+* El proyecto se encuentra en una etapa inicial de configuración de la base de código y definición de la arquitectura debido a un cambio reciente en la propuesta. Actualmente el grupo está en proceso de adquisición y prueba de los componentes de hardware necesarios, como los sensores biométricos, para determinar si se requieren módulos adicionales. En cuanto al software, la aplicación, la conexión con el lector de huellas y la estructura final de la base de datos para almacenar los registros de entrada y salida quedan como las tareas principales pendientes de desarrollo.
+
+
 ## ⚙️ Instalación (Próximamente)
 
 ```bash

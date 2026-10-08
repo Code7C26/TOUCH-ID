@@ -1,0 +1,71 @@
+import serial
+import json
+import csv
+import os
+from datetime import datetime
+ 
+PUERTO = "COM3"
+BAUDIOS = 9600
+ARCHIVO_EMPLEADOS = "empleados.json"
+ARCHIVO_ASISTENCIA = "asistencia.csv"
+ 
+ 
+def cargar_empleados():
+    with open(ARCHIVO_EMPLEADOS, "r", encoding="utf-8") as archivo:
+        return json.load(archivo)
+ 
+ 
+def obtener_ultimo_estado(id_empleado):
+    if not os.path.exists(ARCHIVO_ASISTENCIA):
+        return None
+ 
+    ultimo = None
+    with open(ARCHIVO_ASISTENCIA, "r", encoding="utf-8") as archivo:
+        lector = csv.reader(archivo)
+        next(lector, None)
+        for fila in lector:
+            if fila and fila[0] == str(id_empleado):
+                ultimo = fila[4]
+    return ultimo
+ 
+ 
+def registrar_asistencia(id_empleado, nombre):
+    existe = os.path.exists(ARCHIVO_ASISTENCIA)
+    ultimo_estado = obtener_ultimo_estado(id_empleado)
+    estado = "salida" if ultimo_estado == "entrada" else "entrada"
+    ahora = datetime.now()
+ 
+    with open(ARCHIVO_ASISTENCIA, "a", newline="", encoding="utf-8") as archivo:
+        escritor = csv.writer(archivo)
+        if not existe:
+            escritor.writerow(["id", "nombre", "fecha", "hora", "estado"])
+        escritor.writerow([
+            id_empleado,
+            nombre,
+            ahora.strftime("%Y-%m-%d"),
+            ahora.strftime("%H:%M:%S"),
+            estado,
+        ])
+ 
+    print(f"{nombre} registro su {estado} a las {ahora.strftime('%H:%M:%S')}")
+ 
+ 
+def main():
+    empleados = cargar_empleados()
+    arduino = serial.Serial(PUERTO, BAUDIOS, timeout=1)
+    print("Sistema Touch ID iniciado. Esperando huellas...")
+ 
+    while True:
+        linea = arduino.readline().decode("utf-8", errors="ignore").strip()
+        if linea.startswith("ID:"):
+            id_empleado = linea.replace("ID:", "")
+            nombre = empleados.get(id_empleado, "Desconocido")
+            if nombre == "Desconocido":
+                print(f"Huella no registrada (ID {id_empleado}).")
+            else:
+                registrar_asistencia(id_empleado, nombre)
+ 
+ 
+if __name__ == "__main__":
+    main()
+ 
