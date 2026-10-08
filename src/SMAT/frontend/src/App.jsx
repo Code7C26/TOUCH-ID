@@ -1,9 +1,10 @@
 // Mapa de rutas de la web (ver docs/PLAN.md, "Mapa del sitio").
+//  /, /como-funciona, /planes, /nosotros, /contacto -> página pública de SMAT (sin login)
 //  /login      -> pública
 //  /app/...    -> con sesión; algunas solo para empleado y otras solo para encargado
-//  /           -> por ahora va a /app; en la Fase L será la página pública de SMAT
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
+import LayoutPublico from './components/publico/LayoutPublico.jsx'
 import RutaProtegida from './components/RutaProtegida.jsx'
 import { inicioSegunRol, useAuth } from './context/AuthContext.jsx'
 import Login from './pages/Login.jsx'
@@ -18,6 +19,11 @@ import Panel from './pages/encargado/Panel.jsx'
 import Reportes from './pages/encargado/Reportes.jsx'
 import Robot from './pages/encargado/Robot.jsx'
 import Zonas from './pages/encargado/Zonas.jsx'
+import ComoFunciona from './pages/publico/ComoFunciona.jsx'
+import Contacto from './pages/publico/Contacto.jsx'
+import InicioPublico from './pages/publico/InicioPublico.jsx'
+import Nosotros from './pages/publico/Nosotros.jsx'
+import Planes from './pages/publico/Planes.jsx'
 
 // /app muestra el Inicio del empleado; al encargado lo lleva a su Panel
 function InicioApp() {
@@ -30,7 +36,13 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/app" replace />} />
+      <Route element={<LayoutPublico />}>
+        <Route index element={<InicioPublico />} />
+        <Route path="como-funciona" element={<ComoFunciona />} />
+        <Route path="planes" element={<Planes />} />
+        <Route path="nosotros" element={<Nosotros />} />
+        <Route path="contacto" element={<Contacto />} />
+      </Route>
       <Route path="/login" element={usuario ? <Navigate to={inicioSegunRol(usuario)} replace /> : <Login />} />
 
       <Route path="/app" element={<RutaProtegida><Layout /></RutaProtegida>}>

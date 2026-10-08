@@ -137,9 +137,9 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 4.2 Panel · [x] 4.3 Incidencias · [x] 4.4 Empleados · [x] 4.5 Zonas
 
 ### Fase L · Landing pública
-- [ ] L.1 `LayoutPublico` y rutas públicas
-- [ ] L.2 Inicio, Cómo funciona, Planes, Nosotros, Contacto (textos de EMPRESA-SMAT; si faltan, `TODO`)
-- [ ] L.3 Capturas reales, SEO básico, responsive
+- [x] L.1 `LayoutPublico` y rutas públicas
+- [x] L.2 Inicio, Cómo funciona, Planes, Nosotros, Contacto (textos de EMPRESA-SMAT; mail y WhatsApp en el `.env` del frontend)
+- [x] L.3 Capturas reales (datos ficticios, sin caras), SEO básico, responsive y pruebas e2e
 
 ### Fase 5 · Robot y máquinas
 - [x] 5.1 `/api/robot/estado|ruta|comando` para la web

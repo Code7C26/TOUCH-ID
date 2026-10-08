@@ -19,6 +19,7 @@
 - 07/10: **Fase 6**: foto de evidencia en cada alerta, fotos de rostro con consentimiento (Ley 25.326) que maneja el encargado o el propio empleado, `GET /rostros` para la IA, simulador de YOLO y guía de la prueba real.
 - 08/10: Morena reorganiza el repo (la web pasa a `src/SMAT/`, la empresa a `docs/SMAT/`) y sube su servidor de IA (YOLO + reconocimiento facial). Se renombra a `src/SMAT/servidor_ia/` y se conecta con el backend: cada alerta llega a la web con la foto, el nombre del trabajador y la zona del robot, y detiene la máquina.
 - 08/10: **Revisión general**: recorrido automático de las 14 pantallas en 5 tamaños y temas (sin errores), pruebas de robustez (el servidor ya no se cae con datos raros), la baja o el cambio de rol cortan la sesión al instante, validación de la dirección del video y arreglos de la web en celular y tablet. 76 pruebas de la API y 17 de punta a punta.
+- 08/10: **Fase L**: página pública de SMAT en `/` (Inicio, Cómo funciona, Planes, Nosotros, Contacto) con los textos de la empresa, capturas reales de la app con datos ficticios, título y descripción por página, menú para celular y 4 pruebas e2e.
 
 **Problemas**
 - Node.js y GitHub CLI no estaban instalados (resuelto con winget).
@@ -29,5 +30,5 @@
 - Ver `docs/decisiones/001` a `005`.
 
 **Próximos pasos**
-- Fase L: página pública de SMAT. Fase 6.5: prueba real con el hardware de Morena (`docs/integracion/PRUEBA.md`).
+- Fase 7: tiempo real (alerta sonora, PWA y notificaciones push). Fase 6.5: prueba real con el hardware de Morena (`docs/integracion/PRUEBA.md`).
 - Morena: revisar `docs/API.md` y el acuerdo de socios; probar el robot y el relé contra el backend.
