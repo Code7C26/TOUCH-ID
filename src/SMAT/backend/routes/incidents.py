@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, request
 from sqlalchemy import or_
 
-from models import db, Incidencia, Usuario, Zona
+from models import db, Incidencia, Usuario, Zona, obtener_robot
 from utils.archivos import ImagenInvalida, guardar_imagen
 from utils.auditoria import registrar
 from utils.decoradores import token_required, rol_requerido, api_key_requerida
@@ -133,7 +133,8 @@ def estadisticas():
 @api_key_requerida("YOLO_API_KEY")
 def crear_incidencia():
     """La llama el servidor YOLO cuando detecta a alguien sin EPP (header X-API-KEY).
-    Body JSON: tipo, zona_id (o zona = nombre), empleado_id (opcional), confianza (0 a 1).
+    Body JSON: tipo, zona_id (o zona = nombre; si no viene, la zona actual del robot),
+    empleado_id (o empleado = nombre; opcional), confianza (0 a 1).
     También acepta multipart/form-data con esos campos más "imagen" (JPG/PNG, máx. 5 MB): la foto de evidencia."""
     multipart = request.content_type and request.content_type.startswith("multipart/form-data")
     data = leer_formulario() if multipart else (request.get_json(silent=True) or {})
@@ -145,12 +146,21 @@ def crear_incidencia():
     zona = db.session.get(Zona, data["zona_id"]) if data.get("zona_id") else None
     if not zona and data.get("zona"):
         zona = Zona.query.filter_by(nombre=data["zona"]).first()
+    elif not zona and not data.get("zona_id"):
+        # Sin zona: la cámara va en el robot, así que se usa la zona que el robot reportó
+        zona = obtener_robot().zona_actual
     if not zona:
-        return {"error": "Zona inexistente: indicá 'zona_id' o 'zona'"}, 400
+        return {"error": "Zona inexistente: indicá 'zona_id' o 'zona' (o que el robot reporte en qué zona está)"}, 400
 
     empleado_id = data.get("empleado_id")
     if empleado_id is not None and not db.session.get(Usuario, empleado_id):
         return {"error": "empleado_id inexistente"}, 400
+    if empleado_id is None and data.get("empleado"):
+        # La IA reconoce por nombre (el de la carpeta de fotos). Si no hay nadie con ese nombre
+        # (o es "Desconocido"), la alerta queda sin empleado en vez de perderse.
+        nombre = str(data["empleado"]).strip()
+        encontrado = Usuario.query.filter(db.func.lower(Usuario.nombre) == nombre.lower(), Usuario.activo.is_(True)).first()
+        empleado_id = encontrado.id if encontrado else None
 
     confianza = data.get("confianza", 0.0)
     if not isinstance(confianza, (int, float)) or not 0 <= confianza <= 1:
