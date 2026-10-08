@@ -52,10 +52,10 @@ def notificaciones(pag):
 def test_activar_probar_y_desactivar_desde_la_tarjeta(encargada):
     pag = encargada
     tarjeta = pag.get_by_role("region", name="Notificaciones")
-    assert tarjeta.get_by_text("Apagadas").is_visible()
+    assert esperar_texto(pag, "Apagadas", 5), tarjeta.inner_text()
 
     tarjeta.get_by_role("button", name="Activar notificaciones").click()
-    assert esperar_texto(pag, "Activadas", 8)
+    assert esperar_texto(pag, "Activadas", 8), tarjeta.inner_text()
     tarjeta.get_by_role("button", name="Enviar una de prueba").click()     # el backend la encontró guardada
     assert esperar_texto(pag, "Notificación de prueba enviada", 8)
 
@@ -84,7 +84,8 @@ def test_el_service_worker_muestra_la_notificacion(encargada):
         if notificaciones(pag):
             break
         pag.wait_for_timeout(250)
-    assert notificaciones(pag) == [{"titulo": "Nueva alerta: sin casco", "texto": "Zona C · Pedro Sosa · máquina detenida"}]
+    assert notificaciones(pag) == [{"titulo": "Nueva alerta: sin casco", "texto": "Zona C · Pedro Sosa · máquina detenida"}], \
+        f"permiso de notificaciones: {pag.evaluate('Notification.permission')}"
 
 
 @pytest.mark.skipif(os.getenv("NAVEGADOR", "chromium") != "msedge", reason="el servicio de push real se prueba con Edge")

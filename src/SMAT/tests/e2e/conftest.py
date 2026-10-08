@@ -81,7 +81,9 @@ def pytest_sessionstart(session):
 def navegador():
     canal = os.getenv("NAVEGADOR", "chromium")
     with sync_playwright() as p:
-        nav = p.chromium.launch(channel=None if canal == "chromium" else canal, headless=True)
+        # channel="chromium" usa el navegador completo sin ventana. Sin channel, Playwright usa una versión
+        # recortada ("headless shell") que no tiene notificaciones y hace fallar las pruebas de la Fase 7.
+        nav = p.chromium.launch(channel=canal, headless=True)
         yield nav
         nav.close()
 
