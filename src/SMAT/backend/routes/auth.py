@@ -6,18 +6,21 @@ from flask import Blueprint, request
 from config import Config
 from models import db, Usuario
 from utils.decoradores import token_required
+from utils.validacion import leer_json
 
 auth_bp = Blueprint("auth", __name__)
 
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    data = request.get_json() or {}
+    data = leer_json()
     usuario = data.get("usuario")
     contrasena = data.get("contrasena")
 
-    if not usuario or not contrasena:
+    if not usuario or not contrasena or not isinstance(usuario, str) or not isinstance(contrasena, str):
         return {"error": "Usuario y contraseña requeridos"}, 400
+    if len(usuario) > 50 or len(contrasena) > 128:
+        return {"error": "Credenciales inválidas"}, 401
 
     user = Usuario.query.filter_by(usuario=usuario).first()
     if not user or not user.check_password(contrasena):
