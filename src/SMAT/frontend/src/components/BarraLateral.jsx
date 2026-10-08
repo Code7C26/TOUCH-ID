@@ -59,7 +59,7 @@ export default function BarraLateral() {
         ))}
       </nav>
 
-      <div className={`border-t border-zinc-200/80 p-3 dark:border-zinc-800 ${colapsado ? 'space-y-2' : ''}`}>
+      <div className="border-t border-zinc-200/80 p-3 dark:border-zinc-800">
         <div className={`flex items-center gap-2 ${colapsado ? 'flex-col' : ''}`}>
           <Avatar nombre={usuario?.nombre} />
           {!colapsado && (
@@ -68,6 +68,9 @@ export default function BarraLateral() {
               <p className="truncate text-xs text-zinc-500 capitalize dark:text-zinc-400">{usuario?.rol}{usuario?.zona ? ` · ${usuario.zona}` : ''}</p>
             </div>
           )}
+        </div>
+        {/* Sonido, tema y salir: en fila debajo del nombre (en columna si el menú está achicado) */}
+        <div className={`mt-2 flex items-center gap-1 ${colapsado ? 'flex-col' : ''}`}>
           <button type="button" onClick={sonido.alternar} className={iconoChico} aria-pressed={sonido.activado}
                   aria-label="Sonido de alertas" title={sonido.activado ? 'Silenciar alertas' : 'Activar sonido de alertas'}>
             <Icono nombre={sonido.activado ? 'campana' : 'silencio'} className="size-4" />

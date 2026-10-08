@@ -53,7 +53,8 @@ export default function AlertaSonora() {
         {nombreTipo(ultima.tipo)} en {ultima.zona}
         {usuario?.rol === 'encargado' && ` · ${ultima.empleado_nombre}`}
       </p>
-      <div className="flex items-center gap-2">
+      {/* En el celular los botones van en una segunda fila, para que el texto no quede apretado */}
+      <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
         {/* El navegador bloquea el audio hasta que se toca la página: este botón lo habilita */}
         {(!activado || !listo) && (
           <button type="button" onClick={activar} className="rounded-lg border border-white/60 px-3 py-1.5 text-sm font-semibold hover:bg-white/15">
