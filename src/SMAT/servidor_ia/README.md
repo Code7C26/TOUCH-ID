@@ -1,0 +1,62 @@
+# Servidor de IA · DROID-E3D
+
+Hecho por **Morena**. Mira la cámara del robot (celular con IP Webcam), detecta con YOLO si alguien
+no tiene casco, reconoce de quién es la cara y avisa. Desde el 08/10/2026 cada alerta llega también
+a la **web de DROID-E3D**, con la foto del momento.
+
+```
+cámara del celular ──► motor_ia_robot.py ──┬─► base propia (robotica_industrial)
+                       YOLO + reconocimiento├─► ESP32 del robot (/alerta_seguridad)
+                       facial               └─► web DROID-E3D (POST /api/incidents con foto)
+                                                 └─► alerta en el panel + máquina detenida
+```
+
+## Archivos
+
+| Archivo | Qué hace |
+|---|---|
+| `motor_ia_robot.py` | Programa principal: video, detección de cascos, reconocimiento facial y alertas |
+| `conexion_droid.py` | Manda cada alerta a la web (en segundo plano, no frena el video) |
+| `registrar_trabajador.py` | Saca fotos de un trabajador con la cámara y las guarda en `fotos_trabajadores/<Nombre>/` |
+| `crear_base_datos.sql` | Base propia `robotica_industrial` (registro local de alertas) |
+| `fotos_trabajadores/` | Una carpeta por persona; **el nombre de la carpeta es el nombre que se reconoce** |
+| `modelo_cascos.pt`, `yolov8n.pt` | Modelos de YOLO (con casco / sin casco, y personas) |
+| `modelos/` | Modelos de OpenCV para detectar y reconocer caras |
+
+## Cómo usarlo (Windows, PowerShell)
+
+```powershell
+cd C:\Users\tomas\Fat\TOUCH-ID\src\SMAT\servidor_ia
+pip install -r requirements.txt          # una sola vez
+# en XAMPP → MySQL, cargar crear_base_datos.sql una vez
+python motor_ia_robot.py                  # Q en la ventana del video para salir
+```
+
+Antes de arrancar, en `motor_ia_robot.py` (y en `registrar_trabajador.py`) poné la IP de la cámara
+(`URL_CAMARA_CELULAR`) y la del robot (`URL_ESP32_ALERTA`).
+
+### Conexión con la web
+
+- **Misma PC que el backend:** no hay que configurar nada; toma la clave de `../backend/.env`.
+- **Otra PC:** definí antes de correr el motor (la clave te la pasa Toro por fuera de GitHub):
+  ```powershell
+  $env:DROID_URL = "http://<IP-de-la-PC-del-backend>:5000/api"
+  $env:YOLO_API_KEY = "<la clave>"
+  ```
+- **Zona:** si no se configura, la web usa la zona donde está el robot. Para fijarla: `$env:DROID_ZONA_ID = "2"`.
+- **Nombres:** para que la alerta quede a nombre de alguien, tiene que existir un empleado en la web
+  con el mismo nombre que su carpeta. Para darlos de alta a todos de una vez:
+  ```powershell
+  cd ..\backend
+  python tools\cargar_trabajadores_ia.py --clave-inicial clave123
+  ```
+  Si no lo encuentra, la alerta llega igual como "Desconocido".
+- **Video en vivo en la web:** en la página Robot → Video, pegá la misma URL de la cámara
+  (`http://<IP-del-celular>:8080/video`).
+
+Si la web no responde, el motor sigue funcionando igual: solo muestra `[ERROR WEB]` en la consola.
+
+## Datos personales
+
+Las fotos de `fotos_trabajadores/` son caras de personas reales. Solo se cargan con su consentimiento
+(Ley 25.326), y si alguien lo retira hay que borrar su carpeta.
