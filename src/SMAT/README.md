@@ -21,7 +21,7 @@ Cámara → servidor YOLO ──POST /api/incidents──▶ Backend Flask ─�
 
 ## Estado técnico (07/10/2026)
 
-Pruebas automáticas en el repo: **76 de la API** (pytest) y **17 de punta a punta** en el navegador (Playwright). Corren solas en GitHub Actions en cada PR.
+Pruebas automáticas en el repo: **76 de la API** (pytest) y **21 de punta a punta** en el navegador (Playwright). Corren solas en GitHub Actions en cada PR.
 
 | Área | Estado |
 |---|---|
@@ -32,7 +32,8 @@ Pruebas automáticas en el repo: **76 de la API** (pytest) y **17 de punta a pun
 | Frontend: diseño estilo SaaS (claro/oscuro, celular y PC), pantallas del empleado y del encargado | ✅ Funciona |
 | Frontend: control del robot con video en vivo, mapa con recorrido, detalle de cada zona | ✅ Funciona con el simulador |
 | Frontend: evidencia en las alertas, fotos de rostro (encargado y empleado) | ✅ Funciona |
-| Push, reportes, auditoría (pantalla), página pública de SMAT | 🔜 Pendiente (Fases 7, 8 y L) |
+| Página pública de SMAT (`/`, `/como-funciona`, `/planes`, `/nosotros`, `/contacto`) | ✅ Funciona; mail y WhatsApp de contacto en `frontend/.env` |
+| Push, reportes, auditoría (pantalla) | 🔜 Pendiente (Fases 7 y 8) |
 | Hardware e IA (robot, relé, cámara, YOLO, reconocimiento facial) | En desarrollo por Morena. Mientras tanto: `backend/tools/simular_esp32.py` y `backend/tools/simular_yolo.py` |
 
 El detalle tarea por tarea está en [`docs/PLAN.md`](docs/PLAN.md) y los documentos de la empresa y el reporte de avance en [`docs/SMAT/`](../../docs/SMAT/) (en la raíz del repo).
@@ -124,7 +125,7 @@ backend\venv\Scripts\activate
 pip install -r backend\requirements-dev.txt      # una sola vez
 
 python -m pytest backend\tests        # 76 pruebas de la API (~30 s), usan la base robot_db_test
-python tests\correr_e2e.py            # 17 pruebas con navegador real (~2 min), usan robot_db_e2e
+python tests\correr_e2e.py            # 21 pruebas con navegador real (~2 min), usan robot_db_e2e
 ```
 Las pruebas **nunca tocan la base de desarrollo** (`robot_db`). Las de punta a punta levantan su propio backend (puerto 5001) y su propia web (5174), y prueban también el robot con el ESP32 simulado.
 En GitHub corren solas en cada Pull Request (`.github/workflows/smat-ci.yml`): si algo se rompe, el PR muestra una cruz roja.
