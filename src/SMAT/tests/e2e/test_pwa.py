@@ -1,0 +1,42 @@
+"""Fase 7.2: la web se puede instalar como app (PWA) y abre aunque se corte la conexión.
+Usa la versión compilada que sirve correr_e2e.py en PWA_URL, porque el service worker solo existe ahí."""
+import json
+import os
+import urllib.request
+
+import pytest
+
+PWA = os.getenv("PWA_URL", "http://localhost:5175")
+
+
+@pytest.fixture
+def contexto(navegador):
+    ctx = navegador.new_context(locale="es-AR")
+    yield ctx
+    ctx.close()
+
+
+def test_el_manifest_permite_instalar_la_app():
+    manifest = json.loads(urllib.request.urlopen(f"{PWA}/manifest.webmanifest").read())
+    assert manifest["name"] == "DROID-E3D by SMAT"
+    assert manifest["display"] == "standalone"
+    assert manifest["start_url"] == "/app"
+    assert {"192x192", "512x512"} <= {i["sizes"] for i in manifest["icons"]}
+    assert any(i.get("purpose") == "maskable" for i in manifest["icons"])
+    for icono in manifest["icons"]:                       # los íconos existen de verdad
+        assert urllib.request.urlopen(PWA + icono["src"]).status == 200
+
+
+def test_la_app_abre_sin_conexion(contexto):
+    pag = contexto.new_page()
+    pag.goto(PWA + "/")
+    assert pag.locator('link[rel="manifest"]').count() == 1
+    pag.evaluate("navigator.serviceWorker.ready.then(() => true)")   # quedó instalado y con la app guardada
+    pag.reload()
+    assert pag.evaluate("!!navigator.serviceWorker.controller")       # ahora la página pasa por el service worker
+
+    contexto.set_offline(True)
+    pag.goto(PWA + "/login")
+    assert pag.get_by_role("button", name="Ingresar").is_visible()
+    pag.goto(PWA + "/como-funciona")
+    assert pag.locator("h1").first.is_visible()

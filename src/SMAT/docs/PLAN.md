@@ -173,7 +173,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase 7 · Tiempo real
 - [x] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido" (#49)
-- [ ] 7.2 PWA con `vite-plugin-pwa` (#50)
+- [x] 7.2 PWA con `vite-plugin-pwa` (#50)
 - [ ] 7.3 Web Push (VAPID, `/api/push/suscribir`, `useNotificaciones`) (#51)
 
 ### Fase 8 · Reportes y extras
