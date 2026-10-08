@@ -168,7 +168,8 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 6.2 Fotos de rostro con consentimiento (Ley 25.326) + `GET /api/rostros`
 - [x] 6.3 Evidencia en detalle y en AlertCard
 - [x] 6.4 `tools/simular_yolo.py`
-- [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`, guía lista) cuando exista el hardware
+- [x] 6.6 Unir el servidor de IA de Morena (`servidor_ia/`) con el backend: alertas con foto, empleado por nombre y zona del robot; `tools/cargar_trabajadores_ia.py`
+- [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`, guía lista) con la cámara, el robot y la máquina
 
 ### Fase 7 · Tiempo real
 - [ ] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido"

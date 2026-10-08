@@ -20,7 +20,7 @@ El ESP32 consulta por HTTP al backend qué comando ejecutar y si su máquina deb
 ## Repo y equipo
 - Repo `Code7C26/TOUCH-ID`. Ramas: `SMAT-web` (esta), `SMAT-empresa`, `SMAT-hardware`. PR a `main` al final de cada fase.
 - Estructura del repo (igual para TOUCH y SMAT): `assets/`, `design/`, `docs/`, `src/`, con una subcarpeta por empresa.
-  SMAT puede tocar: `src/SMAT/` (web, pruebas y servidor de IA de Morena), `docs/SMAT/` (empresa, costos, reportes) y `.github/` (archivos `smat-*`).
+  SMAT puede tocar: `src/SMAT/` (web, pruebas y `servidor_ia/` de Morena: su lógica de detección no se cambia, solo se conecta con el backend), `docs/SMAT/` (empresa, costos, reportes) y `.github/` (archivos `smat-*`).
   No tocar nada de `*/TOUCH-ID/` ni el `README.md` de la raíz.
 - Nunca `git add .` desde la raíz del repo ni push directo a `main`.
 - Al terminar una fase con todas las pruebas en verde, Claude abre el PR y lo mergea; se frena si algo falla o si cambia `docs/API.md` (lo revisa Morena).

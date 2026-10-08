@@ -17,6 +17,7 @@
 - 07/10: **Fase T**: pruebas automáticas del backend (pytest) y de la web (Playwright), corriendo solas en GitHub Actions en cada PR.
 - 07/10: **Fase R** (rediseño estilo SaaS): barra lateral, avisos flotantes, paneles laterales, validación en vivo, tablas ordenables con búsqueda, tarjetas con tendencia y mini gráfico, y mapa con íconos de máquina y EPP, robot animado, recorrido numerado y detalle de cada zona.
 - 07/10: **Fase 6**: foto de evidencia en cada alerta, fotos de rostro con consentimiento (Ley 25.326) que maneja el encargado o el propio empleado, `GET /rostros` para la IA, simulador de YOLO y guía de la prueba real.
+- 08/10: Morena reorganiza el repo (la web pasa a `src/SMAT/`, la empresa a `docs/SMAT/`) y sube su servidor de IA (YOLO + reconocimiento facial). Se renombra a `src/SMAT/servidor_ia/` y se conecta con el backend: cada alerta llega a la web con la foto, el nombre del trabajador y la zona del robot, y detiene la máquina.
 
 **Problemas**
 - Node.js y GitHub CLI no estaban instalados (resuelto con winget).

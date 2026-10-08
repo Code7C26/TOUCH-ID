@@ -48,6 +48,7 @@ src/SMAT/
 │   └── database/       schema.sql (tablas + datos de ejemplo)
 ├── frontend/           React + Vite → puerto 5173
 │   └── src/            api/client.js (todas las llamadas al backend) · components/
+├── servidor_ia/        IA de Morena: YOLO + reconocimiento facial → manda las alertas a la web
 └── docs/               PLAN · API · FABRICA-CLIENTE · BITACORA · decisiones/ · integracion/
 ```
 

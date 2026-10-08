@@ -39,8 +39,9 @@ Header: `X-API-KEY: <YOLO_API_KEY>`
 | Campo | Obligatorio | Detalle |
 |---|---|---|
 | `tipo` | sí | `sin_casco`, `sin_guantes`, `sin_lentes` o `sin_chaleco` |
-| `zona_id` | sí* | id de la zona donde está el robot. *Alternativa: `"zona": "Zona A"` (por nombre) |
+| `zona_id` | no* | id de la zona. *Alternativa: `"zona": "Zona A"` (por nombre). **Si no mandás ninguna, se usa la zona que reportó el robot** (la cámara va en el robot); si el robot nunca reportó su zona → `400` |
 | `empleado_id` | no | id del empleado reconocido. Omitilo o mandá `null` si no lo identificó |
+| `empleado` | no | Alternativa a `empleado_id`: el **nombre** del empleado tal como está en la web (ej. el de la carpeta de fotos de la IA). Sin importar mayúsculas. Si no hay nadie con ese nombre (o es `"Desconocido"`), la alerta se guarda igual, sin empleado |
 | `confianza` | no | número de 0 a 1 (por defecto 0) |
 
 Respuesta `201` con la incidencia creada (`id`, `timestamp`, `estado: "activa"`...) y `maquina_detenida`: `true` si **esta falta detuvo la máquina de la zona** (la zona tiene máquina y estaba activa). Errores `400`: tipo inválido, zona o empleado inexistente, confianza fuera de rango.
@@ -57,6 +58,12 @@ requests.post(f"{URL}/incidents", headers={"X-API-KEY": CLAVE},
 - La respuesta trae `imagen_url` (ej. `"/uploads/evidencias/41_a1b2c3d4.jpg"`).
 - Errores: `400` si la imagen no es JPG/PNG o está vacía (no se guarda la incidencia), `413` si pesa más de 5 MB.
 - El servidor revisa el contenido del archivo, no la extensión, y le pone un nombre propio.
+
+### ✅ Servidor de IA de Morena (`src/SMAT/servidor_ia/`)
+`motor_ia_robot.py` manda cada alerta a la web con `conexion_droid.py`: multipart con la foto del momento,
+`empleado` = nombre de la carpeta en `fotos_trabajadores/` y sin zona (usa la del robot).
+Para que la alerta quede a nombre de alguien, ese nombre tiene que existir como empleado en la web:
+`python backend/tools/cargar_trabajadores_ia.py --clave-inicial <clave>` los da de alta.
 
 ### ✅ `GET /zones` · zonas y EPP obligatorio
 Header: `X-API-KEY` (la de YOLO o la del robot). Sirve para saber qué EPP exigir en cada zona:
