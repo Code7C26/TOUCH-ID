@@ -169,25 +169,25 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 6.3 Evidencia en detalle y en AlertCard
 - [x] 6.4 `tools/simular_yolo.py`
 - [x] 6.6 Unir el servidor de IA de Morena (`servidor_ia/`) con el backend: alertas con foto, empleado por nombre y zona del robot; `tools/cargar_trabajadores_ia.py`
-- [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`, guía lista) con la cámara, el robot y la máquina
+- [ ] 6.5 Prueba de integración real (`docs/integracion/PRUEBA.md`, guía lista) con la cámara, el robot y la máquina (#48)
 
 ### Fase 7 · Tiempo real
-- [ ] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido"
-- [ ] 7.2 PWA con `vite-plugin-pwa`
-- [ ] 7.3 Web Push (VAPID, `/api/push/suscribir`, `useNotificaciones`)
+- [ ] 7.1 `AlertaSonora`: polling 3 s + banner + botón "activar sonido" (#49)
+- [ ] 7.2 PWA con `vite-plugin-pwa` (#50)
+- [ ] 7.3 Web Push (VAPID, `/api/push/suscribir`, `useNotificaciones`) (#51)
 
 ### Fase 8 · Reportes y extras
-- [ ] 8.1 `/api/reports/diario` y `/api/reports/ranking`
-- [ ] 8.2 Página Reportes (recharts + ranking)
-- [ ] 8.3 Export CSV y PDF mensual (reportlab)
-- [ ] 8.4 Comentarios en incidencias
-- [ ] 8.5 Página Auditoría
+- [ ] 8.1 `/api/reports/diario` y `/api/reports/ranking` (#52)
+- [ ] 8.2 Página Reportes (recharts + ranking) (#53)
+- [ ] 8.3 Export CSV y PDF mensual (reportlab) (#54)
+- [ ] 8.4 Comentarios en incidencias (#55)
+- [ ] 8.5 Página Auditoría (#56)
 
 ### Fase 9 · Pulido y despliegue
-- [ ] 9.1 Revisión 360px / PC / modo oscuro; errores y estados de carga
-- [ ] 9.2 Guía de demo local (IP de la PC, firewall)
-- [ ] 9.3 PythonAnywhere + Vercel/Netlify (`docs/DESPLIEGUE.md`)
-- [ ] 9.4 README final con capturas y guion de demo
+- [ ] 9.1 Revisión 360px / PC / modo oscuro; errores y estados de carga (#57)
+- [ ] 9.2 Guía de demo local (IP de la PC, firewall) (#58)
+- [ ] 9.3 PythonAnywhere + Vercel/Netlify (`docs/DESPLIEGUE.md`) (#59)
+- [ ] 9.4 README final con capturas y guion de demo (#60)
 
 ### Fase E · Empresa SMAT desde cero (carpeta `docs/SMAT/EMPRESA-SMAT/` de la raíz, rama `SMAT-empresa`)
 Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y deja `TODO (socio)` donde falte una decisión.
@@ -207,3 +207,10 @@ Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y d
 Formato: `- [ ] P.N descripción (#issue)`
 - [x] P.1 Reporte de avance de 1 página en PDF subido a `docs/SMAT/` (#25)
 - [x] P.2 Jornada remota: refactor + feat + docs, con capturas y tarjeta en Done (#26)
+- [x] P.3 Modelo de negocio y viabilidad comercial (Emprendimiento) → `docs/SMAT/documentacion-comercial/01` (#61)
+- [x] P.4 Business Model Canvas en imagen y PDF (Emprendimiento) → `docs/SMAT/documentacion-comercial/02` (#62)
+- [x] P.5 Punto de equilibrio (Emprendimiento) → `docs/SMAT/documentacion-comercial/03` (#63)
+- [x] P.6 Dimensión del mercado: TAM, SAM y SOM (Emprendimiento) → `docs/SMAT/documentacion-comercial/04` (#64)
+- [x] P.7 Operación «Los primeros 10» (Emprendimiento) → `docs/SMAT/documentacion-comercial/05` (#65)
+- [x] P.8 Balance real del MVP actualizado: 75 % (FAT) → `docs/SMAT/Reporte-Avance-DROID-E3D-2026-10-08.pdf` (#66)
+- [x] P.9 Daily 5: tareas pendientes como Issues en el tablero «Kanban TOUCH-ID», con estimación en horas (#48 a #60)

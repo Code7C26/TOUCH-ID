@@ -20,6 +20,7 @@
 - 08/10: Morena reorganiza el repo (la web pasa a `src/SMAT/`, la empresa a `docs/SMAT/`) y sube su servidor de IA (YOLO + reconocimiento facial). Se renombra a `src/SMAT/servidor_ia/` y se conecta con el backend: cada alerta llega a la web con la foto, el nombre del trabajador y la zona del robot, y detiene la máquina.
 - 08/10: **Revisión general**: recorrido automático de las 14 pantallas en 5 tamaños y temas (sin errores), pruebas de robustez (el servidor ya no se cae con datos raros), la baja o el cambio de rol cortan la sesión al instante, validación de la dirección del video y arreglos de la web en celular y tablet. 76 pruebas de la API y 17 de punta a punta.
 - 08/10: **Fase L**: página pública de SMAT en `/` (Inicio, Cómo funciona, Planes, Nosotros, Contacto) con los textos de la empresa, capturas reales de la app con datos ficticios, título y descripción por página, menú para celular y 4 pruebas e2e.
+- 08/10: **Entregas de Classroom** (tomando como modelo KIDO y lo de TOUCH): viabilidad comercial con costos reales y fuentes, Business Model Canvas, punto de equilibrio (2 clientes por año), mercado TAM/SAM/SOM (≈ 495 industrias en la zona), «Los primeros 10» con empresas reales de Alta Gracia y Malagueño, y balance del MVP (75 %). Todo en `docs/SMAT/documentacion-comercial/` con PDF. Tareas pendientes cargadas como Issues en el tablero Kanban con su estimación (#48 a #66). Se suman `assets/SMAT` y `design/SMAT`.
 
 **Problemas**
 - Node.js y GitHub CLI no estaban instalados (resuelto con winget).
