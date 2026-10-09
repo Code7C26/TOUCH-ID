@@ -107,6 +107,16 @@ export const saveRobotVideo = (url_video) => request('/robot/video', { method: '
 export const reactivateMachine = (zonaId) => request(`/zones/${zonaId}/reactivar`, { method: 'PUT' })
 export const stopMachine = (zonaId) => request(`/zones/${zonaId}/detener`, { method: 'PUT' })
 
+// ---------- Notificaciones push (cualquier usuario con sesión) ----------
+
+// Clave pública del servidor: el navegador la necesita para suscribirse
+export const getClavePush = () => request('/push/clave')
+// suscripcion: lo que da el navegador con subscription.toJSON() -> { endpoint, keys: { p256dh, auth } }
+export const suscribirPush = (suscripcion) => request('/push/suscribir', { method: 'POST', body: JSON.stringify(suscripcion) })
+export const desuscribirPush = (endpoint) => request('/push/desuscribir', { method: 'POST', body: JSON.stringify({ endpoint }) })
+// Manda una notificación de prueba a todos los dispositivos del usuario
+export const probarPush = () => request('/push/probar', { method: 'POST' })
+
 // ---------- Fotos (evidencias y rostros) ----------
 
 // Las fotos no son públicas (muestran caras): se piden con el token y se convierten en una

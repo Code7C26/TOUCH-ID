@@ -27,3 +27,11 @@ class Config:
     UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(os.path.dirname(__file__), "uploads"))
     MAX_IMAGEN_MB = 5
     MAX_CONTENT_LENGTH = 6 * 1024 * 1024   # Flask corta antes cualquier envío más grande (error 413)
+
+    # Notificaciones push al celular o la PC (Web Push). Las claves se crean UNA vez con
+    # tools/generar_claves_push.py. Sin claves, la web anda igual pero no manda notificaciones.
+    VAPID_PUBLIC_KEY = os.getenv("VAPID_PUBLIC_KEY", "")
+    VAPID_PRIVATE_KEY = os.getenv("VAPID_PRIVATE_KEY", "")
+    # Contacto que se manda a los servicios de push (Google, Mozilla, Apple) por si hay un problema.
+    # Tiene que ser "mailto:alguien@dominio" o "https://dominio" (sin nada después del dominio).
+    VAPID_CONTACTO = os.getenv("VAPID_CONTACTO", "mailto:soporte@droid-e3d.local")

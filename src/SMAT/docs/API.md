@@ -165,6 +165,23 @@ Consultar cada 1-2 s. **Si no hay conexión con el backend, decidan juntos qué 
 
 ---
 
+## 3b. Notificaciones push (solo la web; para el hardware no cambia nada)
+
+Cuando llega una alerta por `POST /incidents`, el backend además manda una notificación push a los
+encargados y al empleado detectado que la hayan activado. La respuesta a la IA es la misma y no espera
+ese envío. Estas rutas las usa la web, con la sesión de la persona (`Authorization: Bearer <token>`):
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /push/clave` | `{"clave_publica": "..."}` para que el navegador se suscriba · `503` si faltan las claves VAPID en `backend/.env` |
+| ✅ `POST /push/suscribir` | Lo que da el navegador: `{"endpoint": "https://...", "keys": {"p256dh": "...", "auth": "..."}}` → `201` |
+| ✅ `POST /push/desuscribir` | `{"endpoint": "https://..."}`: ese dispositivo deja de recibir (solo si es del usuario) |
+| ✅ `POST /push/probar` | Manda una notificación de prueba a los dispositivos del usuario → `{"enviadas": 1}` · `404` si no activó ninguno |
+
+Las claves se generan una vez con `python backend/tools/generar_claves_push.py`.
+
+---
+
 ## 4. Datos de referencia (solo lectura, para armar tus pruebas)
 
 Zonas de ejemplo: `1` Zona A · `2` Zona B · `3` Zona C · `4` Zona D (ver `docs/FABRICA-CLIENTE.md`).

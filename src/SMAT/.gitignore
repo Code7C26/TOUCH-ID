@@ -20,6 +20,7 @@ backend/uploads/
 .pytest_cache/
 tests/e2e/capturas/
 tests/e2e/logs/
+frontend/dist-e2e/
 
 # Caché de Vite
 .vite/

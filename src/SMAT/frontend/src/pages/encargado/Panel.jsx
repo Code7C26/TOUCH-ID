@@ -5,6 +5,7 @@ import { getIncidents, getRobot, getRobotRoute, getStats, getZones, reactivateMa
 import AlertCard from '../../components/AlertCard.jsx'
 import DetalleZona from '../../components/DetalleZona.jsx'
 import MapaFabrica, { LeyendaMapa } from '../../components/MapaFabrica.jsx'
+import Notificaciones from '../../components/Notificaciones.jsx'
 import PanelLateral from '../../components/PanelLateral.jsx'
 import StatCard from '../../components/StatCard.jsx'
 import Tabla from '../../components/Tabla.jsx'
@@ -89,6 +90,7 @@ export default function Panel() {
             <Tabla claveFila="zona" filas={s?.top_zonas || []}
                    columnas={[{ clave: 'zona', titulo: 'Zona' }, { clave: 'incidencias', titulo: 'Alertas', clase: 'text-right tabular-nums' }]} />
           </section>
+          <Notificaciones />
         </div>
       </div>
 
