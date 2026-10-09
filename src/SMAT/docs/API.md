@@ -202,6 +202,10 @@ Comentarios: el encargado en cualquier alerta; el empleado, solo en las suyas (s
 
 Cada incidencia trae además `cantidad_comentarios`.
 
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /auditoria` | Solo el encargado. Registros del más nuevo al más viejo. Filtros: `accion`, `usuario_id` (un id o `sistema`), `desde`, `hasta`, `q` (busca en el detalle), `page`, `limit` (25; máx. 100). Devuelve también `acciones` y `usuarios` para armar los filtros |
+
 ---
 
 ## 4. Datos de referencia (solo lectura, para armar tus pruebas)

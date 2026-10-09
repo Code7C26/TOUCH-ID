@@ -181,7 +181,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 8.2 Página Reportes (recharts + ranking) (#53)
 - [x] 8.3 Export CSV y PDF mensual (reportlab) (#54)
 - [x] 8.4 Comentarios en incidencias (#55)
-- [ ] 8.5 Página Auditoría (#56)
+- [x] 8.5 Página Auditoría (#56)
 
 ### Fase 9 · Pulido y despliegue
 - [ ] 9.1 Revisión 360px / PC / modo oscuro; errores y estados de carga (#57)

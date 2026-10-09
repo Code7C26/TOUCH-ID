@@ -113,6 +113,11 @@ export const descargarCSV = (periodo) =>
 // Informe mensual en PDF (para la ART y las inspecciones). mes: 'AAAA-MM'
 export const descargarInformePDF = (mes) => descargar(`/reports/mensual.pdf?mes=${mes}`, `informe-epp-${mes}.pdf`)
 
+// ---------- Auditoría (solo encargado) ----------
+
+// filtros (todos opcionales): { accion, usuario_id (un id o 'sistema'), desde, hasta, q, page, limit }
+export const getAuditoria = (filtros) => request(`/auditoria${armarConsulta(filtros)}`)
+
 // ---------- Zonas (leer: todos · crear, editar y borrar: encargado) ----------
 
 export const getZones = () => request('/zones')
