@@ -178,7 +178,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 
 ### Fase 8 · Reportes y extras
 - [x] 8.1 `/api/reports/diario` y `/api/reports/ranking` (#52)
-- [ ] 8.2 Página Reportes (recharts + ranking) (#53)
+- [x] 8.2 Página Reportes (recharts + ranking) (#53)
 - [ ] 8.3 Export CSV y PDF mensual (reportlab) (#54)
 - [ ] 8.4 Comentarios en incidencias (#55)
 - [ ] 8.5 Página Auditoría (#56)

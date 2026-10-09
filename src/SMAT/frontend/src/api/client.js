@@ -72,6 +72,14 @@ export const resolveIncident = (id) => request(`/incidents/${id}/resolver`, { me
 
 export const getStats = () => request('/stats')
 
+// ---------- Reportes (solo encargado) ----------
+
+// periodo: { desde: 'AAAA-MM-DD', hasta: 'AAAA-MM-DD' }
+// Alertas por día (con el detalle por tipo), por tipo, por zona, activas/resueltas y paradas de máquina
+export const getReporteDiario = (periodo) => request(`/reports/diario${armarConsulta(periodo)}`)
+// Cumplimiento de cada empleado y de cada zona (días sin alertas / días del período)
+export const getRanking = (periodo) => request(`/reports/ranking${armarConsulta(periodo)}`)
+
 // ---------- Zonas (leer: todos · crear, editar y borrar: encargado) ----------
 
 export const getZones = () => request('/zones')
