@@ -68,6 +68,11 @@ export const getIncidents = (filtros) => request(`/incidents${armarConsulta(filt
 
 export const resolveIncident = (id) => request(`/incidents/${id}/resolver`, { method: 'PUT' })
 
+// Comentarios de una alerta (el encargado y el empleado detectado). texto: de 1 a 500 caracteres
+export const getComentarios = (incidenciaId) => request(`/incidents/${incidenciaId}/comentarios`)
+export const comentar = (incidenciaId, texto) =>
+  request(`/incidents/${incidenciaId}/comentarios`, { method: 'POST', body: JSON.stringify({ texto }) })
+
 // ---------- Estadísticas (solo encargado) ----------
 
 export const getStats = () => request('/stats')

@@ -13,6 +13,7 @@ from routes.rostros import rostros_bp
 from routes.uploads import uploads_bp
 from routes.push import push_bp
 from routes.reports import reports_bp
+from routes.comentarios import comentarios_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -29,6 +30,7 @@ app.register_blueprint(rostros_bp, url_prefix="/api")
 app.register_blueprint(uploads_bp, url_prefix="/api")
 app.register_blueprint(push_bp, url_prefix="/api")
 app.register_blueprint(reports_bp, url_prefix="/api")
+app.register_blueprint(comentarios_bp, url_prefix="/api")
 
 
 @app.errorhandler(HTTPException)

@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom'
 import { getIncidents, getUsers, getZones, resolveIncident } from '../../api/client.js'
 import AlertCard from '../../components/AlertCard.jsx'
 import Avatar from '../../components/Avatar.jsx'
+import ContadorComentarios from '../../components/ContadorComentarios.jsx'
 import DetalleAlerta from '../../components/DetalleAlerta.jsx'
 import Etiqueta, { tonoDeEstado } from '../../components/Etiqueta.jsx'
 import Filtros from '../../components/Filtros.jsx'
@@ -75,7 +76,12 @@ export default function Incidencias() {
     ) },
     { clave: 'tipo', titulo: 'Qué faltaba', ordenable: true, render: (i) => nombreTipo(i.tipo) },
     { clave: 'confianza', titulo: 'Confianza', ordenable: true, clase: 'tabular-nums', render: (i) => porcentaje(i.confianza) },
-    { clave: 'estado', titulo: 'Estado', ordenable: true, render: (i) => <Etiqueta tono={tonoDeEstado(i.estado)} punto={i.estado === 'activa'}>{i.estado}</Etiqueta> },
+    { clave: 'estado', titulo: 'Estado', ordenable: true, render: (i) => (
+      <span className="inline-flex items-center gap-2">
+        <Etiqueta tono={tonoDeEstado(i.estado)} punto={i.estado === 'activa'}>{i.estado}</Etiqueta>
+        <ContadorComentarios cantidad={i.cantidad_comentarios} />
+      </span>
+    ) },
     { clave: 'acciones', titulo: '', clase: 'text-right', render: (i) => (
       <button type="button" className="rounded-md px-2 py-1 font-medium text-zinc-700 hover:bg-zinc-100 dark:text-zinc-200 dark:hover:bg-zinc-800" onClick={() => setElegida(i)}>Ver detalle</button>
     ) },

@@ -193,6 +193,15 @@ Solo el encargado, con su sesión. El período es `?desde=AAAA-MM-DD&hasta=AAAA-
 | ✅ `GET /reports/incidencias.csv` | Las alertas del período en CSV para Excel (separado por `;`, UTF-8 con BOM). Queda en la auditoría |
 | ✅ `GET /reports/mensual.pdf?mes=AAAA-MM` | Informe mensual en PDF para la ART (por defecto el mes actual, hasta hoy). Queda en la auditoría |
 
+Comentarios: el encargado en cualquier alerta; el empleado, solo en las suyas (si no, `403`).
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /incidents/<id>/comentarios` | `{"comentarios": [{id, usuario_nombre, usuario_rol, texto, created_at}]}`, del más viejo al más nuevo |
+| ✅ `POST /incidents/<id>/comentarios` | `{"texto": "..."}` (1 a 500 caracteres) → `201`. Avisa por push a la otra parte y queda en la auditoría |
+
+Cada incidencia trae además `cantidad_comentarios`.
+
 ---
 
 ## 4. Datos de referencia (solo lectura, para armar tus pruebas)
