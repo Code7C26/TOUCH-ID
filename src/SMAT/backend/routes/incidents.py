@@ -8,7 +8,7 @@ from utils.archivos import ImagenInvalida, guardar_imagen
 from utils.auditoria import registrar
 from utils.decoradores import token_required, rol_requerido, api_key_requerida
 from utils.push import notificar_alerta
-from utils.validacion import id_valido, leer_json
+from utils.validacion import id_valido, leer_fecha, leer_json
 
 incidents_bp = Blueprint("incidents", __name__)
 
@@ -33,14 +33,6 @@ def leer_formulario():
             except ValueError:
                 pass
     return datos
-
-
-def leer_fecha(texto):
-    """Convierte 'AAAA-MM-DD' en fecha. Devuelve None si no viene o es inválida."""
-    try:
-        return datetime.strptime(texto, "%Y-%m-%d") if texto else None
-    except ValueError:
-        return None
 
 
 @incidents_bp.route("/incidents", methods=["GET"])

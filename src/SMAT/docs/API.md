@@ -180,6 +180,17 @@ ese envío. Estas rutas las usa la web, con la sesión de la persona (`Authoriza
 
 Las claves se generan una vez con `python backend/tools/generar_claves_push.py`.
 
+## 3c. Reportes, comentarios y auditoría (solo la web)
+
+Solo el encargado, con su sesión. El período es `?desde=AAAA-MM-DD&hasta=AAAA-MM-DD` (por defecto los
+últimos 30 días contando hoy; máximo 366 días). **Cumplimiento** = días sin alertas / días del período
+(la misma cuenta que ve el empleado en su inicio).
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /reports/diario` | `dias` (cada día, con la cantidad por tipo y el total), `por_tipo`, `por_zona`, `total`, `activas`, `resueltas`, `paradas_maquina` |
+| ✅ `GET /reports/ranking` | `empleados` y `zonas`, de mejor a peor cumplimiento (`alertas`, `dias_con_alerta`, `cumplimiento` en %), y `alertas_sin_identificar` |
+
 ---
 
 ## 4. Datos de referencia (solo lectura, para armar tus pruebas)
