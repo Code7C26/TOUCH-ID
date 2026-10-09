@@ -66,3 +66,47 @@ def test_periodo_invalido(cliente, encargada):
     for consulta in ("desde=2025-13-01", "hasta=ayer", "desde=2025-01-10&hasta=2025-01-01", "desde=2020-01-01&hasta=2025-01-01"):
         r = cliente.get(f"/api/reports/diario?{consulta}", headers=encargada)
         assert r.status_code == 400 and r.json["error"], consulta
+
+
+# ---------- 8.3: descargas ----------
+
+def test_csv_para_excel(enero, encargada, consulta_sql):
+    r = enero.get(f"/api/reports/incidencias.csv?{PERIODO}", headers=encargada)
+    assert r.status_code == 200 and r.mimetype == "text/csv"
+    assert 'filename="alertas_2025-01-01_a_2025-01-10.csv"' in r.headers["Content-Disposition"]
+    texto = r.data.decode("utf-8")
+    assert texto.startswith("\ufeff")                       # BOM: Excel reconoce los acentos
+    filas = texto.lstrip("\ufeff").strip().split("\r\n")
+    assert filas[0] == "ID;Fecha;Hora;Zona;Empleado;Legajo;Falta;Confianza (%);Estado;Resuelta por;Resuelta el"
+    assert len(filas) == 1 + 5                              # las 5 alertas del período, de la más vieja a la más nueva
+    assert filas[1].split(";")[1:] == ["02/01/2025", "09:00", "Zona A", "Juan Pérez", "L-001", "Sin casco", "90", "activa", "", ""]
+    assert "No identificado" in filas[3]
+    assert consulta_sql("SELECT detalle FROM auditoria WHERE accion = 'exportar_csv'")[0][0] == \
+        "Alertas del 01/01/2025 al 10/01/2025 (5 filas)"
+
+
+def test_csv_no_deja_pasar_formulas(enero, encargada):
+    from routes.reports import celda_segura
+    assert celda_segura("=1+2") == "'=1+2" and celda_segura("@SUMA") == "'@SUMA"
+    assert celda_segura("Juan") == "Juan" and celda_segura(None) == "" and celda_segura(90) == "90"
+    with aplicacion.app_context():
+        db.session.execute(db.text("UPDATE usuarios SET nombre = '=1+2' WHERE id = 1"))
+        db.session.commit()
+    texto = enero.get(f"/api/reports/incidencias.csv?{PERIODO}", headers=encargada).data.decode("utf-8")
+    assert ";'=1+2;" in texto
+
+
+def test_pdf_mensual(enero, encargada, consulta_sql):
+    r = enero.get("/api/reports/mensual.pdf?mes=2025-01", headers=encargada)
+    assert r.status_code == 200 and r.mimetype == "application/pdf"
+    assert r.data.startswith(b"%PDF") and len(r.data) > 3000
+    assert 'filename="informe-epp-2025-01.pdf"' in r.headers["Content-Disposition"]
+    assert consulta_sql("SELECT detalle FROM auditoria WHERE accion = 'exportar_pdf'")[0][0] == "Informe mensual de enero de 2025"
+
+
+def test_pdf_valida_el_mes(cliente, encargada, empleado):
+    assert cliente.get("/api/reports/mensual.pdf?mes=2025-13", headers=encargada).status_code == 400
+    assert cliente.get("/api/reports/mensual.pdf?mes=2999-01", headers=encargada).status_code == 400
+    assert cliente.get("/api/reports/mensual.pdf", headers=empleado).status_code == 403
+    assert cliente.get("/api/reports/incidencias.csv", headers=empleado).status_code == 403
+    assert cliente.get("/api/reports/mensual.pdf", headers=encargada).status_code == 200   # mes actual

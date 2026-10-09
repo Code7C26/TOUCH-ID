@@ -2,6 +2,7 @@
 // El período se elige arriba; todo se recalcula en el backend (/api/reports/*).
 import { useState } from 'react'
 import { getRanking, getReporteDiario } from '../../api/client.js'
+import Descargas from '../../components/reportes/Descargas.jsx'
 import GraficoBarras from '../../components/reportes/GraficoBarras.jsx'
 import GraficoPorDia from '../../components/reportes/GraficoPorDia.jsx'
 import SelectorPeriodo, { periodoDeDias } from '../../components/reportes/SelectorPeriodo.jsx'
@@ -36,7 +37,9 @@ export default function Reportes() {
 
   return (
     <>
-      <Titulo titulo="Reportes" subtitulo="Alertas y cumplimiento del equipo de protección" />
+      <Titulo titulo="Reportes" subtitulo="Alertas y cumplimiento del equipo de protección">
+        <Descargas periodo={periodo} />
+      </Titulo>
       <SelectorPeriodo periodo={periodo} onCambiar={setPeriodo} />
       {(diario.error || ranking.error) && <p role="alert" className={`mt-4 ${mensajeError}`}>{diario.error || ranking.error}</p>}
 

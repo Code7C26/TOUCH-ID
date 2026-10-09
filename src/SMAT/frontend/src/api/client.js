@@ -80,6 +80,34 @@ export const getReporteDiario = (periodo) => request(`/reports/diario${armarCons
 // Cumplimiento de cada empleado y de cada zona (días sin alertas / días del período)
 export const getRanking = (periodo) => request(`/reports/ranking${armarConsulta(periodo)}`)
 
+// Descarga un archivo del backend (CSV o PDF). Como hace falta el token, no alcanza con un link común:
+// se pide con fetch y después se "toca" un link invisible que guarda el archivo en la PC.
+async function descargar(ruta, nombreArchivo) {
+  let res
+  try {
+    res = await fetch(`${API_URL}${ruta}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+  } catch {
+    throw new Error('No se pudo conectar con el servidor')
+  }
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error || `Error ${res.status} en el servidor`)
+  }
+  const enlace = document.createElement('a')
+  enlace.href = URL.createObjectURL(await res.blob())
+  enlace.download = nombreArchivo
+  document.body.appendChild(enlace)
+  enlace.click()
+  enlace.remove()
+  setTimeout(() => URL.revokeObjectURL(enlace.href), 1000)   // libera la memoria del archivo
+}
+
+// Las alertas del período en una planilla (se abre con Excel)
+export const descargarCSV = (periodo) =>
+  descargar(`/reports/incidencias.csv${armarConsulta(periodo)}`, `alertas_${periodo.desde}_a_${periodo.hasta}.csv`)
+// Informe mensual en PDF (para la ART y las inspecciones). mes: 'AAAA-MM'
+export const descargarInformePDF = (mes) => descargar(`/reports/mensual.pdf?mes=${mes}`, `informe-epp-${mes}.pdf`)
+
 // ---------- Zonas (leer: todos · crear, editar y borrar: encargado) ----------
 
 export const getZones = () => request('/zones')

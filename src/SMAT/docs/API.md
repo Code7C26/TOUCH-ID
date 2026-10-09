@@ -190,6 +190,8 @@ Solo el encargado, con su sesión. El período es `?desde=AAAA-MM-DD&hasta=AAAA-
 |---|---|
 | ✅ `GET /reports/diario` | `dias` (cada día, con la cantidad por tipo y el total), `por_tipo`, `por_zona`, `total`, `activas`, `resueltas`, `paradas_maquina` |
 | ✅ `GET /reports/ranking` | `empleados` y `zonas`, de mejor a peor cumplimiento (`alertas`, `dias_con_alerta`, `cumplimiento` en %), y `alertas_sin_identificar` |
+| ✅ `GET /reports/incidencias.csv` | Las alertas del período en CSV para Excel (separado por `;`, UTF-8 con BOM). Queda en la auditoría |
+| ✅ `GET /reports/mensual.pdf?mes=AAAA-MM` | Informe mensual en PDF para la ART (por defecto el mes actual, hasta hoy). Queda en la auditoría |
 
 ---
 
