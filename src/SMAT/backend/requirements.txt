@@ -6,3 +6,4 @@ PyJWT==2.9.0
 PyMySQL==1.1.1
 cryptography==50.0.2
 pywebpush==2.5.0
+reportlab==5.0.1

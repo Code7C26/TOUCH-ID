@@ -94,6 +94,7 @@ class Incidencia(db.Model):
             "resuelta_por": self.resuelta_por,
             "resuelta_por_nombre": self.resolutor.nombre if self.resolutor else None,
             "resuelta_at": self.resuelta_at.isoformat() if self.resuelta_at else None,
+            "cantidad_comentarios": len(self.comentarios),
         }
 
 
@@ -112,6 +113,30 @@ class FotoRostro(db.Model):
     def to_dict(self):
         return {"id": self.id, "usuario_id": self.usuario_id, "url": self.ruta_archivo,
                 "consentimiento_at": self.consentimiento_at.isoformat() if self.consentimiento_at else None}
+
+
+class Comentario(db.Model):
+    """Comentario sobre una alerta. Lo escriben el encargado o el empleado detectado."""
+    __tablename__ = "comentarios"
+
+    id = db.Column(db.Integer, primary_key=True)
+    incidencia_id = db.Column(db.Integer, db.ForeignKey("incidencias.id", ondelete="CASCADE"), nullable=False)
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id", ondelete="SET NULL"))
+    texto = db.Column(db.String(500), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    incidencia = db.relationship("Incidencia", backref=db.backref("comentarios", cascade="all, delete-orphan",
+                                                                 passive_deletes=True, order_by="Comentario.id"))
+    usuario = db.relationship("Usuario")
+
+    def to_dict(self):
+        return {
+            "id": self.id, "incidencia_id": self.incidencia_id, "usuario_id": self.usuario_id,
+            "usuario_nombre": self.usuario.nombre if self.usuario else "Usuario borrado",
+            "usuario_rol": self.usuario.rol if self.usuario else None,
+            "texto": self.texto,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
 
 
 class SuscripcionPush(db.Model):

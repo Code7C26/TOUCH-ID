@@ -180,6 +180,32 @@ ese envío. Estas rutas las usa la web, con la sesión de la persona (`Authoriza
 
 Las claves se generan una vez con `python backend/tools/generar_claves_push.py`.
 
+## 3c. Reportes, comentarios y auditoría (solo la web)
+
+Solo el encargado, con su sesión. El período es `?desde=AAAA-MM-DD&hasta=AAAA-MM-DD` (por defecto los
+últimos 30 días contando hoy; máximo 366 días). **Cumplimiento** = días sin alertas / días del período
+(la misma cuenta que ve el empleado en su inicio).
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /reports/diario` | `dias` (cada día, con la cantidad por tipo y el total), `por_tipo`, `por_zona`, `total`, `activas`, `resueltas`, `paradas_maquina` |
+| ✅ `GET /reports/ranking` | `empleados` y `zonas`, de mejor a peor cumplimiento (`alertas`, `dias_con_alerta`, `cumplimiento` en %), y `alertas_sin_identificar` |
+| ✅ `GET /reports/incidencias.csv` | Las alertas del período en CSV para Excel (separado por `;`, UTF-8 con BOM). Queda en la auditoría |
+| ✅ `GET /reports/mensual.pdf?mes=AAAA-MM` | Informe mensual en PDF para la ART (por defecto el mes actual, hasta hoy). Queda en la auditoría |
+
+Comentarios: el encargado en cualquier alerta; el empleado, solo en las suyas (si no, `403`).
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /incidents/<id>/comentarios` | `{"comentarios": [{id, usuario_nombre, usuario_rol, texto, created_at}]}`, del más viejo al más nuevo |
+| ✅ `POST /incidents/<id>/comentarios` | `{"texto": "..."}` (1 a 500 caracteres) → `201`. Avisa por push a la otra parte y queda en la auditoría |
+
+Cada incidencia trae además `cantidad_comentarios`.
+
+| Endpoint | Para qué |
+|---|---|
+| ✅ `GET /auditoria` | Solo el encargado. Registros del más nuevo al más viejo. Filtros: `accion`, `usuario_id` (un id o `sistema`), `desde`, `hasta`, `q` (busca en el detalle), `page`, `limit` (25; máx. 100). Devuelve también `acciones` y `usuarios` para armar los filtros |
+
 ---
 
 ## 4. Datos de referencia (solo lectura, para armar tus pruebas)

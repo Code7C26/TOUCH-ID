@@ -87,3 +87,17 @@ def notificar_alerta(inc, maquina_detenida=False):
             "url": "/app/mis-alertas",
             "etiqueta": f"alerta-{inc.id}",
         })
+
+
+def notificar_comentario(inc, comentario):
+    """Avisa un comentario nuevo a la otra parte: si comenta el encargado, al empleado de la alerta;
+    si comenta el empleado, a los encargados."""
+    autor = comentario.usuario
+    texto = comentario.texto if len(comentario.texto) <= 120 else comentario.texto[:117] + "..."
+    mensaje = {"titulo": f"{autor.nombre} comentó una alerta", "texto": texto, "etiqueta": f"comentario-{inc.id}"}
+    if autor.rol == "encargado":
+        if inc.empleado and inc.empleado.activo:
+            enviar_a_usuarios([inc.empleado.id], {**mensaje, "url": "/app/mis-alertas"})
+    else:
+        encargados = [u.id for u in Usuario.query.filter_by(rol="encargado", activo=True).all()]
+        enviar_a_usuarios(encargados, {**mensaje, "url": "/app/incidencias"})

@@ -21,7 +21,7 @@ Cámara → servidor YOLO ──POST /api/incidents──▶ Backend Flask ─�
 
 ## Estado técnico (07/10/2026)
 
-Pruebas automáticas en el repo: **83 de la API** (pytest) y **29 de punta a punta** en el navegador (Playwright). Corren solas en GitHub Actions en cada PR.
+Pruebas automáticas en el repo: **100 de la API** (pytest) y **34 de punta a punta** en el navegador (Playwright). Corren solas en GitHub Actions en cada PR.
 
 | Área | Estado |
 |---|---|
@@ -128,8 +128,8 @@ cd C:\Users\tomas\Fat\TOUCH-ID\src\SMAT
 backend\venv\Scripts\activate
 pip install -r backend\requirements-dev.txt      # una sola vez
 
-python -m pytest backend\tests        # 83 pruebas de la API (~30 s), usan la base robot_db_test
-python tests\correr_e2e.py            # 29 pruebas con navegador real (~3 min), usan robot_db_e2e
+python -m pytest backend\tests        # 100 pruebas de la API (~30 s), usan la base robot_db_test
+python tests\correr_e2e.py            # 34 pruebas con navegador real (~4 min), usan robot_db_e2e
 ```
 Las pruebas **nunca tocan la base de desarrollo** (`robot_db`). Las de punta a punta levantan su propio backend (puerto 5001) y su propia web (5174), y prueban también el robot con el ESP32 simulado.
 En GitHub corren solas en cada Pull Request (`.github/workflows/smat-ci.yml`): si algo se rompe, el PR muestra una cruz roja.
