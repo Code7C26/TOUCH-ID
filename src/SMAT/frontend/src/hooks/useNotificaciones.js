@@ -19,6 +19,24 @@ function aBytes(base64url) {
   return Uint8Array.from(atob(base64), (letra) => letra.charCodeAt(0))
 }
 
+// Edge y Chrome no terminan de suscribirse mientras la página redibuja una animación sin parar (pasa con
+// el recorrido punteado del mapa del Panel). Por eso se pausan las animaciones solo durante esos segundos.
+// Devuelve la función que las vuelve a encender.
+function pausarAnimaciones() {
+  document.documentElement.classList.add('animaciones-pausadas')        // CSS: ver index.css
+  const dibujos = [...document.querySelectorAll('svg')]
+  dibujos.forEach((svg) => svg.pauseAnimations?.())                    // las animaciones propias de SVG
+  return () => {
+    document.documentElement.classList.remove('animaciones-pausadas')
+    dibujos.forEach((svg) => svg.unpauseAnimations?.())
+  }
+}
+
+// Si el navegador no contesta en ese tiempo, se corta (en vez de quedar "Activando…" para siempre)
+function conLimite(promesa, segundos) {
+  return Promise.race([promesa, new Promise((_, rechazar) => setTimeout(() => rechazar(new Error('tiempo agotado')), segundos * 1000))])
+}
+
 // La suscripción que tiene guardada el navegador (o null)
 async function suscripcionActual() {
   const registro = await navigator.serviceWorker.ready
@@ -85,10 +103,13 @@ export default function useNotificaciones() {
     const { clave_publica: clave } = await getClavePush()
     const registro = await navigator.serviceWorker.ready
     let suscripcion
+    const reanudarAnimaciones = pausarAnimaciones()
     try {
-      suscripcion = await registro.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: aBytes(clave) })
+      suscripcion = await conLimite(registro.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: aBytes(clave) }), 20)
     } catch {
       throw new Error('El navegador no pudo conectarse con su servicio de notificaciones. Probá de nuevo en unos minutos o con otro navegador.')
+    } finally {
+      reanudarAnimaciones()
     }
     await suscribirPush(suscripcion.toJSON())
     setEstado('activadas')

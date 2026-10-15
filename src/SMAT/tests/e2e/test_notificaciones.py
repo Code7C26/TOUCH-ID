@@ -14,7 +14,7 @@ import pytest
 
 from conftest import YOLO, api, esperar_texto, sesion
 
-PWA = os.getenv("PWA_URL", "http://localhost:5175")
+PWA = os.getenv("PWA_URL", "http://localhost:5001")
 
 # Reemplaza la suscripción del navegador por una falsa (".invalid" es un dominio que no existe)
 SUSCRIPCION_FALSA = """
@@ -105,7 +105,7 @@ def test_push_real_con_el_servicio_de_edge(navegador, base_limpia, tmp_path):
                 break
             pag.wait_for_timeout(500)
         if not tarjeta.get_by_text("Activadas").is_visible():
-            pytest.skip("Sin conexión con el servicio de push de Edge (¿hay internet?)")
+            pytest.skip("Sin conexión con el servicio de push de Edge (¿hay internet?). La tarjeta dice: " + " ".join(tarjeta.inner_text().split()))
 
         api("/incidents", cabeceras=YOLO, datos={"tipo": "sin_chaleco", "zona_id": 4, "empleado_id": 7, "confianza": 0.93})
         esperada = {"titulo": "Nueva alerta: sin chaleco", "texto": "Zona D · Sofía Romero · máquina detenida"}

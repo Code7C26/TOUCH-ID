@@ -18,4 +18,4 @@ PWA + Web Push, con polling cada 3 s y sonido como respaldo.
 - PythonAnywhere gratis limita las conexiones salientes; hay que verificar que los servicios de push estén permitidos.
 - El service worker (vite-plugin-pwa, modo generateSW) se genera solo con `npm run build`: en `npm run dev`
   no está, para que los cambios se vean al instante. La PWA y las notificaciones se prueban con
-  `npm run build` + `npm run preview` (o en la versión online).
+  `npm run build` y abriendo la web que sirve Flask en http://localhost:5000 (o en la versión online).
