@@ -1,12 +1,12 @@
 """Fase 7.2: la web se puede instalar como app (PWA) y abre aunque se corte la conexión.
-Usa la versión compilada que sirve correr_e2e.py en PWA_URL, porque el service worker solo existe ahí."""
+Usa la versión compilada que sirve el backend de prueba (como en PythonAnywhere): el service worker solo existe ahí."""
 import json
 import os
 import urllib.request
 
 import pytest
 
-PWA = os.getenv("PWA_URL", "http://localhost:5175")
+PWA = os.getenv("PWA_URL", "http://localhost:5001")
 
 
 @pytest.fixture

@@ -1,4 +1,7 @@
-from flask import Flask
+import mimetypes
+import os
+
+from flask import Flask, abort, send_from_directory
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
@@ -59,6 +62,23 @@ def archivo_muy_grande(e):
 @app.route("/api/health")
 def health():
     return {"status": "ok", "mensaje": "Servidor Flask funcionando"}
+
+
+# ---------- La web compilada (npm run build) ----------
+# Si existe frontend/dist, Flask sirve también la web. Así la API y la web están en la misma dirección
+# (en PythonAnywhere, o en la PC en http://localhost:5000) y no hace falta CORS. Ver docs/DESPLIEGUE.md.
+mimetypes.add_type("application/manifest+json", ".webmanifest")   # el manifest de la PWA
+
+
+@app.route("/", defaults={"ruta": ""})
+@app.route("/<path:ruta>")
+def web(ruta):
+    carpeta = os.path.abspath(Config.WEB_DIST)
+    if ruta.startswith("api/") or not os.path.isfile(os.path.join(carpeta, "index.html")):
+        abort(404)   # las rutas de la API que no existen siguen respondiendo JSON
+    if ruta and os.path.isfile(os.path.join(carpeta, ruta)):
+        return send_from_directory(carpeta, ruta)            # archivos: JS, CSS, íconos, service worker...
+    return send_from_directory(carpeta, "index.html")        # páginas (/app/panel...): las arma React
 
 
 def crear_datos_iniciales():

@@ -186,7 +186,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 ### Fase 9 · Pulido y despliegue
 - [ ] 9.1 Revisión 360px / PC / modo oscuro; errores y estados de carga (#57)
 - [ ] 9.2 Guía de demo local (IP de la PC, firewall) (#58)
-- [ ] 9.3 PythonAnywhere + Vercel/Netlify (`docs/DESPLIEGUE.md`) (#59)
+- [ ] 9.3 Todo en PythonAnywhere: Flask sirve la web (`docs/DESPLIEGUE.md`; repo listo el 15/10, falta crear la cuenta) (#59)
 - [ ] 9.4 README final con capturas y guion de demo (#60)
 
 ### Fase E · Empresa SMAT desde cero (carpeta `docs/SMAT/EMPRESA-SMAT/` de la raíz, rama `SMAT-empresa`)

@@ -1,7 +1,8 @@
 // Cliente de la API: TODAS las llamadas al backend de Flask pasan por este archivo.
 // (Regla del proyecto: ningún componente usa fetch directamente.)
 
-// URL del backend. En el celular hay que poner la IP de la PC en frontend/.env (VITE_API_URL).
+// URL del backend. En "npm run dev" sale de frontend/.env (en el celular, con la IP de la PC).
+// En la versión compilada es "/api" (frontend/.env.production): la web y la API están en el mismo Flask.
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 // Devuelve el token de la sesión guardada al hacer login, o undefined si no hay sesión.
