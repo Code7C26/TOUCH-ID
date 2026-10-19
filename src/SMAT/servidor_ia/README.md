@@ -32,8 +32,17 @@ pip install -r requirements.txt          # una sola vez
 python motor_ia_robot.py                  # Q en la ventana del video para salir
 ```
 
-Antes de arrancar, en `motor_ia_robot.py` (y en `registrar_trabajador.py`) poné la IP de la cámara
-(`URL_CAMARA_CELULAR`) y la del robot (`URL_ESP32_ALERTA`).
+Antes de arrancar, copiá `.env.example` como `.env` (en esta carpeta) y poné la IP de la cámara
+(`URL_CAMARA_CELULAR`) y la del robot (`URL_ESP32_ALERTA`). El `.env` no se sube a GitHub, así que
+cuando cambia la red solo se toca ese archivo:
+```powershell
+Copy-Item .env.example .env
+notepad .env
+```
+
+**No se suben a GitHub:** `fotos_trabajadores/` (caras reales), `modelos/` y `yolov8n.pt`. Los
+modelos se descargan solos la primera vez. Las fotos se pasan por fuera de GitHub o se sacan de nuevo
+con `registrar_trabajador.py`. `modelo_cascos.pt` sí está en el repo.
 
 ### Conexión con la web
 
