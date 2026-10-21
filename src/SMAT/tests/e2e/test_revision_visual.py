@@ -66,6 +66,14 @@ def test_pantalla_se_ve_bien(abrir, pantalla, tamano, tema):
     oscuro = pag.evaluate("document.documentElement.classList.contains('dark')")
     assert oscuro == (tema == "oscuro"), f"{ruta}: el tema {tema} no se aplicó"
 
+    # Bajamos hasta el final para que carguen las imágenes "lazy" (y salgan en la captura)
+    pag.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+    pag.wait_for_timeout(800)
+    pag.evaluate("window.scrollTo(0, 0)")
+    # Imágenes rotas: terminaron de cargar pero no tienen tamaño (archivo que no existe o dañado)
+    rotas = pag.evaluate("[...document.images].filter(i => i.complete && i.naturalWidth === 0 && i.src).map(i => i.src)")
+    assert not rotas, f"{ruta} tiene imágenes rotas: {rotas}"
+
 
 @pytest.mark.parametrize("pantalla", [p for p in PANTALLAS if p[0]], ids=_nombre)
 def test_sin_servidor_avisa_el_error(abrir, pantalla):
