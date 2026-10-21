@@ -15,6 +15,8 @@ import threading
 
 import requests
 
+from config import leer_env
+
 CARPETA = os.path.dirname(os.path.abspath(__file__))
 
 # Lo que dice el motor -> el tipo de falta que entiende la web
@@ -24,15 +26,7 @@ TIPOS = {"Falta de Casco": "sin_casco", "Falta de Guantes": "sin_guantes",
 
 def _leer_env_del_backend():
     """Toma las claves de ../backend/.env si no están en el entorno (misma PC que el backend)."""
-    ruta = os.path.join(CARPETA, "..", "backend", ".env")
-    if not os.path.exists(ruta):
-        return {}
-    valores = {}
-    for linea in open(ruta, encoding="utf-8"):
-        if "=" in linea and not linea.lstrip().startswith("#"):
-            clave, valor = linea.split("=", 1)
-            valores[clave.strip()] = valor.strip().strip('"').strip("'")
-    return valores
+    return leer_env(os.path.join(CARPETA, "..", "backend", ".env"))
 
 
 _ENV = _leer_env_del_backend()
