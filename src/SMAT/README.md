@@ -132,7 +132,7 @@ backend\venv\Scripts\activate
 pip install -r backend\requirements-dev.txt      # una sola vez
 
 python -m pytest backend\tests        # 105 pruebas de la API (~30 s), usan la base robot_db_test
-python tests\correr_e2e.py            # 34 pruebas con navegador real (~4 min), usan robot_db_e2e
+python tests\correr_e2e.py            # 112 pruebas con navegador real (~8 min), usan robot_db_e2e
 ```
 Las pruebas **nunca tocan la base de desarrollo** (`robot_db`). Las de punta a punta levantan su propio backend (puerto 5001) y su propia web (5174), y prueban también el robot con el ESP32 simulado.
 En GitHub corren solas en cada Pull Request (`.github/workflows/smat-ci.yml`): si algo se rompe, el PR muestra una cruz roja.
