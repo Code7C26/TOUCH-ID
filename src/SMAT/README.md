@@ -60,7 +60,7 @@ Necesitás: Python 3.11, Node.js LTS y MySQL (alcanza con XAMPP).
 ### 1. Base de datos
 Iniciá **MySQL** desde el panel de XAMPP y cargá el esquema con los datos de ejemplo:
 ```powershell
-C:\xampp\mysql\bin\mysql.exe -u root < backend\database\schema.sql
+cmd /c "C:\xampp\mysql\bin\mysql.exe -u root < backend\database\schema.sql"   # PowerShell no acepta el < solo
 ```
 Para empezar de cero (borra los datos): `C:\xampp\mysql\bin\mysql.exe -u root -e "DROP DATABASE robot_db;"` y volver a cargar el esquema.
 
@@ -97,6 +97,8 @@ npm run dev
 Abrí: http://localhost:5173 . Para entrar desde el celular, poné la IP de tu PC en `frontend\.env` (`VITE_API_URL=http://<IP>:5000/api`) y permití el puerto 5000 en el Firewall de Windows.
 
 **Versión compilada (la misma que se publica):** `npm run build` y abrí http://localhost:5000 (la sirve Flask).
+**Demo en la red local** (feria, aula o jurado, sin internet): [`docs/DEMO-LOCAL.md`](docs/DEMO-LOCAL.md).
+
 **Publicar en internet:** todo en PythonAnywhere, paso a paso en [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
 
 ### Usuarios de prueba (contraseña `pass123`)
@@ -132,7 +134,7 @@ backend\venv\Scripts\activate
 pip install -r backend\requirements-dev.txt      # una sola vez
 
 python -m pytest backend\tests        # 105 pruebas de la API (~30 s), usan la base robot_db_test
-python tests\correr_e2e.py            # 34 pruebas con navegador real (~4 min), usan robot_db_e2e
+python tests\correr_e2e.py            # 112 pruebas con navegador real (~8 min), usan robot_db_e2e
 ```
 Las pruebas **nunca tocan la base de desarrollo** (`robot_db`). Las de punta a punta levantan su propio backend (puerto 5001) y su propia web (5174), y prueban también el robot con el ESP32 simulado.
 En GitHub corren solas en cada Pull Request (`.github/workflows/smat-ci.yml`): si algo se rompe, el PR muestra una cruz roja.
