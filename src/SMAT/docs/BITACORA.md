@@ -9,6 +9,8 @@
 - 19/10: Morena, en `SMAT-hardware`: las IPs de la cámara y del robot pasan a `servidor_ia/.env` (`config.py`), las fotos de caras y los modelos descargables dejan de subirse a GitHub (Ley 25.326) y `CONTRIBUIR.md` suma los comandos de git del día a día.
 - 19/10: Issue #72 para Morena: rediseñar el logo, porque no está de acuerdo con la versión 1.
 - 21/10: PR #73 (`SMAT-hardware` → `main`): el CI también revisa `servidor_ia/` y `cargar_trabajadores_ia.py` explica cómo conseguir las fotos. Se ponen al día esta bitácora y el plan.
+- 21/10: **Fase 9.1**: prueba automática que recorre las 17 pantallas en celular y PC, en claro y oscuro, y con el servidor caído (78 casos). Arreglos: Empleados y Zonas quedaban en «Cargando…» sin servidor, y el botón para elegir la foto de rostro cortaba su texto en el celular. 105 pruebas de la API y 112 de punta a punta.
+- 21/10: **Fase 9.2**: `docs/DEMO-LOCAL.md`, guía para la demo sin internet (IP, firewall, dónde va la IP en cada pieza, simuladores y problemas comunes). La IA ahora lee también `DROID_URL` y `YOLO_API_KEY` de `servidor_ia/.env`. El README cargaba el esquema con `<`, que en PowerShell no anda: ahora usa `cmd /c`.
 
 **Problemas**
 - El README del documento final se subió directo a `main`, sin PR. Se le recordó la regla a Morena en el PR #73.
@@ -16,7 +18,7 @@
 - Al bajar el cambio de Morena, git borra la carpeta local `fotos_trabajadores/`: hay que copiarla antes.
 
 **Próximos pasos**
-- Fase 9: 9.1 revisión en celular, PC y modo oscuro; 9.2 guía de la demo local; 9.3 publicar en PythonAnywhere (falta crear la cuenta); 9.4 README final.
+- Fase 9: 9.3 publicar en PythonAnywhere (falta crear la cuenta); 9.4 README final.
 - Documento final: Toro completa diseño, desarrollo, pruebas y capturas de GitHub; Morena, robot, IA y hardware.
 - Morena: logo nuevo (#72) y prueba real con el hardware (6.5, #48).
 

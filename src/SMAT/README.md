@@ -60,7 +60,7 @@ Necesitás: Python 3.11, Node.js LTS y MySQL (alcanza con XAMPP).
 ### 1. Base de datos
 Iniciá **MySQL** desde el panel de XAMPP y cargá el esquema con los datos de ejemplo:
 ```powershell
-C:\xampp\mysql\bin\mysql.exe -u root < backend\database\schema.sql
+cmd /c "C:\xampp\mysql\bin\mysql.exe -u root < backend\database\schema.sql"   # PowerShell no acepta el < solo
 ```
 Para empezar de cero (borra los datos): `C:\xampp\mysql\bin\mysql.exe -u root -e "DROP DATABASE robot_db;"` y volver a cargar el esquema.
 
@@ -97,6 +97,8 @@ npm run dev
 Abrí: http://localhost:5173 . Para entrar desde el celular, poné la IP de tu PC en `frontend\.env` (`VITE_API_URL=http://<IP>:5000/api`) y permití el puerto 5000 en el Firewall de Windows.
 
 **Versión compilada (la misma que se publica):** `npm run build` y abrí http://localhost:5000 (la sirve Flask).
+**Demo en la red local** (feria, aula o jurado, sin internet): [`docs/DEMO-LOCAL.md`](docs/DEMO-LOCAL.md).
+
 **Publicar en internet:** todo en PythonAnywhere, paso a paso en [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
 
 ### Usuarios de prueba (contraseña `pass123`)
