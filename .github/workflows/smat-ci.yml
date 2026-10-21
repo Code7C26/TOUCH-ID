@@ -60,6 +60,11 @@ jobs:
       - name: Backend compila
         run: python -m compileall -q backend
 
+      # Solo revisa que el código de la IA de Morena no tenga errores de escritura
+      # (no instala YOLO ni OpenCV, que son muy pesados para el CI)
+      - name: Servidor de IA compila
+        run: python -m compileall -q servidor_ia
+
       - name: Frontend compila
         run: npm run build --prefix frontend
 
