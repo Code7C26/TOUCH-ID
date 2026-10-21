@@ -191,7 +191,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 - [x] 9.1 Revisión 360px / PC / modo oscuro; errores y estados de carga (#57) · `tests/e2e/test_revision_visual.py`
 - [x] 9.2 Guía de demo local (IP de la PC, firewall) (#58) · `docs/DEMO-LOCAL.md`
 - [ ] 9.3 Todo en PythonAnywhere: Flask sirve la web (`docs/DESPLIEGUE.md`; repo listo el 15/10, falta crear la cuenta) (#59)
-- [ ] 9.4 README final con capturas y guion de demo (#60)
+- [ ] 9.4 README final con capturas y guion de demo (#60) · README al día con capturas y links a la demo (21/10); falta rehacer las capturas con el logo nuevo (#72) y sumar el resultado de la 6.5
 
 ### Fase E · Empresa SMAT desde cero (carpeta `docs/SMAT/EMPRESA-SMAT/` de la raíz, rama `SMAT-empresa`)
 Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y deja `TODO (socio)` donde falte una decisión.
@@ -210,7 +210,7 @@ Cada socio (Toro, Morena) escribe su parte; Claude ayuda solo en las de Toro y d
 
 ### Fase D · Documento final del FAT (`docs/SMAT/documentacion-final/`)
 Se edita en línea entre los dos (link en el README de esa carpeta); lo que falta está marcado `[COMPLETAR]`.
-- [ ] D.1 (Toro) Diseño (5), desarrollo de la web (6), pruebas (7) y capturas de GitHub (11)
+- [ ] D.1 (Toro) Diseño (5), desarrollo de la web (6), pruebas (7) y capturas de GitHub (11) · borrador listo en `docs/SMAT/documentacion-final/secciones-toro.md` (falta pegarlo y las capturas de GitHub)
 - [ ] D.2 (Morena) Armado del robot, modelo de IA, sensor que falta y fotos (6)
 - [ ] D.3 (Los dos) Portada, ideación, organización, marketing, presentación y anexos (1 a 4 y 8 a 11)
 - [ ] D.4 (Cada uno) Reflexión individual, balance y conclusión (10)
