@@ -56,7 +56,7 @@ Pruebas automáticas en el repo: **105 de la API** (pytest) y **112 de punta a p
 | Tiempo real: cartel y sonido, web instalable (PWA), notificaciones push | ✅ Funciona (push e instalación en el celular solo con https) |
 | Reportes con gráficos y ranking, CSV, PDF mensual, comentarios, auditoría | ✅ Funciona |
 | Servidor de IA de Morena (`servidor_ia/`) conectado con la web | ✅ Conectado; falta la prueba real con la cámara y el robot |
-| Publicación en internet (PythonAnywhere) | 🔜 Repo listo; falta crear la cuenta (9.3) |
+| Publicación en internet (Render + Supabase) | 🔜 Código listo y probado con Postgres; falta crear las cuentas (9.3) |
 | Hardware (robot, relé, cámara) | En desarrollo por Morena. Mientras tanto: `backend/tools/simular_esp32.py` y `backend/tools/simular_yolo.py` |
 
 El detalle tarea por tarea está en [`docs/PLAN.md`](docs/PLAN.md) y los documentos de la empresa y el reporte de avance en [`docs/SMAT/`](../../docs/SMAT/) (en la raíz del repo).
@@ -125,7 +125,7 @@ Abrí: http://localhost:5173 . Para entrar desde el celular, poné la IP de tu P
 **Versión compilada (la misma que se publica):** `npm run build` y abrí http://localhost:5000 (la sirve Flask).
 **Demo en la red local** (feria, aula o jurado, sin internet): [`docs/DEMO-LOCAL.md`](docs/DEMO-LOCAL.md).
 
-**Publicar en internet:** todo en PythonAnywhere, paso a paso en [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
+**Publicar en internet:** Render (Flask) + Supabase (base Postgres y fotos), paso a paso en [`docs/DESPLIEGUE.md`](docs/DESPLIEGUE.md).
 
 ### Usuarios de prueba (contraseña `pass123`)
 | Usuario | Rol | Zona |

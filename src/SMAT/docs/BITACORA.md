@@ -11,6 +11,8 @@
 - 21/10: PR #73 (`SMAT-hardware` → `main`): el CI también revisa `servidor_ia/` y `cargar_trabajadores_ia.py` explica cómo conseguir las fotos. Se ponen al día esta bitácora y el plan.
 - 21/10: **Fase 9.1**: prueba automática que recorre las 17 pantallas en celular y PC, en claro y oscuro, y con el servidor caído (78 casos). Arreglos: Empleados y Zonas quedaban en «Cargando…» sin servidor, y el botón para elegir la foto de rostro cortaba su texto en el celular. 105 pruebas de la API y 112 de punta a punta.
 - 21/10: **Fase 9.2**: `docs/DEMO-LOCAL.md`, guía para la demo sin internet (IP, firewall, dónde va la IP en cada pieza, simuladores y problemas comunes). La IA ahora lee también `DROID_URL` y `YOLO_API_KEY` de `servidor_ia/.env`. El README cargaba el esquema con `<`, que en PowerShell no anda: ahora usa `cmd /c`.
+- 22/10: Secciones técnicas de Toro del documento final, en Markdown y en Word con formato APA (`docs/SMAT/documentacion-final/`). Consentimientos de las fotos confirmados. Morena sube por PR el sketch del robot con sensores de línea y de distancia (#77).
+- 22/10: **Fase 9.3**: PythonAnywhere gratis ya no tiene MySQL, así que la versión online pasa a **Render + Supabase** (decisión 007). El backend funciona con MySQL y con Postgres; las 105 pruebas de la API corren también contra Postgres en GitHub Actions; las fotos van a Supabase Storage; `tools/cargar_supabase.py` carga los datos de ejemplo.
 
 **Problemas**
 - El README del documento final se subió directo a `main`, sin PR. Se le recordó la regla a Morena en el PR #73.
