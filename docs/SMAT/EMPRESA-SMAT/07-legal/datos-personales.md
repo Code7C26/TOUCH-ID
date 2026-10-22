@@ -1,6 +1,6 @@
 # Datos personales y consentimiento
 
-> **Estado:** completo (v1.1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 21/10/2026
+> **Estado:** completo (v1.1) · **Responsable:** Toro · **Revisión:** Morena · **Actualizado:** 22/10/2026
 
 **Para qué sirve:** DROID-E3D guarda fotos de rostros y de evidencia: hay que tratarlas según la ley.
 
@@ -54,4 +54,4 @@ Para la demo **no se usan datos reales**: los empleados de la base son ficticios
 - Desde el 19/10 **ya no se suben**: la carpeta está en `.gitignore` y las fotos se pasan por fuera de GitHub (PR #73).
 - **Siguen en el historial de git**, aunque no se vean en la versión actual. El repo es **privado**. **No se reescribe el historial**, porque cambiaría el repo de todo TOUCH (unos 30 colaboradores).
 - Si alguien pide que se borren sus fotos: se borra su carpeta en cada PC que tenga la copia y sus fotos en la web (Mi perfil o Empleados). Si además exige sacarlas del historial, se decide con TOUCH y el profe.
-- `TODO (socio)`: confirmar que hay **consentimiento escrito** de cada una de las 8 personas (modelo en la sección 5). Si alguien no lo dio, borrar su carpeta antes de la demo.
+- ✅ **Consentimientos confirmados** (22/10/2026): las 8 personas de las fotos dieron su consentimiento (modelo en la sección 5). Si alguien lo retira, se borra su carpeta y sus fotos en la web, como se indica arriba.
