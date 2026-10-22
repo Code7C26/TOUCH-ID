@@ -121,7 +121,7 @@ En la red local la dirección es `http://`. Por eso, **en los celulares**:
 
 El resto funciona igual: alertas en tiempo real con sonido, robot, mapa, reportes y descargas. En la
 **notebook** (`http://localhost:5000`) sí andan la instalación y las notificaciones, porque el navegador
-confía en `localhost`. Para mostrarlas en el celular, usar la versión online (PythonAnywhere, `docs/DESPLIEGUE.md`).
+confía en `localhost`. Para mostrarlas en el celular, usar la versión online (Render, `docs/DESPLIEGUE.md`).
 
 ## 8. Problemas comunes
 

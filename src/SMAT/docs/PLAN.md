@@ -190,7 +190,7 @@ La Fase E (resto) avanza en paralelo con los socios. Las tareas `P.N` urgentes d
 ### Fase 9 · Pulido y despliegue
 - [x] 9.1 Revisión 360px / PC / modo oscuro; errores y estados de carga (#57) · `tests/e2e/test_revision_visual.py`
 - [x] 9.2 Guía de demo local (IP de la PC, firewall) (#58) · `docs/DEMO-LOCAL.md`
-- [ ] 9.3 Todo en PythonAnywhere: Flask sirve la web (`docs/DESPLIEGUE.md`; cuenta `tizianoymorena` creada el 22/10; se sube un paquete porque el repo es privado) (#59)
+- [ ] 9.3 Versión online en Render + Supabase (`docs/DESPLIEGUE.md`, decisión 007; PythonAnywhere gratis ya no tiene MySQL). Código listo y probado con Postgres; faltan las cuentas (#59)
 - [ ] 9.4 README final con capturas y guion de demo (#60) · README al día con capturas y links a la demo (21/10); falta rehacer las capturas con el logo nuevo (#72) y sumar el resultado de la 6.5
 
 ### Fase E · Empresa SMAT desde cero (carpeta `docs/SMAT/EMPRESA-SMAT/` de la raíz, rama `SMAT-empresa`)
