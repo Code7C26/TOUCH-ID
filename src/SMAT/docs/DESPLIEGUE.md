@@ -18,78 +18,48 @@ En esta guía, **`USUARIO`** es tu nombre de usuario de PythonAnywhere (en minú
 3. En *Create a database* escribí `droid` y tocá **Create**. La base queda como **`USUARIO$droid`**.
    Anotá también el **Database host** que aparece arriba: `USUARIO.mysql.pythonanywhere-services.com`.
 
-## 2. Bajar el código e instalar el backend (consola Bash)
+## 2. Armar el paquete en tu PC
 
-Pestaña **Consoles** → **Bash**. Copiá y pegá de a una línea:
-
-```bash
-git clone https://github.com/Code7C26/TOUCH-ID.git
-cd ~/TOUCH-ID/src/SMAT/backend
-python3.11 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-```
-
-Generá las claves (copiá lo que imprime cada comando):
-
-```bash
-python -c "import secrets; print(secrets.token_urlsafe(32))"   # correlo 3 veces: JWT, YOLO y ROBOT
-python tools/generar_claves_push.py                              # claves de las notificaciones
-```
-
-Abrí el `.env` con `nano .env` y dejalo así (con tus datos). Para guardar: `Ctrl+O`, `Enter`, `Ctrl+X`.
-
-```ini
-DB_HOST=USUARIO.mysql.pythonanywhere-services.com
-DB_USER=USUARIO
-DB_PASS=la contraseña de MySQL del paso 1
-DB_NAME='USUARIO$droid'
-JWT_SECRET=la primera clave generada
-FLASK_DEBUG=0
-
-YOLO_API_KEY=la segunda clave
-ROBOT_API_KEY=la tercera clave
-
-VAPID_PUBLIC_KEY=la que imprimió generar_claves_push.py
-VAPID_PRIVATE_KEY=la que imprimió generar_claves_push.py
-VAPID_CONTACTO=mailto:un-mail-de-contacto@ejemplo.com
-```
-
-Cargá las tablas y los datos de ejemplo. Te va a pedir una **contraseña nueva** para los usuarios de ejemplo
-(`maria`, `juan`...): la de siempre, `pass123`, está publicada en el README y en internet cualquiera podría usarla.
-
-```bash
-python tools/cargar_datos_ejemplo.py
-```
-
-## 3. Subir la web compilada
-
-La web se compila en **tu PC** (así lleva tus datos de contacto del `frontend\.env`). En PowerShell:
+El repo es **privado**: PythonAnywhere no puede hacer `git clone` sin un token de GitHub. Por eso se sube
+**un solo archivo** con el backend y la web ya compilada. La web se compila en tu PC, así lleva tus datos de
+contacto del `frontend\.env`. En PowerShell:
 
 ```powershell
 cd C:\Users\tomas\Fat\TOUCH-ID\src\SMAT\frontend
 npm run build
-tar -czf web.tgz -C dist .
+cd ..
+backend\venv\Scripts\python.exe backend\tools\armar_paquete.py   # crea src\SMAT\droid-e3d.tgz
 ```
 
-En PythonAnywhere, pestaña **Files** → entrá a `/home/USUARIO/TOUCH-ID/src/SMAT/frontend/` →
-**Upload a file** → elegí `web.tgz`. Después, en la consola Bash:
+El paquete lleva solo los archivos que están en git: nunca el `.env`, el `venv`, las fotos ni las claves.
 
-```bash
-cd ~/TOUCH-ID/src/SMAT/frontend
-rm -rf dist && mkdir dist && tar -xzf web.tgz -C dist && rm web.tgz
-```
+## 3. Subirlo e instalar (consola Bash)
+
+1. Pestaña **Files** → quedate en `/home/USUARIO/` → **Upload a file** → elegí `droid-e3d.tgz`.
+2. Pestaña **Consoles** → **Bash**, y pegá:
+   ```bash
+   tar -xzf droid-e3d.tgz && rm droid-e3d.tgz
+   bash ~/droid-e3d/backend/tools/instalar_pythonanywhere.sh
+   ```
+3. El script instala las librerías y te pide:
+   - la **contraseña de MySQL** del paso 1, sin comillas simples;
+   - un **mail de contacto**, para las notificaciones;
+   - una **contraseña nueva** para los usuarios de ejemplo (`maria`, `juan`...). La de siempre, `pass123`,
+     está publicada en el README, y en internet cualquiera podría usarla.
+
+   Solo, sin que lo toques, genera todas las claves (JWT, YOLO, ROBOT y push), escribe el `.env` (que solo vos
+   podés leer) y carga las tablas y los datos de ejemplo.
+   Para ver las claves del robot y de la IA: `grep API_KEY ~/droid-e3d/backend/.env`.
 
 ## 4. Crear la web app
 
 Pestaña **Web** → **Add a new web app** → *Next* → **Manual configuration** → **Python 3.11** → *Next*. Después, en esa misma página:
 
-1. **Virtualenv:** `/home/USUARIO/TOUCH-ID/src/SMAT/backend/venv`
+1. **Virtualenv:** `/home/USUARIO/droid-e3d/backend/venv`
 2. **WSGI configuration file:** tocá el link, borrá todo lo que tiene y pegá esto (con tu usuario). Guardá con **Save**.
    ```python
    import sys
-   sys.path.insert(0, "/home/USUARIO/TOUCH-ID/src/SMAT/backend")
+   sys.path.insert(0, "/home/USUARIO/droid-e3d/backend")
    from wsgi import application  # noqa
    ```
 3. **Force HTTPS:** *Enabled*.
@@ -104,13 +74,14 @@ Pestaña **Web** → **Add a new web app** → *Next* → **Manual configuration
 
 ## 6. Actualizar después de un cambio
 
-```bash
-cd ~/TOUCH-ID && git pull
-cd src/SMAT/backend && source venv/bin/activate && pip install -r requirements.txt
-```
-
-Si cambió la web, repetí el **paso 3**. Siempre al final: pestaña **Web** → **Reload**.
-Las tablas nuevas se crean solas al recargar (no hace falta borrar la base).
+1. En tu PC, repetí el **paso 2**: `npm run build` y `armar_paquete.py`.
+2. Subí el `droid-e3d.tgz` nuevo a `/home/USUARIO/` (pisá el anterior) y en la consola Bash:
+   ```bash
+   tar -xzf droid-e3d.tgz && rm droid-e3d.tgz
+   bash ~/droid-e3d/backend/tools/instalar_pythonanywhere.sh
+   ```
+   Como ya existe el `.env`, el script solo actualiza las librerías: **no cambia las claves ni los datos**.
+3. Pestaña **Web** → **Reload**. Las tablas nuevas se crean solas al recargar (no hace falta borrar la base).
 
 ## 7. Conectar el robot y la IA
 
